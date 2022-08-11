@@ -1,9 +1,10 @@
-import './App.css';
+import "./App.css";
+import { Navbar } from "./components";
 
 function App() {
   return (
-    <div className="text-center">
-      <h1 className='text'>Hello World</h1>
+    <div className="">
+      <Navbar />
     </div>
   );
 }
