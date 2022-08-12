@@ -5,6 +5,7 @@
     MdOutlineHome,
     MdOutlineExplore,
     MdAccountCircle,
+    MdOutlineMoreHoriz
   } from "react-icons/md";
 
-  export {MdAccountCircle, MdSearch, MdOutlineExplore, MdOutlineFavoriteBorder, CgAddR, MdOutlineHome}
+  export {MdAccountCircle, MdOutlineMoreHoriz, MdSearch, MdOutlineExplore, MdOutlineFavoriteBorder, CgAddR, MdOutlineHome}

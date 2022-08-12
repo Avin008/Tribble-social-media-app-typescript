@@ -9,7 +9,7 @@ import {
 
 const Navbar = () => {
   return (
-    <div className="absolute left-0 right-0 flex h-14 items-center justify-evenly border border-gray-400 shadow-sm">
+    <div className="fixed top-0 left-0 right-0 flex h-14 items-center justify-evenly border border-gray-400 bg-white shadow-sm">
       <div className="">
         <h1 className="text-lg font-semibold">Tribble</h1>
       </div>
