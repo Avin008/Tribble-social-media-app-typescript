@@ -1,6 +1,6 @@
 const Suggestions = () => {
   return (
-    <div className="h-fit w-80  p-3">
+    <div className="h-fit w-72 p-3">
       <h1 className="font-semibold text-gray-500">Suggestions for you</h1>
       <div className="flex h-fit justify-between py-2">
         <div className="flex items-center gap-2 px-2 font-medium">

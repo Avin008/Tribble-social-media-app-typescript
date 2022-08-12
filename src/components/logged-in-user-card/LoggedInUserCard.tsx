@@ -1,6 +1,6 @@
 const LoggedInUserCard = () => {
   return (
-    <div className="flex h-fit justify-between rounded-md p-2">
+    <div className="flex h-fit w-72 justify-between rounded-md p-2">
       <div className="flex items-center gap-2 font-medium">
         <div className="h-12 w-12">
           <img
