@@ -1,10 +1,11 @@
-import { ProfileTabs, UserProfileCard } from "../../components";
+import { ProfileTabs, UserProfileCard, ViewPostCard } from "../../components";
 
 const ProfilePage = () => {
   return (
-    <div className="mx-auto mt-20 w-3/5 space-y-5">
+    <div className="mx-auto mt-20 flex w-3/5 flex-col gap-5">
       <UserProfileCard />
       <ProfileTabs />
+      {false && <ViewPostCard />}
     </div>
   );
 };

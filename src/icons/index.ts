@@ -7,7 +7,33 @@
     MdAccountCircle,
     MdOutlineMoreHoriz,
     MdGridOn, 
-    MdOutlineBookmarkBorder
+    MdOutlineBookmarkBorder,
+    MdOutlineClose,
+    MdAdd, 
+    MdFavoriteBorder,
+    MdOutlineComment,
+    MdOutlineEmojiEmotions,
+    MdClose,
+    MdOutlineFavorite,
+    MdOutlineBookmark,
   } from "react-icons/md";
 
-  export {MdAccountCircle, MdGridOn, MdOutlineBookmarkBorder, MdOutlineMoreHoriz, MdSearch, MdOutlineExplore, MdOutlineFavoriteBorder, CgAddR, MdOutlineHome}
+  export {
+    MdAccountCircle, 
+    MdFavoriteBorder,
+    MdOutlineComment,
+    MdOutlineEmojiEmotions,
+    MdClose,
+    MdOutlineFavorite,
+    MdOutlineBookmark, 
+    MdAdd, 
+    MdOutlineClose, 
+    MdGridOn, 
+    MdOutlineBookmarkBorder, 
+    MdOutlineMoreHoriz,
+    MdSearch, 
+    MdOutlineExplore, 
+    MdOutlineFavoriteBorder, 
+    CgAddR, 
+    MdOutlineHome
+  }

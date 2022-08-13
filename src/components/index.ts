@@ -6,6 +6,9 @@ import Suggestions from "./suggestions/Suggestions";
 import UserPostCard from "./user-post-card/UserPostCard";
 import UserProfileCard from "./user-profile-card/UserProfileCard";
 import VerticalPostCard from "./vertical-post-card/VerticalPostCard";
+import CreateCollectionModal from "./create-collection-modal/CreateCollectionModal";
+import ViewPostCard from "./view-post-card/ViewPostCard";
+import SavePost from "./save-post/SavePost";
+import EmojiKeyBoard from "./emoji-keyboard/EmojiKeyboard";
 
-
-export {Navbar, VerticalPostCard, LoggedInUserCard, Suggestions, UserProfileCard, SavedPostCard, UserPostCard, ProfileTabs}
+export {Navbar, VerticalPostCard, CreateCollectionModal, ViewPostCard, SavePost, EmojiKeyBoard, LoggedInUserCard, Suggestions, UserProfileCard, SavedPostCard, UserPostCard, ProfileTabs}
