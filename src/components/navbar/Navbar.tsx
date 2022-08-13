@@ -6,8 +6,10 @@ import {
   MdAccountCircle,
   CgAddR,
 } from "../../icons";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   return (
     <div className="fixed top-0 left-0 right-0 flex h-14 items-center justify-evenly border border-gray-400 bg-white shadow-sm">
       <div className="">
@@ -22,13 +24,19 @@ const Navbar = () => {
         <MdSearch size={25} className="text-gray-500" />
       </div>
       <ul className="flex space-x-5">
-        <li className="cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300">
+        <li
+          className="cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300"
+          onClick={() => navigate("/")}
+        >
           <MdOutlineHome size={25} />
         </li>
         <li className="cursor-pointer rounded-full p-1 hover:bg-gray-200  active:bg-gray-300">
           <CgAddR size={25} />
         </li>
-        <li className="cursor-pointer rounded-full p-1 hover:bg-gray-200  active:bg-gray-300">
+        <li
+          className="cursor-pointer rounded-full p-1 hover:bg-gray-200  active:bg-gray-300"
+          onClick={() => navigate("/explore")}
+        >
           <MdOutlineExplore size={25} />
         </li>
         <li className="cursor-pointer rounded-full p-1 hover:bg-gray-200  active:bg-gray-300">

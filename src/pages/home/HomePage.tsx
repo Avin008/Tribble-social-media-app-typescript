@@ -84,10 +84,10 @@ const suggestions: SuggestionsData[] = [
   },
   {
     profileImg:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60",
-    username: "ravirajin775",
-    fullname: "Ravi Rajin",
-    followerUserId: "2",
+      "https://images.unsplash.com/photo-1660316582501-f2697bbf76d3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+    username: "riya335",
+    fullname: "Riya Awashti",
+    followerUserId: "3",
   },
 ];
 
