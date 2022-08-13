@@ -5,7 +5,11 @@ import {
   MdOutlineFavoriteBorder,
   MdMoreHoriz,
 } from "react-icons/md";
-const VerticalPostCard = () => {
+import { Posts } from "../../pages/home/HomePage";
+
+type Props = { data: Posts };
+
+const VerticalPostCard = ({ data }: Props) => {
   return (
     <div className="h-fit w-96 rounded-lg border border-black bg-white">
       <div className="flex h-14 items-center justify-between border-b border-black p-2">
@@ -13,24 +17,18 @@ const VerticalPostCard = () => {
           <div className="h-10 w-10">
             <img
               className="aspect-square h-full w-full rounded-full border-2 border-black object-cover"
-              src="https://images.unsplash.com/photo-1660110583004-b9c1a8692076?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw2NHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60"
+              src={data.profileImg}
               alt=""
             />
           </div>
-          <h1 className="text-sm font-semibold">Natasha Bora</h1>
+          <h1 className="text-sm font-semibold">{data.username}</h1>
         </div>
         <span className="cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300">
           <MdMoreHoriz size={25} />
         </span>
       </div>
       <div className="h-auto border-b border-black">
-        <img
-          className="aspect-auto h-full w-full"
-          src={
-            "https://images.unsplash.com/photo-1660075119027-8ad18e0925b9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=875&q=80"
-          }
-          alt=""
-        />
+        <img className="aspect-auto h-full w-full" src={data.postImg} alt="" />
       </div>
       <div className="space-y-1 border border-b-black p-1">
         <div className="flex items-center justify-between p-1">
@@ -50,8 +48,8 @@ const VerticalPostCard = () => {
         <div className="space-y-1 px-2">
           <div className="flex">
             <p className="text-sm font-medium">
-              <span className="font-semibold">Natasha Bora</span> Lorem, ipsum
-              dolor sit amet.
+              <span className="font-semibold">{data.username}</span>{" "}
+              {data.caption}
             </p>
           </div>
           <div className="">
@@ -60,17 +58,16 @@ const VerticalPostCard = () => {
             </p>
           </div>
           <ul className="">
-            <li className="text-sm font-medium">
-              <span className="font-semibold">Natasha Bora</span> Lorem ipsum
-              dolor sit amet.
-            </li>
-            <li className="text-sm font-medium">
-              <span className="font-semibold">Natasha Bora</span> Lorem ipsum
-              dolor sit amet.
-            </li>
+            {data.comments.map((x) => (
+              <li className="text-sm font-medium">
+                <span className="font-semibold">{x.username}</span> {x.comment}
+              </li>
+            ))}
           </ul>
           <div className="">
-            <p className="text-sm font-medium text-gray-500">2 DAY AGO</p>
+            <p className="text-sm font-medium text-gray-500">
+              {data.dateOfCreation}
+            </p>
           </div>
         </div>
       </div>

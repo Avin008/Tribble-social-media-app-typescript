@@ -1,10 +1,15 @@
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import { HomePage } from "./pages";
+import { HomePage, SharedLayout } from "./pages";
 
 function App() {
   return (
     <div className="">
-      <HomePage />
+      <Routes>
+        <Route path="/" element={<SharedLayout />}>
+          <Route index element={<HomePage />} />
+        </Route>
+      </Routes>
     </div>
   );
 }
