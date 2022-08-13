@@ -10,5 +10,6 @@ import CreateCollectionModal from "./create-collection-modal/CreateCollectionMod
 import ViewPostCard from "./view-post-card/ViewPostCard";
 import SavePost from "./save-post/SavePost";
 import EmojiKeyBoard from "./emoji-keyboard/EmojiKeyboard";
+import ExploreCard from "./explore-card/ExploreCard";
 
-export {Navbar, VerticalPostCard, CreateCollectionModal, ViewPostCard, SavePost, EmojiKeyBoard, LoggedInUserCard, Suggestions, UserProfileCard, SavedPostCard, UserPostCard, ProfileTabs}
+export {Navbar, VerticalPostCard, CreateCollectionModal, ViewPostCard, ExploreCard, SavePost, EmojiKeyBoard, LoggedInUserCard, Suggestions, UserProfileCard, SavedPostCard, UserPostCard, ProfileTabs}
