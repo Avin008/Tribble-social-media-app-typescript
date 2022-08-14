@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   MdOutlineEmojiEmotions,
   MdOutlineBookmarkBorder,
@@ -13,6 +13,12 @@ type Props = { data: Posts };
 
 const VerticalPostCard = ({ data }: Props) => {
   const [toggleSavePost, setToggleSavePost] = useState(false);
+  const commentRef = useRef(null);
+
+  const handleCommentFocus = () => {
+    // @ts-ignore: Object is possibly 'null'.
+    commentRef.current.focus();
+  };
 
   return (
     <div className="h-fit w-96 rounded-lg border border-black bg-white">
@@ -41,7 +47,11 @@ const VerticalPostCard = ({ data }: Props) => {
               <MdOutlineFavoriteBorder size={28} className="" />
             </span>
             <span className="cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300">
-              <MdOutlineComment size={28} className="" />
+              <MdOutlineComment
+                size={28}
+                className=""
+                onClick={handleCommentFocus}
+              />
             </span>
           </div>
 
@@ -90,6 +100,7 @@ const VerticalPostCard = ({ data }: Props) => {
           name=""
           id=""
           placeholder="Add Comment"
+          ref={commentRef}
         ></textarea>
         <button className="font-medium text-gray-500" disabled>
           Post
