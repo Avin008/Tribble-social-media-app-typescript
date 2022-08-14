@@ -1,6 +1,7 @@
 import {
   LoggedInUserCard,
   Navbar,
+  PostOptions,
   Suggestions,
   VerticalPostCard,
 } from "../../components";
@@ -104,6 +105,7 @@ const HomePage = () => {
         <LoggedInUserCard />
         <Suggestions data={suggestions} />
       </div>
+      {false && <PostOptions />}
     </div>
   );
 };

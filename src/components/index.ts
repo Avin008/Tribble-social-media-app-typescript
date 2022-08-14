@@ -13,5 +13,7 @@ import EmojiKeyBoard from "./emoji-keyboard/EmojiKeyboard";
 import ExploreCard from "./explore-card/ExploreCard";
 import SavedCard from "./saved-card/SavedCard";
 import CreatePostModal from "./create-post-modal/CreatePostModal";
+import PostOptions from "./post-options/PostOptions";
 
-export {Navbar, VerticalPostCard, CreateCollectionModal, CreatePostModal, ViewPostCard, ExploreCard, SavePost, SavedCard, EmojiKeyBoard, LoggedInUserCard, Suggestions, UserProfileCard, SavedPostCard, UserPostCard, ProfileTabs}
+
+export {Navbar, PostOptions, VerticalPostCard, CreateCollectionModal, CreatePostModal, ViewPostCard, ExploreCard, SavePost, SavedCard, EmojiKeyBoard, LoggedInUserCard, Suggestions, UserProfileCard, SavedPostCard, UserPostCard, ProfileTabs}

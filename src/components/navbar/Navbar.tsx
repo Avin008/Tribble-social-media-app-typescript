@@ -33,7 +33,7 @@ const Navbar = () => {
         </li>
         <li className="cursor-pointer rounded-full p-1 hover:bg-gray-200  active:bg-gray-300">
           <CgAddR size={25} />
-          <CreatePostModal />
+          {false && <CreatePostModal />}
         </li>
         <li
           className="cursor-pointer rounded-full p-1 hover:bg-gray-200  active:bg-gray-300"
