@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   MdOutlineEmojiEmotions,
   MdOutlineBookmarkBorder,
@@ -6,10 +7,13 @@ import {
   MdMoreHoriz,
 } from "react-icons/md";
 import { Posts } from "../../pages/home/HomePage";
+import SavePost from "../save-post/SavePost";
 
 type Props = { data: Posts };
 
 const VerticalPostCard = ({ data }: Props) => {
+  const [toggleSavePost, setToggleSavePost] = useState(false);
+
   return (
     <div className="h-fit w-96 rounded-lg border border-black bg-white">
       <div className="flex h-14 items-center justify-between border-b border-black p-2">
@@ -41,8 +45,13 @@ const VerticalPostCard = ({ data }: Props) => {
             </span>
           </div>
 
-          <span className="cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300">
-            <MdOutlineBookmarkBorder size={28} className="" />
+          <span className="relative cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300">
+            <MdOutlineBookmarkBorder
+              size={28}
+              className=""
+              onClick={() => setToggleSavePost((prev) => !prev)}
+            />
+            {toggleSavePost && <SavePost />}
           </span>
         </div>
         <div className="space-y-1 px-2">
