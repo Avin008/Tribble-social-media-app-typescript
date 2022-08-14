@@ -7,6 +7,7 @@ import {
   CgAddR,
 } from "../../icons";
 import { useNavigate } from "react-router-dom";
+import CreatePostModal from "../create-post-modal/CreatePostModal";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ const Navbar = () => {
         </li>
         <li className="cursor-pointer rounded-full p-1 hover:bg-gray-200  active:bg-gray-300">
           <CgAddR size={25} />
+          <CreatePostModal />
         </li>
         <li
           className="cursor-pointer rounded-full p-1 hover:bg-gray-200  active:bg-gray-300"
