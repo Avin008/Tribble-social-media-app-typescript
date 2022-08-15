@@ -7,6 +7,7 @@ import {
   ProfilePage,
   SavedPostPage,
   SharedLayout,
+  Signup,
 } from "./pages";
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path="saved-posts" element={<SavedPostPage />} />
         </Route>
         <Route path="login" element={<Login />} />
+        <Route path="signup" element={<Signup />} />
       </Routes>
     </div>
   );
