@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import {
+  EditProfile,
   ExplorePage,
   HomePage,
   Login,
@@ -19,6 +20,7 @@ function App() {
           <Route path="profile" element={<ProfilePage />} />
           <Route path="explore" element={<ExplorePage />} />
           <Route path="saved-posts" element={<SavedPostPage />} />
+          <Route path="edit-profile" element={<EditProfile />} />
         </Route>
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
