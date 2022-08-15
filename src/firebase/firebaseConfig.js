@@ -12,6 +12,7 @@ import {
   arrayUnion,
   collection,
   doc,
+  getDoc,
   getDocs,
   getFirestore,
   query,
@@ -212,6 +213,11 @@ const removedFromSavedPost = async (userId, savedPost, postID) => {
   }
 };
 
+const getCurrentUser = async (userID) => {
+  const userDocRef = doc(db, "users", userID);
+  return await getDoc(userDocRef).data();
+};
+
 export {
   auth,
   db,
@@ -227,4 +233,5 @@ export {
   saveToCollection,
   removedFromSavedPost,
   loginUser,
+  getCurrentUser,
 };
