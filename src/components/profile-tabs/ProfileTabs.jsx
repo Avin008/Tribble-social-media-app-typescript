@@ -2,13 +2,19 @@ import { useState } from "react";
 import { MdGridOn, MdOutlineBookmarkBorder } from "../../icons";
 import UserPostCard from "../user-post-card/UserPostCard";
 import SavedPostCard from "../saved-post-card/SavedPostCard";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
+import { db } from "../../firebase/firebaseConfig";
 
-type PostData = {
-  img: string;
-  collectionName: string;
-};
-
-const postData: PostData[] = [
+const postData = [
   {
     img: "https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=388&q=80",
     collectionName: "Anime",
@@ -28,7 +34,31 @@ const postData: PostData[] = [
 ];
 
 const ProfileTabs = () => {
+  const { id } = useParams();
+
   const [tabs, setTabs] = useState(0);
+
+  const { data: postData, isLoading } = useQuery(["posts"], async () => {
+    const userPostCollectionRef = collection(db, "posts");
+    const q = query(userPostCollectionRef, where("userID", "==", id));
+    return (await getDocs(q)).docs.map((x) => x.data());
+  });
+
+  const { data: savedPostsData, isLoading: savedPostLoading } = useQuery(
+    ["users"],
+    async () => {
+      const userDocRef = doc(db, "users", id);
+      return (await getDoc(userDocRef)).data();
+    }
+  );
+
+  if (savedPostLoading) {
+    <h1>Loading...</h1>;
+  }
+
+  if (isLoading) {
+    return <h1>Loading...</h1>;
+  }
   return (
     <div className="flex w-full flex-col items-center">
       <div className="flex items-center justify-center space-x-8 p-2">
@@ -52,7 +82,7 @@ const ProfileTabs = () => {
       <div className="grid h-fit w-full grid-cols-3 gap-4 border-t border-black py-4 px-0">
         {tabs === 0
           ? postData.map((x) => <UserPostCard data={x} />)
-          : postData.map((x) => <SavedPostCard data={x} />)}
+          : savedPostsData.savedPost.map((x) => <SavedPostCard data={x} />)}
       </div>
     </div>
   );
