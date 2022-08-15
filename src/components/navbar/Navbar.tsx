@@ -8,6 +8,8 @@ import {
 } from "../../icons";
 import { useNavigate } from "react-router-dom";
 import CreatePostModal from "../create-post-modal/CreatePostModal";
+import UserProfileActions from "../user-profile-actions/UserProfileActions";
+import SearchResults from "../search-results/SearchResults";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -16,13 +18,14 @@ const Navbar = () => {
       <div className="">
         <h1 className="text-lg font-semibold">Tribble</h1>
       </div>
-      <div className="flex w-60 items-center rounded-md border border-gray-300 bg-gray-100 p-1">
+      <div className="relative flex w-60 items-center rounded-md border border-gray-300 bg-gray-100 p-1">
         <input
           className="w-full border-none bg-transparent px-2 outline-none"
           type="text"
           placeholder="Search profile"
         />
         <MdSearch size={25} className="text-gray-500" />
+        {false && <SearchResults />}
       </div>
       <ul className="flex space-x-5">
         <li
@@ -44,8 +47,9 @@ const Navbar = () => {
         <li className="cursor-pointer rounded-full p-1 hover:bg-gray-200  active:bg-gray-300">
           <MdOutlineFavoriteBorder size={25} />
         </li>
-        <li className=" cursor-pointer rounded-full p-1 hover:bg-gray-200  active:bg-gray-300">
+        <li className="relative cursor-pointer rounded-full p-1 hover:bg-gray-200  active:bg-gray-300">
           <MdAccountCircle size={25} />
+          {false && <UserProfileActions />}
         </li>
       </ul>
     </div>

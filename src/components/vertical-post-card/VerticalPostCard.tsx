@@ -7,12 +7,14 @@ import {
   MdMoreHoriz,
 } from "react-icons/md";
 import { Posts } from "../../pages/home/HomePage";
+import EmojiKeyBoard from "../emoji-keyboard/EmojiKeyboard";
 import SavePost from "../save-post/SavePost";
 
 type Props = { data: Posts };
 
 const VerticalPostCard = ({ data }: Props) => {
   const [toggleSavePost, setToggleSavePost] = useState(false);
+  const [toggleEmojiKeyboard, setToggleEmojiKeyboard] = useState(false);
   const commentRef = useRef(null);
 
   const handleCommentFocus = () => {
@@ -91,8 +93,12 @@ const VerticalPostCard = ({ data }: Props) => {
         </div>
       </div>
       <div className="flex items-center justify-between gap-1 p-2 px-2">
-        <span className="cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300">
+        <span
+          className="relative cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300"
+          onClick={() => setToggleEmojiKeyboard((prev) => !prev)}
+        >
           <MdOutlineEmojiEmotions size={25} />
+          {toggleEmojiKeyboard && <EmojiKeyBoard />}
         </span>
         <textarea
           rows={1}

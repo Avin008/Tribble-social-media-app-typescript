@@ -14,6 +14,7 @@ import ExploreCard from "./explore-card/ExploreCard";
 import SavedCard from "./saved-card/SavedCard";
 import CreatePostModal from "./create-post-modal/CreatePostModal";
 import PostOptions from "./post-options/PostOptions";
+import UserProfileActions from "./user-profile-actions/UserProfileActions";
+import SearchResults from "./search-results/SearchResults";
 
-
-export {Navbar, PostOptions, VerticalPostCard, CreateCollectionModal, CreatePostModal, ViewPostCard, ExploreCard, SavePost, SavedCard, EmojiKeyBoard, LoggedInUserCard, Suggestions, UserProfileCard, SavedPostCard, UserPostCard, ProfileTabs}
+export {Navbar, UserProfileActions, PostOptions, SearchResults, VerticalPostCard, CreateCollectionModal, CreatePostModal, ViewPostCard, ExploreCard, SavePost, SavedCard, EmojiKeyBoard, LoggedInUserCard, Suggestions, UserProfileCard, SavedPostCard, UserPostCard, ProfileTabs}
