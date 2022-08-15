@@ -42,13 +42,13 @@ const storage = getStorage(app);
 
 const initializeUserData = (
   userID,
-  { username, firstName, lastName, email }
+  { username, firstname, lastname, email }
 ) => {
   return {
     userId: userID,
     username: username,
     profileImg: "",
-    fullName: `${firstName} ${lastName}`,
+    fullname: `${firstname} ${lastname}`,
     emailAddress: email,
     following: [],
     followers: [],
