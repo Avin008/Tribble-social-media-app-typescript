@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
+import { RequireAuth } from "./components";
 import {
   EditProfile,
   ExplorePage,
@@ -16,11 +17,46 @@ function App() {
     <div className="">
       <Routes>
         <Route path="/" element={<SharedLayout />}>
-          <Route index element={<HomePage />} />
-          <Route path="profile" element={<ProfilePage />} />
-          <Route path="explore" element={<ExplorePage />} />
-          <Route path="saved-posts" element={<SavedPostPage />} />
-          <Route path="edit-profile" element={<EditProfile />} />
+          <Route
+            index
+            element={
+              <RequireAuth>
+                <HomePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="profile"
+            element={
+              <RequireAuth>
+                <ProfilePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="explore"
+            element={
+              <RequireAuth>
+                <ExplorePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="saved-posts"
+            element={
+              <RequireAuth>
+                <SavedPostPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="edit-profile"
+            element={
+              <RequireAuth>
+                <EditProfile />
+              </RequireAuth>
+            }
+          />
         </Route>
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
