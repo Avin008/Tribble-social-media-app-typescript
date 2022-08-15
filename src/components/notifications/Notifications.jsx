@@ -1,4 +1,4 @@
-const UserNotification = () => {
+const Notifications = () => {
   return (
     <ul className="absolute top-12 -right-0 flex h-fit w-80 flex-col gap-1 rounded-md border border-black bg-white py-1 shadow-md">
       <li className="flex cursor-pointer justify-between p-1 hover:bg-gray-100">
@@ -27,4 +27,4 @@ const UserNotification = () => {
   );
 };
 
-export default UserNotification;
+export default Notifications;

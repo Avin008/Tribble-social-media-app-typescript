@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import CreatePostModal from "../create-post-modal/CreatePostModal";
 import UserProfileActions from "../user-profile-actions/UserProfileActions";
 import SearchResults from "../search-results/SearchResults";
+import Notifications from "../notifications/Notifications";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -44,8 +45,9 @@ const Navbar = () => {
         >
           <MdOutlineExplore size={25} />
         </li>
-        <li className="cursor-pointer rounded-full p-1 hover:bg-gray-200  active:bg-gray-300">
+        <li className="relative cursor-pointer rounded-full p-1 hover:bg-gray-200  active:bg-gray-300">
           <MdOutlineFavoriteBorder size={25} />
+          {false && <Notifications />}
         </li>
         <li className="relative cursor-pointer rounded-full p-1 hover:bg-gray-200  active:bg-gray-300">
           <MdAccountCircle size={25} />
