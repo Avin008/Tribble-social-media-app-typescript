@@ -3,6 +3,7 @@ import "./App.css";
 import {
   ExplorePage,
   HomePage,
+  Login,
   ProfilePage,
   SavedPostPage,
   SharedLayout,
@@ -18,6 +19,7 @@ function App() {
           <Route path="explore" element={<ExplorePage />} />
           <Route path="saved-posts" element={<SavedPostPage />} />
         </Route>
+        <Route path="login" element={<Login />} />
       </Routes>
     </div>
   );
