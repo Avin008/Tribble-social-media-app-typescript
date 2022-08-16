@@ -13,27 +13,45 @@ import SavePost from "../save-post/SavePost";
 import EmojiKeyboard from "../emoji-keyboard/EmojiKeyboard";
 import { Link } from "react-router-dom";
 import CreateCollectionModal from "../create-collection-modal/CreateCollectionModal";
+import { useDispatch, useSelector } from "react-redux";
+import { closePostModal } from "../../redux-toolkit/features/postModalSlice";
+import { useQuery } from "@tanstack/react-query";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase/firebaseConfig";
 
 const ViewPostCard = () => {
   const [toggleCollection, setToggleCollection] = useState(false);
   const [toggleEmojikeyboard, setTogglEmojiKeyboard] = useState(false);
   const [comment, setComment] = useState("");
 
+  const dispatch = useDispatch();
+
+  const { postID, profileImg, username } = useSelector(
+    (store) => store.postModalSlice.postData
+  );
+
+  const { data, isLoading } = useQuery(["view-post"], async () => {
+    const postDocRef = doc(db, "posts", postID);
+    return (await getDoc(postDocRef)).data();
+  });
+
+  if (isLoading) {
+    return <h1>Loading...</h1>;
+  }
+
   return (
     <div className="fixed top-0 bottom-0 left-0 right-0 z-10 flex items-center justify-center bg-black/50">
       <div className="absolute top-4 right-8">
-        <MdClose size={30} className="cursor-pointer text-white" />
+        <MdClose
+          size={30}
+          className="cursor-pointer text-white"
+          onClick={() => dispatch(closePostModal())}
+        />
       </div>
       <div className="grid h-4/5 w-3/5 grid-flow-row auto-rows-[480px] grid-cols-2 bg-white">
         <div className="bg-black py-4 px-0">
           <div className="h-full w-full">
-            <img
-              className="h-full w-full object-cover"
-              src={
-                "https://images.unsplash.com/photo-1660252696878-e6407a230ab2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEwfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=600&q=60"
-              }
-              alt=""
-            />
+            <img className="h-full w-full object-cover" src={data.img} alt="" />
           </div>
         </div>
         <div className="relative">
@@ -41,9 +59,7 @@ const ViewPostCard = () => {
             <div className="flex items-center gap-2">
               <div className="h-10 w-10">
                 <img
-                  src={
-                    "https://images.unsplash.com/photo-1660252696878-e6407a230ab2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEwfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=600&q=60"
-                  }
+                  src={profileImg}
                   alt=""
                   className="h-full w-full rounded-full border border-black object-cover"
                 />
@@ -53,32 +69,32 @@ const ViewPostCard = () => {
             <MdOutlineMoreHoriz size={20} className="cursor-pointer" />
           </div>
           <div className="scrollbar-hide flex h-3/5 flex-col gap-4 overflow-scroll p-3">
-            <p className="text-base font-normal">{"this is just a post"}</p>
+            <p className="text-base font-normal">{data.caption}</p>
 
-            <div className="flex items-center gap-2">
-              <div>
-                <div className="h-10 w-10">
-                  <img
-                    src={
-                      "https://images.unsplash.com/photo-1660252696878-e6407a230ab2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEwfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=600&q=60"
-                    }
-                    alt=""
-                    className="h-full w-full rounded-full border border-black object-cover"
-                  />
+            {data.comments.map((x) => {
+              return (
+                <div className="flex items-center gap-2">
+                  <div>
+                    <div className="h-10 w-10">
+                      <img
+                        src={x.profileImg}
+                        alt=""
+                        className="h-full w-full rounded-full border border-black object-cover"
+                      />
+                    </div>
+                  </div>
+                  <div className="leading-3">
+                    <Link
+                      to={`/profile/${""}`}
+                      className="text-xs font-semibold hover:underline"
+                    >
+                      {x.username}
+                    </Link>
+                    <p className="text-xs font-medium">{x.comment}</p>
+                  </div>
                 </div>
-              </div>
-              <div className="leading-3">
-                <Link
-                  to={`/profile/${""}`}
-                  className="text-xs font-semibold hover:underline"
-                >
-                  {"Natasha Vora"}
-                </Link>
-                <p className="text-xs font-medium">
-                  {"this is just a post this is just a post to check "}
-                </p>
-              </div>
-            </div>
+              );
+            })}
           </div>
           <div className="absolute bottom-0 left-0 right-0 flex flex-col gap-2 border border-gray-700 bg-white">
             <div className="space-y-2 p-2">
@@ -101,9 +117,11 @@ const ViewPostCard = () => {
                 </div>
               </div>
               <div>
-                <h5 className="text-sm font-medium">{"100"} Likes</h5>
+                <h5 className="text-sm font-medium">
+                  {data.likes.length} Likes
+                </h5>
                 <h5 className="text-sm font-medium text-gray-700">
-                  {"2 DAYS AGO"}
+                  {data.dateCreated}
                 </h5>
               </div>
             </div>
