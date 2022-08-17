@@ -20,7 +20,9 @@ import { doc, getDoc } from "firebase/firestore";
 import {
   db,
   isPostSaved,
+  likePost,
   removedFromSavedPost,
+  unlikePost,
 } from "../../firebase/firebaseConfig";
 
 const ViewPostCard = () => {
@@ -31,6 +33,7 @@ const ViewPostCard = () => {
 
   const dispatch = useDispatch();
   const postID = useSelector((store) => store.postModalSlice.postID);
+  const token = useSelector((store) => store.authSlice.token);
 
   // fetch post Data by postID
 
@@ -52,6 +55,32 @@ const ViewPostCard = () => {
         postData.user.savedPost,
         postData.post.postID
       );
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["posts"]);
+      },
+    }
+  );
+
+  // like post
+
+  const { mutate: mutateLike } = useMutation(
+    async () => {
+      return await likePost(postData.post.postID, token);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["posts"]);
+      },
+    }
+  );
+
+  // unlike post
+
+  const { mutate: mutateUnLike } = useMutation(
+    async () => {
+      return await unlikePost(postData.post.postID, token);
     },
     {
       onSuccess: () => {
@@ -129,7 +158,19 @@ const ViewPostCard = () => {
             <div className="space-y-2 p-2">
               <div className="flex justify-between">
                 <div className="flex gap-2">
-                  <MdOutlineFavorite className="cursor-pointer" size={25} />
+                  {postData.post.likes.map((x) => x.userId).includes(token) ? (
+                    <MdOutlineFavorite
+                      className="cursor-pointer"
+                      size={25}
+                      onClick={() => mutateUnLike()}
+                    />
+                  ) : (
+                    <MdFavoriteBorder
+                      className="cursor-pointer"
+                      size={25}
+                      onClick={() => mutateLike()}
+                    />
+                  )}
                   <MdOutlineComment className="cursor-pointer" size={25} />
                 </div>
                 <div className="card-secondary-actions">

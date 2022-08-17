@@ -132,23 +132,15 @@ const postComment = async (
 // like post
 
 const likePost = async (postID, userId) => {
-  try {
-    const postRef = doc(db, "posts", postID);
-    await updateDoc(postRef, { likes: arrayUnion({ userId }) });
-  } catch (error) {
-    console.log(error);
-  }
+  const postRef = doc(db, "posts", postID);
+  return await updateDoc(postRef, { likes: arrayUnion({ userId }) });
 };
 
 // unlike post
 
 const unlikePost = async (postID, userId) => {
-  try {
-    const postRef = doc(db, "posts", postID);
-    await updateDoc(postRef, { likes: arrayRemove({ userId: userId }) });
-  } catch (error) {
-    console.log(error);
-  }
+  const postRef = doc(db, "posts", postID);
+  return await updateDoc(postRef, { likes: arrayRemove({ userId }) });
 };
 
 // create saved post folder
