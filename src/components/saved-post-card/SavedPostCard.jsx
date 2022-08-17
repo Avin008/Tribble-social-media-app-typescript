@@ -1,10 +1,4 @@
-type Props = {
-  img: string;
-  folderName: string;
-  posts: [{ img: string }];
-};
-
-const SavedPostCard = ({ data }: { data: Props }) => {
+const SavedPostCard = ({ data }) => {
   return (
     <div className="relative h-72 w-full cursor-pointer">
       <img

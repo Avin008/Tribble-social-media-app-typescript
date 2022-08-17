@@ -6,21 +6,7 @@ import {
   VerticalPostCard,
 } from "../../components";
 
-type Comments = {
-  username: string;
-  comment: string;
-};
-
-export type Posts = {
-  profileImg: string;
-  postImg: string;
-  username: string;
-  caption: string;
-  dateOfCreation: number;
-  comments: Comments[];
-};
-
-const posts: Posts[] = [
+const posts = [
   {
     profileImg:
       "https://images.unsplash.com/photo-1659701706985-077fc9eb5592?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDR8aG1lbnZRaFVteE18fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60",
@@ -61,14 +47,7 @@ const posts: Posts[] = [
   },
 ];
 
-export type SuggestionsData = {
-  profileImg: string;
-  username: string;
-  fullname: string;
-  followerUserId: string;
-};
-
-const suggestions: SuggestionsData[] = [
+const suggestions = [
   {
     profileImg:
       "https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60",

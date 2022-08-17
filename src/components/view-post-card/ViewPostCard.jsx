@@ -15,25 +15,50 @@ import { Link } from "react-router-dom";
 import CreateCollectionModal from "../create-collection-modal/CreateCollectionModal";
 import { useDispatch, useSelector } from "react-redux";
 import { closePostModal } from "../../redux-toolkit/features/postModalSlice";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../firebase/firebaseConfig";
+import {
+  db,
+  isPostSaved,
+  removedFromSavedPost,
+} from "../../firebase/firebaseConfig";
 
 const ViewPostCard = () => {
   const [toggleCollection, setToggleCollection] = useState(false);
   const [toggleEmojikeyboard, setTogglEmojiKeyboard] = useState(false);
   const [comment, setComment] = useState("");
+  const queryClient = useQueryClient();
 
   const dispatch = useDispatch();
+  const postID = useSelector((store) => store.postModalSlice.postID);
 
-  const { postID, profileImg, username } = useSelector(
-    (store) => store.postModalSlice.postData
-  );
+  // fetch post Data by postID
 
-  const { data, isLoading } = useQuery(["view-post"], async () => {
+  const { data: postData, isLoading } = useQuery(["posts"], async () => {
+    const post = { post: "", user: "" };
     const postDocRef = doc(db, "posts", postID);
-    return (await getDoc(postDocRef)).data();
+    post.post = (await getDoc(postDocRef)).data();
+    const userDocRef = doc(db, "users", post.post.userID);
+    post.user = (await getDoc(userDocRef)).data();
+    return post;
   });
+
+  // remove post from saved
+
+  const { isLoading: isWritingData, mutate } = useMutation(
+    async () => {
+      return await removedFromSavedPost(
+        postData.user.userId,
+        postData.user.savedPost,
+        postData.post.postID
+      );
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["posts"]);
+      },
+    }
+  );
 
   if (isLoading) {
     return <h1>Loading...</h1>;
@@ -51,7 +76,11 @@ const ViewPostCard = () => {
       <div className="grid h-4/5 w-3/5 grid-flow-row auto-rows-[480px] grid-cols-2 bg-white">
         <div className="bg-black py-4 px-0">
           <div className="h-full w-full">
-            <img className="h-full w-full object-cover" src={data.img} alt="" />
+            <img
+              className="h-full w-full object-cover"
+              src={postData.post.img}
+              alt=""
+            />
           </div>
         </div>
         <div className="relative">
@@ -59,19 +88,19 @@ const ViewPostCard = () => {
             <div className="flex items-center gap-2">
               <div className="h-10 w-10">
                 <img
-                  src={profileImg}
+                  src={postData.user.profileImg}
                   alt=""
                   className="h-full w-full rounded-full border border-black object-cover"
                 />
               </div>
-              <h5 className="font-medium">{"Natasha Vora"}</h5>
+              <h5 className="font-medium">{postData.user.username}</h5>
             </div>
             <MdOutlineMoreHoriz size={20} className="cursor-pointer" />
           </div>
           <div className="scrollbar-hide flex h-3/5 flex-col gap-4 overflow-scroll p-3">
-            <p className="text-base font-normal">{data.caption}</p>
+            <p className="text-base font-normal">{postData.post.caption}</p>
 
-            {data.comments.map((x) => {
+            {postData.post.comments.map((x) => {
               return (
                 <div className="flex items-center gap-2">
                   <div>
@@ -85,7 +114,7 @@ const ViewPostCard = () => {
                   </div>
                   <div className="leading-3">
                     <Link
-                      to={`/profile/${""}`}
+                      to={`/profile/${x.userId}`}
                       className="text-xs font-semibold hover:underline"
                     >
                       {x.username}
@@ -104,24 +133,32 @@ const ViewPostCard = () => {
                   <MdOutlineComment className="cursor-pointer" size={25} />
                 </div>
                 <div className="card-secondary-actions">
-                  <MdOutlineBookmark
-                    size={25}
-                    className="cursor-pointer"
-                    onClick={() => setToggleCollection((prev) => !prev)}
-                  />
+                  {isPostSaved(postData.user.savedPost, postID) ? (
+                    <MdOutlineBookmark
+                      size={25}
+                      className="cursor-pointer"
+                      onClick={() => mutate()}
+                    />
+                  ) : (
+                    <MdOutlineBookmarkBorder
+                      size={25}
+                      className="cursor-pointer"
+                      onClick={() => setToggleCollection((prev) => !prev)}
+                    />
+                  )}
                   {toggleCollection && (
                     <div className="relative">
-                      <SavePost />
+                      <SavePost data={postData} />
                     </div>
                   )}
                 </div>
               </div>
               <div>
                 <h5 className="text-sm font-medium">
-                  {data.likes.length} Likes
+                  {postData.post.likes.length} Likes
                 </h5>
                 <h5 className="text-sm font-medium text-gray-700">
-                  {data.dateCreated}
+                  {postData.post.dateCreated}
                 </h5>
               </div>
             </div>

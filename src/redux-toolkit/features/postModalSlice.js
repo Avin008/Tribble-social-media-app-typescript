@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isModalOpen: false,
-  postData: {},
+  postID: "",
 };
 
 const postModalSlice = createSlice({
@@ -11,7 +11,7 @@ const postModalSlice = createSlice({
   reducers: {
     openPostModal: (state, action) => {
       state.isModalOpen = true;
-      state.postData = action.payload;
+      state.postID = action.payload.postID;
     },
     closePostModal: (state) => {
       state.isModalOpen = false;

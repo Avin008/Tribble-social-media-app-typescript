@@ -165,12 +165,8 @@ const createSavedPostFolder = async (userId, folderName) => {
   }
 };
 
-const saveToCollection = async (
-  userId,
-  folderName,
-  savedPost,
-  { img, postID }
-) => {
+const saveToCollection = async (userId, folderName, savedPost, img, postID) => {
+  console.log(userId, folderName, savedPost, img, postID);
   const data = savedPost.map((x) => {
     if (x.folderName === folderName) {
       return {
@@ -182,18 +178,14 @@ const saveToCollection = async (
     }
   });
 
-  try {
-    const userRef = doc(db, "users", userId);
-    await updateDoc(userRef, {
-      savedPost: data,
-    });
-    alert("post added to saved");
-  } catch (error) {
-    console.log(error);
-  }
+  const userRef = doc(db, "users", userId);
+  return await updateDoc(userRef, {
+    savedPost: data,
+  });
 };
 
 const removedFromSavedPost = async (userId, savedPost, postID) => {
+  console.log(userId, savedPost, postID);
   const result = savedPost.map((x) => {
     if (x.posts.length > 0) {
       return { ...x, posts: x.posts.filter((x) => x.postID !== postID) };
@@ -202,20 +194,25 @@ const removedFromSavedPost = async (userId, savedPost, postID) => {
     }
   });
 
-  try {
-    const userRef = doc(db, "users", userId);
-    await updateDoc(userRef, {
-      savedPost: result,
-    });
-    alert("post removed from savedPost");
-  } catch (error) {
-    console.log(error);
-  }
+  const userRef = doc(db, "users", userId);
+  return await updateDoc(userRef, {
+    savedPost: result,
+  });
 };
 
 const getCurrentUser = async (userID) => {
   const userDocRef = doc(db, "users", userID);
   return await getDoc(userDocRef).data();
+};
+
+// isPostSaved
+const isPostSaved = (dataArr, postID) => {
+  const posts = dataArr.filter((x) => x.posts.length > 0).map((x) => x.posts);
+  const postObj = [];
+  posts.forEach((x) => {
+    postObj.push(...x);
+  });
+  return postObj.map((x) => x.postID).includes(postID);
 };
 
 export {
@@ -234,4 +231,5 @@ export {
   removedFromSavedPost,
   loginUser,
   getCurrentUser,
+  isPostSaved,
 };

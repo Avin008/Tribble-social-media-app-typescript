@@ -10,15 +10,12 @@ import { Posts } from "../../pages/home/HomePage";
 import EmojiKeyBoard from "../emoji-keyboard/EmojiKeyboard";
 import SavePost from "../save-post/SavePost";
 
-type Props = { data: Posts };
-
-const VerticalPostCard = ({ data }: Props) => {
+const VerticalPostCard = ({ data }) => {
   const [toggleSavePost, setToggleSavePost] = useState(false);
   const [toggleEmojiKeyboard, setToggleEmojiKeyboard] = useState(false);
   const commentRef = useRef(null);
 
   const handleCommentFocus = () => {
-    // @ts-ignore: Object is possibly 'null'.
     commentRef.current.focus();
   };
 

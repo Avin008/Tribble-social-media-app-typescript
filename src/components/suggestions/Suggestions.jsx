@@ -1,11 +1,4 @@
-type Props = {
-  profileImg: string;
-  username: string;
-  fullname: string;
-  followerUserId: string;
-};
-
-const Suggestions = ({ data }: { data: Props[] }) => {
+const Suggestions = ({ data }) => {
   return (
     <div className="h-fit w-72 p-3">
       <h1 className="font-semibold text-gray-500">Suggestions for you</h1>
