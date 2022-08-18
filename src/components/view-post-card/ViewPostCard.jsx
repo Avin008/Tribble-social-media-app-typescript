@@ -8,7 +8,7 @@ import {
   MdOutlineFavorite,
   MdOutlineBookmark,
 } from "../../icons";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import SavePost from "../save-post/SavePost";
 import EmojiKeyboard from "../emoji-keyboard/EmojiKeyboard";
 import { Link } from "react-router-dom";
@@ -32,8 +32,13 @@ const ViewPostCard = () => {
   const [toggleEmojikeyboard, setTogglEmojiKeyboard] = useState(false);
   const [comment, setComment] = useState("");
   const [togglePostOptions, setTogglePostOptions] = useState(false);
+  const commentRef = useRef(null);
 
   const queryClient = useQueryClient();
+
+  const focusCommentBox = () => {
+    commentRef.current.focus();
+  };
 
   const dispatch = useDispatch();
   const postID = useSelector((store) => store.postModalSlice.postID);
@@ -205,7 +210,11 @@ const ViewPostCard = () => {
                       onClick={() => mutateLike()}
                     />
                   )}
-                  <MdOutlineComment className="cursor-pointer" size={25} />
+                  <MdOutlineComment
+                    className="cursor-pointer"
+                    size={25}
+                    onClick={() => focusCommentBox()}
+                  />
                 </div>
                 <div className="card-secondary-actions">
                   {isPostSaved(postData.user.savedPost, postID) ? (
@@ -256,6 +265,7 @@ const ViewPostCard = () => {
                   placeholder="Add comment"
                   onChange={(e) => setComment(e.target.value)}
                   value={comment}
+                  ref={commentRef}
                 />
               </div>
               <button
