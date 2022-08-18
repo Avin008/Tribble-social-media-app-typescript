@@ -91,12 +91,14 @@ const uploadImg = async (userID, file, postID) => {
   return imgUrl;
 };
 
-const createPost = async (userID, file, caption) => {
+const createPost = async (userID, username, profileImg, file, caption) => {
   const postID = uuid();
   const img = await uploadImg(userID, file, postID);
   const colllectionRef = doc(db, "posts", postID);
   await setDoc(colllectionRef, {
     userID,
+    username,
+    profileImg,
     img,
     postID,
     caption,
