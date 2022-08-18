@@ -25,12 +25,14 @@ import {
   removedFromSavedPost,
   unlikePost,
 } from "../../firebase/firebaseConfig";
+import PostOptions from "../post-options/PostOptions";
 
 const ViewPostCard = () => {
   const [toggleCollection, setToggleCollection] = useState(false);
   const [toggleEmojikeyboard, setTogglEmojiKeyboard] = useState(false);
   const [comment, setComment] = useState("");
   const queryClient = useQueryClient();
+  const [togglePostOptions, setTogglePostOptions] = useState(false);
 
   const dispatch = useDispatch();
   const postID = useSelector((store) => store.postModalSlice.postID);
@@ -146,7 +148,13 @@ const ViewPostCard = () => {
               </div>
               <h5 className="font-medium">{postData.user.username}</h5>
             </div>
-            <MdOutlineMoreHoriz size={20} className="cursor-pointer" />
+            <div className="rounded-full p-1 hover:bg-gray-200">
+              <MdOutlineMoreHoriz
+                size={25}
+                className="cursor-pointer"
+                onClick={() => setTogglePostOptions((prev) => !prev)}
+              />
+            </div>
           </div>
           <div className="scrollbar-hide flex h-3/5 flex-col gap-4 overflow-scroll p-3">
             <p className="text-base font-normal">{postData.post.caption}</p>
@@ -170,7 +178,7 @@ const ViewPostCard = () => {
                     >
                       {x.username}
                     </Link>
-                    <p className="text-xs font-medium">{x.comment}</p>
+                    <p className="text-sm font-medium">{x.comment}</p>
                   </div>
                 </div>
               );
@@ -216,9 +224,12 @@ const ViewPostCard = () => {
                   )}
                 </div>
               </div>
-              <div>
-                <h5 className="text-sm font-medium">
-                  {postData.post.likes.length} Likes
+              <div className="px-2">
+                <h5 className="text-md font-medium">
+                  <span className="font-semibold">
+                    {postData.post.likes.length}
+                  </span>{" "}
+                  Likes
                 </h5>
                 <h5 className="text-sm font-medium text-gray-700">
                   {postData.post.dateCreated}
@@ -244,8 +255,11 @@ const ViewPostCard = () => {
                 />
               </div>
               <button
-                className="border-0 bg-transparent p-0 text-sm font-semibold text-gray-500 outline-none"
+                className={`border-0 bg-transparent p-0 text-sm font-semibold outline-none ${
+                  !comment ? `: text-gray-500` : `text-black`
+                }`}
                 onClick={() => mutateAddComment()}
+                disabled={comment ? false : true}
               >
                 Post
               </button>
@@ -254,6 +268,7 @@ const ViewPostCard = () => {
         </div>
       </div>
       {false && <CreateCollectionModal />}
+      {togglePostOptions && <PostOptions toggleFunc={setTogglePostOptions} />}
     </div>
   );
 };
