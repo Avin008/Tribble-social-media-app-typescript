@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 const SavedPostCard = ({ data }) => {
   const navigate = useNavigate();
 
-  console.log(data.folderName);
-
   return (
     <div
       className="relative h-72 w-full cursor-pointer"

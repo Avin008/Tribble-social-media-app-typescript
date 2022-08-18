@@ -1,4 +1,8 @@
+import { useSelector } from "react-redux";
+
 const UserProfileCard = ({ userData }) => {
+  const { token } = useSelector((store) => store.authSlice);
+
   return (
     <div className="flex h-fit w-full items-center gap-12 rounded-lg border border-gray-500 bg-white p-4">
       <div className="">
@@ -15,9 +19,15 @@ const UserProfileCard = ({ userData }) => {
         <div className="flex items-center justify-between">
           <h4 className="text-3xl font-light">{userData.username}</h4>
 
-          <button className="cursor-pointer rounded-md border-0 bg-purple-700 px-4 py-1 text-sm font-medium text-white">
-            Follow
-          </button>
+          {userData.userId === token ? (
+            <button className="cursor-pointer rounded-md border-0 bg-purple-700 px-4 py-1 text-sm font-medium text-white">
+              Edit Profile
+            </button>
+          ) : (
+            <button className="cursor-pointer rounded-md border-0 bg-purple-700 px-4 py-1 text-sm font-medium text-white">
+              Follow
+            </button>
+          )}
         </div>
         <div className="flex space-x-8">
           <h5 className="font-medium">
