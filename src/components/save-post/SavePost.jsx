@@ -20,6 +20,7 @@ const SavePost = ({ data }) => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["posts"]);
+        queryClient.invalidateQueries(["current-user-data"]);
       },
     }
   );
