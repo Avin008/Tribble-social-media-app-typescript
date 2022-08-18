@@ -9,15 +9,6 @@ const emojis = [
     ios_version: "6.0",
   },
   {
-    emoji: "😃",
-    description: "grinning face with big eyes",
-    category: "Smileys & Emotion",
-    aliases: ["smiley"],
-    tags: ["happy", "joy", "haha"],
-    unicode_version: "6.0",
-    ios_version: "6.0",
-  },
-  {
     emoji: "😄",
     description: "grinning face with smiling eyes",
     category: "Smileys & Emotion",
@@ -172,11 +163,16 @@ const emojis = [
   },
 ];
 
-const EmojiKeyBoard = () => {
+const EmojiKeyBoard = ({ addEmojiFunc }) => {
   return (
     <div className="absolute bottom-10 left-0 grid h-60 w-60 select-none grid-flow-row auto-rows-max grid-cols-7 rounded-md  border border-black bg-white shadow-sm">
       {emojis.map((x) => (
-        <div className="cursor-pointer text-2xl">{x.emoji}</div>
+        <div
+          className="cursor-pointer text-2xl"
+          onClick={() => addEmojiFunc((prev) => prev + x.emoji)}
+        >
+          {x.emoji}
+        </div>
       ))}
     </div>
   );

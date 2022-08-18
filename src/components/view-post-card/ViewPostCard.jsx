@@ -232,7 +232,9 @@ const ViewPostCard = () => {
                   size={25}
                   onClick={() => setTogglEmojiKeyboard((prev) => !prev)}
                 />
-                {toggleEmojikeyboard && <EmojiKeyboard />}
+                {toggleEmojikeyboard && (
+                  <EmojiKeyboard addEmojiFunc={setComment} />
+                )}
                 <input
                   className="relative w-full  border-0 bg-transparent outline-none"
                   type="text"
