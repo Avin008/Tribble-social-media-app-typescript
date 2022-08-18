@@ -109,24 +109,16 @@ const createPost = async (userID, file, caption) => {
 
 // post a comment
 
-const postComment = async (
-  { username, profileImg, userId },
-  postID,
-  comment
-) => {
-  try {
-    const docRef = doc(db, "posts", postID);
-    await updateDoc(docRef, {
-      comments: arrayUnion({
-        username,
-        userId,
-        profileImg,
-        comment,
-      }),
-    });
-  } catch (error) {
-    console.log(error);
-  }
+const postComment = async (username, profileImg, userId, postID, comment) => {
+  const docRef = doc(db, "posts", postID);
+  return await updateDoc(docRef, {
+    comments: arrayUnion({
+      username,
+      userId,
+      profileImg,
+      comment,
+    }),
+  });
 };
 
 // like post

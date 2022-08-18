@@ -21,6 +21,7 @@ import {
   db,
   isPostSaved,
   likePost,
+  postComment,
   removedFromSavedPost,
   unlikePost,
 } from "../../firebase/firebaseConfig";
@@ -84,6 +85,26 @@ const ViewPostCard = () => {
     },
     {
       onSuccess: () => {
+        queryClient.invalidateQueries(["posts"]);
+      },
+    }
+  );
+
+  // post comment
+
+  const { mutate: mutateAddComment } = useMutation(
+    async () => {
+      return await postComment(
+        "noranuwa",
+        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80",
+        token,
+        postData.post.postID,
+        comment
+      );
+    },
+    {
+      onSuccess: () => {
+        setComment("");
         queryClient.invalidateQueries(["posts"]);
       },
     }
@@ -221,7 +242,7 @@ const ViewPostCard = () => {
               </div>
               <button
                 className="border-0 bg-transparent p-0 text-sm font-semibold text-gray-500 outline-none"
-                disabled={true}
+                onClick={() => mutateAddComment()}
               >
                 Post
               </button>
