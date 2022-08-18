@@ -40,7 +40,7 @@ const HomePage = () => {
   const getFollowedPosts = (allPosts, userFollowing) => {
     const filteredPosts = [];
     allPosts.forEach((x) => {
-      if (userFollowing.includes(x.userID)) {
+      if (userFollowing.includes(x.userID) || x.userID === token) {
         filteredPosts.push(x);
       }
     });
