@@ -19,6 +19,7 @@ const Navbar = () => {
   const [toggleSearchBar, setToggleSearchBar] = useState(false);
   const [toggleProfileActions, setToggleProfileActions] = useState(false);
   const [toggleNotification, setToggleNotification] = useState(false);
+  const [openCreatePostModal, setOpenCreatePostModal] = useState(null);
 
   return (
     <div className="fixed top-0 left-0 right-0 z-10 flex h-14 items-center justify-evenly border border-gray-400 bg-white shadow-sm">
@@ -44,9 +45,12 @@ const Navbar = () => {
         >
           <MdOutlineHome size={25} />
         </li>
-        <li className="cursor-pointer rounded-full p-1 hover:bg-gray-200  active:bg-gray-300">
+        <li
+          className="cursor-pointer rounded-full p-1 hover:bg-gray-200  active:bg-gray-300"
+          onClick={() => setOpenCreatePostModal(true)}
+        >
           <CgAddR size={25} />
-          {false && <CreatePostModal />}
+          {openCreatePostModal && <CreatePostModal />}
         </li>
         <li
           className="cursor-pointer rounded-full p-1 hover:bg-gray-200  active:bg-gray-300"

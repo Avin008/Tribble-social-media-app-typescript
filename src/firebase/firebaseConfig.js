@@ -87,7 +87,6 @@ const loginUser = async (email, password) => {
 const uploadImg = async (userID, file, postID) => {
   const storageRef = ref(storage, `posts/${userID}/${postID}.jpg`);
   await uploadBytes(storageRef, file);
-  alert("img uploaded");
   const imgUrl = await getDownloadURL(storageRef);
   return imgUrl;
 };

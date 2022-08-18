@@ -1,36 +1,71 @@
+import { useMutation } from "@tanstack/react-query";
 import { useRef, useState } from "react";
-import { MdOutlineAddPhotoAlternate } from "react-icons/md";
+import { MdClose, MdOutlineAddPhotoAlternate } from "react-icons/md";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { createPost } from "../../firebase/firebaseConfig";
 const CreatePostModal = () => {
   const fileRef = useRef(null);
-  const [files, setFile] = useState({});
+  const [files, setFile] = useState(null);
+  const [caption, setCaption] = useState("");
+  const navigate = useNavigate();
+
+  const { token } = useSelector((store) => store.authSlice);
 
   const handleClick = () => {
-    // @ts-ignore: Object is possibly 'null'.
     fileRef.current.click();
   };
 
+  const { mutate, isLoading } = useMutation(
+    async () => {
+      return await createPost(token, files, caption);
+    },
+    {
+      onSuccess: () => {
+        navigate(`/profile/${token}`);
+      },
+    }
+  );
+
   return (
     <div className="fixed top-0 bottom-0 left-0 right-0 flex items-center justify-center bg-black/50">
+      <div className="absolute top-9 right-10">
+        <MdClose className="text-white" size={30} />
+      </div>
       <div className="h-2/4 w-2/4 rounded-xl border bg-white">
         <div className="flex justify-center border-b border-black p-2">
           <h1 className="font-semibold">Create new post</h1>
         </div>
         <div className="grid h-[70%] grid-cols-2">
-          <div className="flex flex-col items-center justify-center gap-1">
+          <div className={`relative h-60 w-full p-1`}>
+            <img
+              className="h-full w-full object-contain"
+              src={files && URL.createObjectURL(files)}
+              alt=""
+            />
+
             <div
-              className="absolute flex flex-col items-center"
+              className="absolute top-20 flex w-full flex-col items-center justify-center"
               onClick={handleClick}
             >
               <input
-                ref={fileRef}
-                // @ts-ignore: Object is possibly 'null'.
-
-                onChange={(e) => setFile(e.target.files[0])}
                 type="file"
+                ref={fileRef}
                 hidden
+                onChange={(e) => setFile(e.target.files[0])}
               />
-              <MdOutlineAddPhotoAlternate className="text-gray-500" size={50} />
-              <p className="text-sm font-medium">Click here to upload Image</p>
+              <MdOutlineAddPhotoAlternate
+                size={40}
+                className={files === null ? `text-black` : `text-white`}
+              />
+              <p
+                className={
+                  files === null ? `text-black` : `font-semibold text-gray-800`
+                }
+              >
+                {files && "Click here to change Image"}
+                {!files && "Click here to Upload Image"}
+              </p>
             </div>
           </div>
           <div className="border-l border-black">
@@ -48,12 +83,21 @@ const CreatePostModal = () => {
               <textarea
                 placeholder="Write a caption"
                 className="h-32 w-full resize-none p-2 font-semibold outline-none"
-                name=""
-                id=""
+                onChange={(e) => setCaption(e.target.value)}
+                value={caption}
               ></textarea>
             </div>
-            <div className="flex justify-end border-t border-black p-2">
-              <button className="rounded-lg bg-purple-500 px-4 py-1 font-normal text-white">
+            <div className="flex justify-end gap-4 border-t border-black px-4 py-2">
+              <button
+                className="rounded-md border  border-purple-500 bg-white px-6 py-1 font-medium text-purple-500"
+                onClick={() => mutate()}
+              >
+                Cancel
+              </button>
+              <button
+                className="rounded-md bg-purple-500 px-6 py-1 font-normal text-white"
+                onClick={() => mutate()}
+              >
                 Post
               </button>
             </div>
