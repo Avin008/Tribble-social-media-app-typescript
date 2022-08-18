@@ -11,6 +11,9 @@ const CreatePostModal = () => {
   const navigate = useNavigate();
 
   const { token } = useSelector((store) => store.authSlice);
+  const { loggedInUser } = useSelector((store) => store.userSlice);
+
+  console.log(loggedInUser);
 
   const handleClick = () => {
     fileRef.current.click();
@@ -18,7 +21,13 @@ const CreatePostModal = () => {
 
   const { mutate, isLoading } = useMutation(
     async () => {
-      return await createPost(token, files, caption);
+      return await createPost(
+        token,
+        loggedInUser.username,
+        loggedInUser.profileImg,
+        files,
+        caption
+      );
     },
     {
       onSuccess: () => {
