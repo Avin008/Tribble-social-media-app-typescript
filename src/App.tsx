@@ -42,7 +42,7 @@ function App() {
             }
           />
           <Route
-            path="saved-posts/:postID"
+            path="saved-posts/:collectionID"
             element={
               <RequireAuth>
                 <SavedPostPage />

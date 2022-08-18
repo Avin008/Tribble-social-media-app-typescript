@@ -6,7 +6,7 @@ const SavedPostCard = ({ data }) => {
   return (
     <div
       className="relative h-72 w-full cursor-pointer"
-      onClick={() => navigate(`/saved-posts/${data.folderName}`)}
+      onClick={() => navigate(`/saved-posts/${data.collectionID}`)}
     >
       <img
         className="h-full w-full object-cover"

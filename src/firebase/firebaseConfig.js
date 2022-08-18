@@ -140,7 +140,11 @@ const unlikePost = async (postID, userId) => {
 const createCollection = async (userId, folderName) => {
   const userRef = doc(db, "users", userId);
   return await updateDoc(userRef, {
-    savedPost: arrayUnion({ folderName: folderName, posts: [] }),
+    savedPost: arrayUnion({
+      folderName: folderName,
+      posts: [],
+      collectionID: uuid(),
+    }),
   });
 };
 
