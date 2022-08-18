@@ -56,7 +56,7 @@ const Suggestions = () => {
       <h1 className="font-semibold text-gray-500">Suggestions for you</h1>
       {getSuggestions(
         suggestions,
-        loggedInUser.followers,
+        loggedInUser.following,
         loggedInUser.userId
       ).map((x) => (
         <div className="flex h-fit justify-between py-2">
@@ -73,7 +73,7 @@ const Suggestions = () => {
               <h2 className="text-sm">{x.fullname}</h2>
             </span>
           </div>
-          {!loggedInUser.followers.includes(x.userId) ? (
+          {!loggedInUser.following.includes(x.userId) ? (
             <button
               className="font-medium text-purple-800"
               onClick={() => mutate(x.userId)}
