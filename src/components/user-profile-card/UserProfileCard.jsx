@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 
-const UserProfileCard = ({ userData }) => {
+const UserProfileCard = ({ data }) => {
+  const { userPostsData, userData } = data;
   const { token } = useSelector((store) => store.authSlice);
 
   return (
@@ -31,7 +32,7 @@ const UserProfileCard = ({ userData }) => {
         </div>
         <div className="flex space-x-8">
           <h5 className="font-medium">
-            <span className="font-semibold">{userData.posts.length}</span> Posts
+            <span className="font-semibold">{userPostsData.length}</span> Posts
           </h5>
           <h5 className="font-medium">
             <span className="font-semibold">{userData.followers.length}</span>{" "}

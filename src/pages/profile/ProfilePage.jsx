@@ -43,7 +43,7 @@ const ProfilePage = () => {
 
   return (
     <div className="mx-auto mt-20 flex w-3/5 flex-col gap-5">
-      <UserProfileCard userData={userData} />
+      <UserProfileCard data={{ userData, userPostsData }} />
       {isUserPostsLoading ? (
         "<h1>Loading...</h1>"
       ) : (
