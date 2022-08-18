@@ -6,7 +6,6 @@ import {
   MdOutlineFavoriteBorder,
   MdMoreHoriz,
 } from "react-icons/md";
-import { Posts } from "../../pages/home/HomePage";
 import EmojiKeyBoard from "../emoji-keyboard/EmojiKeyboard";
 import SavePost from "../save-post/SavePost";
 
