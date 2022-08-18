@@ -88,10 +88,7 @@ const CreatePostModal = () => {
               ></textarea>
             </div>
             <div className="flex justify-end gap-4 border-t border-black px-4 py-2">
-              <button
-                className="rounded-md border  border-purple-500 bg-white px-6 py-1 font-medium text-purple-500"
-                onClick={() => mutate()}
-              >
+              <button className="rounded-md border  border-purple-500 bg-white px-6 py-1 font-medium text-purple-500">
                 Cancel
               </button>
               <button
