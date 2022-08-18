@@ -1,13 +1,26 @@
 import { MdOutlineClose } from "../../icons/";
 import { useState } from "react";
-import {
-  closeCollectionModal,
-  openCollectionModal,
-} from "../../redux-toolkit/features/collectionModalSlice";
-import { useDispatch } from "react-redux";
+import { closeCollectionModal } from "../../redux-toolkit/features/collectionModalSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createCollection } from "../../firebase/firebaseConfig";
 const CreateCollectionModal = ({ data }) => {
   const [collectionName, setCollectionName] = useState("");
   const dispatch = useDispatch();
+  const { token } = useSelector((store) => store.authSlice);
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation(
+    async () => {
+      return await createCollection(token, collectionName);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["posts"]);
+        setCollectionName("");
+      },
+    }
+  );
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 z-10 flex items-center justify-center bg-black/40">
@@ -32,7 +45,10 @@ const CreateCollectionModal = ({ data }) => {
           </div>
         </div>
         <div className="flex items-center justify-center border-t border-gray-700 p-2">
-          <button className="cursor-pointer border-0 bg-transparent p-0 font-medium text-purple-700">
+          <button
+            className="cursor-pointer border-0 bg-transparent p-0 font-medium text-purple-700"
+            onClick={() => mutate()}
+          >
             Create Collection
           </button>
         </div>

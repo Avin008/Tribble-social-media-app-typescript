@@ -137,16 +137,11 @@ const unlikePost = async (postID, userId) => {
 
 // create saved post folder
 
-const createSavedPostFolder = async (userId, folderName) => {
-  try {
-    const userRef = doc(db, "users", userId);
-    await updateDoc(userRef, {
-      savedPost: arrayUnion({ folderName: folderName, posts: [] }),
-    });
-    alert("created folder successfully");
-  } catch (error) {
-    console.log(error);
-  }
+const createCollection = async (userId, folderName) => {
+  const userRef = doc(db, "users", userId);
+  return await updateDoc(userRef, {
+    savedPost: arrayUnion({ folderName: folderName, posts: [] }),
+  });
 };
 
 const saveToCollection = async (userId, folderName, savedPost, img, postID) => {
@@ -210,7 +205,7 @@ export {
   postComment,
   likePost,
   unlikePost,
-  createSavedPostFolder,
+  createCollection,
   saveToCollection,
   removedFromSavedPost,
   loginUser,
