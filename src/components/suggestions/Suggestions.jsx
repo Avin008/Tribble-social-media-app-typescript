@@ -1,11 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
-import { collection, getDocs } from "firebase/firestore";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  arrayUnion,
+  collection,
+  doc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { db } from "../../firebase/firebaseConfig";
 
 const Suggestions = () => {
   const { loggedInUser } = useSelector((store) => store.userSlice);
+  const queryClient = useQueryClient();
   const { data: suggestions, isLoading } = useQuery(
     ["suggestions"],
     async () => {
@@ -14,6 +21,32 @@ const Suggestions = () => {
     }
   );
 
+  const { mutate } = useMutation(
+    async (followerId) => {
+      const userDoc = doc(db, "users", loggedInUser.userId);
+      return await updateDoc(userDoc, { followers: arrayUnion(followerId) });
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["suggestions"]);
+        alert("follower added");
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    }
+  );
+
+  const getSuggestions = (suggestions, userFollowers, userId) => {
+    const filteredSuggestions = [];
+    suggestions.forEach((x) => {
+      if (!userFollowers.includes(x.userId) && x.userId !== userId) {
+        filteredSuggestions.push(x);
+      }
+    });
+    return filteredSuggestions;
+  };
+
   if (isLoading) {
     return <h1>Loading...</h1>;
   }
@@ -21,7 +54,11 @@ const Suggestions = () => {
   return (
     <div className="h-fit w-72 p-3">
       <h1 className="font-semibold text-gray-500">Suggestions for you</h1>
-      {suggestions.map((x) => (
+      {getSuggestions(
+        suggestions,
+        loggedInUser.followers,
+        loggedInUser.userId
+      ).map((x) => (
         <div className="flex h-fit justify-between py-2">
           <div className="flex items-center gap-2 px-2 font-medium">
             <div className="h-10 w-10">
@@ -36,7 +73,16 @@ const Suggestions = () => {
               <h2 className="text-sm">{x.fullname}</h2>
             </span>
           </div>
-          <button className="font-medium text-purple-800">Follow</button>
+          {!loggedInUser.followers.includes(x.userId) ? (
+            <button
+              className="font-medium text-purple-800"
+              onClick={() => mutate(x.userId)}
+            >
+              Follow
+            </button>
+          ) : (
+            <button className="font-medium text-purple-800">unFollow</button>
+          )}
         </div>
       ))}
     </div>
