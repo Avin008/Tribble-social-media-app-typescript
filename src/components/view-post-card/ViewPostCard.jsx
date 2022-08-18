@@ -35,6 +35,7 @@ const ViewPostCard = () => {
   const dispatch = useDispatch();
   const postID = useSelector((store) => store.postModalSlice.postID);
   const token = useSelector((store) => store.authSlice.token);
+  const { loggedInUser } = useSelector((store) => store.userSlice);
 
   // fetch post Data by postID
 
@@ -95,9 +96,9 @@ const ViewPostCard = () => {
   const { mutate: mutateAddComment } = useMutation(
     async () => {
       return await postComment(
-        "noranuwa",
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80",
-        token,
+        loggedInUser.username,
+        loggedInUser.profileImg,
+        loggedInUser.userId,
         postData.post.postID,
         comment
       );

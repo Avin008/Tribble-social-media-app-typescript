@@ -1,17 +1,28 @@
 import { useQuery } from "@tanstack/react-query";
 import { doc, getDoc } from "firebase/firestore";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../firebase/firebaseConfig";
+import { initiateUserData } from "../../redux-toolkit/features/userSlice";
 
 const LoggedInUserCard = () => {
   const { token } = useSelector((store) => store.authSlice);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const { data, isLoading } = useQuery(["users"], async () => {
-    const docRef = doc(db, "users", token);
-    return (await getDoc(docRef)).data();
-  });
+  const { data, isLoading } = useQuery(
+    ["users"],
+    async () => {
+      const docRef = doc(db, "users", token);
+      const res = (await getDoc(docRef)).data();
+      return res;
+    },
+    {
+      onSuccess: (data) => {
+        dispatch(initiateUserData({ userInfo: data }));
+      },
+    }
+  );
 
   if (isLoading) {
     return <h1>Loading</h1>;
