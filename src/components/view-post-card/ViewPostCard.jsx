@@ -31,13 +31,17 @@ const ViewPostCard = () => {
   const [toggleCollection, setToggleCollection] = useState(false);
   const [toggleEmojikeyboard, setTogglEmojiKeyboard] = useState(false);
   const [comment, setComment] = useState("");
-  const queryClient = useQueryClient();
   const [togglePostOptions, setTogglePostOptions] = useState(false);
+
+  const queryClient = useQueryClient();
 
   const dispatch = useDispatch();
   const postID = useSelector((store) => store.postModalSlice.postID);
   const token = useSelector((store) => store.authSlice.token);
   const { loggedInUser } = useSelector((store) => store.userSlice);
+  const { collectionModal } = useSelector(
+    (store) => store.collectionModalSlice
+  );
 
   // fetch post Data by postID
 
@@ -267,7 +271,7 @@ const ViewPostCard = () => {
           </div>
         </div>
       </div>
-      {false && <CreateCollectionModal />}
+      {collectionModal && <CreateCollectionModal />}
       {togglePostOptions && <PostOptions toggleFunc={setTogglePostOptions} />}
     </div>
   );

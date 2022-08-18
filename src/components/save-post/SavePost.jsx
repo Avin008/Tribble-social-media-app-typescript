@@ -1,7 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
 import { saveToCollection } from "../../firebase/firebaseConfig";
 import { MdAdd } from "../../icons";
+import { openCollectionModal } from "../../redux-toolkit/features/collectionModalSlice";
 const SavePost = ({ data }) => {
+  const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
   const { mutate, isLoading } = useMutation(
@@ -25,7 +28,11 @@ const SavePost = ({ data }) => {
     <div className="absolute bottom-12 right-0 h-56 w-60 rounded-md border border-gray-500 bg-white shadow-sm">
       <div className="flex justify-between border-b border-gray-700 p-2">
         <h4 className="font-medium">Collections</h4>
-        <MdAdd className="cursor-pointer" size={25} />
+        <MdAdd
+          className="cursor-pointer"
+          size={25}
+          onClick={() => dispatch(openCollectionModal())}
+        />
       </div>
       <ul className="m-0 h-4/5 list-none overflow-y-scroll p-1">
         {data.user.savedPost.map((x) => (

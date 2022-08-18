@@ -1,13 +1,24 @@
 import { MdOutlineClose } from "../../icons/";
 import { useState } from "react";
-const CreateCollectionModal = () => {
+import {
+  closeCollectionModal,
+  openCollectionModal,
+} from "../../redux-toolkit/features/collectionModalSlice";
+import { useDispatch } from "react-redux";
+const CreateCollectionModal = ({ data }) => {
   const [collectionName, setCollectionName] = useState("");
+  const dispatch = useDispatch();
+
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 z-10 flex items-center justify-center bg-black/40">
       <div className="h-fit w-96 rounded-md bg-white shadow-sm">
         <div className="flex items-center justify-between border-b border-black py-2 px-4">
           <h5 className="font-semibold">New Collection</h5>
-          <MdOutlineClose size={25} className="cursor-pointer" />
+          <MdOutlineClose
+            size={25}
+            className="cursor-pointer"
+            onClick={() => dispatch(closeCollectionModal())}
+          />
         </div>
         <div className="flex flex-col items-center gap-2 p-4">
           <div className="w-full">
