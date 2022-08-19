@@ -1,3 +1,4 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import {
   MdOutlineEmojiEmotions,
@@ -5,6 +6,8 @@ import {
   MdOutlineComment,
   MdOutlineFavoriteBorder,
   MdMoreHoriz,
+  MdOutlineFavorite,
+  MdFavoriteBorder,
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -13,6 +16,11 @@ import { openPostModal } from "../../redux-toolkit/features/postModalSlice";
 import { openPostOptionsModal } from "../../redux-toolkit/features/postOptionsModalSlice";
 import EmojiKeyBoard from "../emoji-keyboard/EmojiKeyboard";
 import SavePost from "../save-post/SavePost";
+import {
+  likePost,
+  unlikePost,
+  postComment,
+} from "../../firebase/firebaseConfig";
 
 export const avatarImg =
   "https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png";
@@ -21,6 +29,7 @@ const VerticalPostCard = ({ data }) => {
   const [toggleSavePost, setToggleSavePost] = useState(false);
   const [toggleEmojiKeyboard, setToggleEmojiKeyboard] = useState(false);
   const [toggleCollection, setToggleCollection] = useState(false);
+  const [comment, setComment] = useState("");
   const commentRef = useRef(null);
   const { token } = useSelector((store) => store.authSlice);
   const { postID } = useSelector((store) => store.postModalSlice);
@@ -31,9 +40,57 @@ const VerticalPostCard = ({ data }) => {
     commentRef.current.focus();
   };
 
+  const queryClient = useQueryClient();
+
   const comments = [];
 
   console.log(loggedInUser);
+
+  // like post
+
+  const { mutate: mutateLike } = useMutation(
+    async () => {
+      return await likePost(data.postID, token);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["followed-user-post"]);
+      },
+    }
+  );
+
+  // unlike post
+
+  const { mutate: mutateUnLike } = useMutation(
+    async () => {
+      return await unlikePost(data.postID, token);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["followed-user-post"]);
+      },
+    }
+  );
+
+  // post comment
+
+  const { mutate: mutateAddComment } = useMutation(
+    async () => {
+      return await postComment(
+        loggedInUser.username,
+        loggedInUser.profileImg,
+        loggedInUser.userId,
+        data.postID,
+        comment
+      );
+    },
+    {
+      onSuccess: () => {
+        setComment("");
+        queryClient.invalidateQueries(["followed-user-post"]);
+      },
+    }
+  );
 
   return (
     <div className="h-fit w-96 rounded-lg border border-black bg-white">
@@ -70,7 +127,19 @@ const VerticalPostCard = ({ data }) => {
         <div className="flex items-center justify-between p-1">
           <div className="flex gap-2">
             <span className="cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300">
-              <MdOutlineFavoriteBorder size={28} className="" />
+              {data.likes.map((x) => x.userId).includes(token) ? (
+                <MdOutlineFavorite
+                  className="cursor-pointer"
+                  size={25}
+                  onClick={() => mutateUnLike()}
+                />
+              ) : (
+                <MdFavoriteBorder
+                  className="cursor-pointer"
+                  size={25}
+                  onClick={() => mutateLike()}
+                />
+              )}
             </span>
             <span className="cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300">
               <MdOutlineComment
@@ -129,18 +198,25 @@ const VerticalPostCard = ({ data }) => {
       </div>
       <div className="flex items-center justify-between gap-1 p-2 px-2">
         <span className="relative cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300">
-          <MdOutlineEmojiEmotions size={25} />
-          {toggleEmojiKeyboard && <EmojiKeyBoard />}
+          <MdOutlineEmojiEmotions
+            size={25}
+            onClick={() => setToggleEmojiKeyboard((prev) => !prev)}
+          />
+          {toggleEmojiKeyboard && <EmojiKeyBoard addEmojiFunc={setComment} />}
         </span>
         <textarea
           rows={1}
           className="w-full resize-none outline-none"
-          name=""
-          id=""
+          value={comment}
           placeholder="Add Comment"
           ref={commentRef}
+          onChange={(e) => setComment(e.target.value)}
         ></textarea>
-        <button className="font-medium text-gray-500" disabled>
+        <button
+          className="font-medium"
+          disabled={comment ? false : true}
+          onClick={() => mutateAddComment()}
+        >
           Post
         </button>
       </div>
