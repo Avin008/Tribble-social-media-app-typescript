@@ -26,6 +26,7 @@ import {
   unlikePost,
 } from "../../firebase/firebaseConfig";
 import PostOptions from "../post-options/PostOptions";
+import { avatarImg } from "../vertical-post-card/VerticalPostCard";
 
 const ViewPostCard = () => {
   const [toggleCollection, setToggleCollection] = useState(false);
@@ -150,7 +151,11 @@ const ViewPostCard = () => {
             <div className="flex items-center gap-2">
               <div className="h-10 w-10">
                 <img
-                  src={postData.user.profileImg}
+                  src={
+                    postData.user.profileImg
+                      ? postData.user.profileImg
+                      : avatarImg
+                  }
                   alt=""
                   className="h-full w-full rounded-full border border-black object-cover"
                 />
