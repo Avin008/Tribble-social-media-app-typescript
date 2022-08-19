@@ -29,11 +29,7 @@ const Suggestions = () => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["suggestions"]);
-        alert("follower added");
-      },
-      onError: (err) => {
-        console.log(err);
+        queryClient.invalidateQueries(["users"]);
       },
     }
   );
