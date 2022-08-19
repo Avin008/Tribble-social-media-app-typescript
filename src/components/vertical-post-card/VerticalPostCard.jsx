@@ -6,17 +6,27 @@ import {
   MdOutlineFavoriteBorder,
   MdMoreHoriz,
 } from "react-icons/md";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import EmojiKeyBoard from "../emoji-keyboard/EmojiKeyboard";
 import SavePost from "../save-post/SavePost";
+
+const avatarImg =
+  "https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png";
 
 const VerticalPostCard = ({ data }) => {
   const [toggleSavePost, setToggleSavePost] = useState(false);
   const [toggleEmojiKeyboard, setToggleEmojiKeyboard] = useState(false);
   const commentRef = useRef(null);
+  const { token } = useSelector((store) => store.authSlice);
 
   const handleCommentFocus = () => {
     commentRef.current.focus();
   };
+
+  const comments = [];
+
+  console.log(data);
 
   return (
     <div className="h-fit w-96 rounded-lg border border-black bg-white">
@@ -25,11 +35,16 @@ const VerticalPostCard = ({ data }) => {
           <div className="h-10 w-10">
             <img
               className="aspect-square h-full w-full rounded-full border-2 border-black object-cover"
-              src={data.profileImg}
+              src={data.profileImg ? data.profileImg : `${avatarImg}`}
               alt=""
             />
           </div>
-          <h1 className="text-sm font-semibold">{data.username}</h1>
+          <Link
+            to={`/profile/${data.userID}`}
+            className="text-sm font-semibold hover:underline"
+          >
+            {data.username}
+          </Link>
         </div>
         <span className="cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300">
           <MdMoreHoriz size={25} />
@@ -75,7 +90,12 @@ const VerticalPostCard = ({ data }) => {
             </p>
           </div>
           <ul className="">
-            {data.comments.map((x) => (
+            {data.comments.forEach((x) => {
+              if (x.userId === token) {
+                comments.push(x);
+              }
+            })}
+            {comments.map((x) => (
               <li className="text-sm font-medium">
                 <span className="font-semibold">{x.username}</span> {x.comment}
               </li>
