@@ -179,7 +179,7 @@ const ViewPostCard = () => {
                   <div>
                     <div className="h-10 w-10">
                       <img
-                        src={x.profileImg}
+                        src={x.profileImg ? x.profileImg : avatarImg}
                         alt=""
                         className="h-full w-full rounded-full border border-black object-cover"
                       />
