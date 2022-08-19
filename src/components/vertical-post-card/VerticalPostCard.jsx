@@ -44,8 +44,6 @@ const VerticalPostCard = ({ data }) => {
 
   const comments = [];
 
-  console.log(loggedInUser);
-
   // like post
 
   const { mutate: mutateLike } = useMutation(
@@ -110,13 +108,12 @@ const VerticalPostCard = ({ data }) => {
             {data.username}
           </Link>
         </div>
-        <span
-          className="cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300"
-          onClick={() => dispatch(openPostOptionsModal())}
-        >
+        <span className="cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300">
           <MdMoreHoriz
             size={25}
-            onClick={() => dispatch(closeCollectionList())}
+            onClick={() =>
+              dispatch(openPostOptionsModal({ userID: data.userID }))
+            }
           />
         </span>
       </div>

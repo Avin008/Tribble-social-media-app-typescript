@@ -2,7 +2,6 @@ import { useMutation } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { createPost } from "../../firebase/firebaseConfig";
 import { closeCreatePostModal } from "../../redux-toolkit/features/createPostModalSlice";
 import { avatarImg } from "../vertical-post-card/VerticalPostCard";
@@ -10,7 +9,6 @@ const CreatePostModal = () => {
   const fileRef = useRef(null);
   const [files, setFile] = useState(null);
   const [caption, setCaption] = useState("");
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { token } = useSelector((store) => store.authSlice);
