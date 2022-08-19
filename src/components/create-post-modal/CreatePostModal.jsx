@@ -1,19 +1,19 @@
 import { useMutation } from "@tanstack/react-query";
 import { useRef, useState } from "react";
-import { MdClose, MdOutlineAddPhotoAlternate } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { MdOutlineAddPhotoAlternate } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createPost } from "../../firebase/firebaseConfig";
+import { closeCreatePostModal } from "../../redux-toolkit/features/createPostModalSlice";
 const CreatePostModal = () => {
   const fileRef = useRef(null);
   const [files, setFile] = useState(null);
   const [caption, setCaption] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { token } = useSelector((store) => store.authSlice);
   const { loggedInUser } = useSelector((store) => store.userSlice);
-
-  console.log(loggedInUser);
 
   const handleClick = () => {
     fileRef.current.click();
@@ -38,9 +38,6 @@ const CreatePostModal = () => {
 
   return (
     <div className="fixed top-0 bottom-0 left-0 right-0 flex items-center justify-center bg-black/50">
-      <div className="absolute top-9 right-10">
-        <MdClose className="text-white" size={30} />
-      </div>
       <div className="h-2/4 w-2/4 rounded-xl border bg-white">
         <div className="flex justify-center border-b border-black p-2">
           <h1 className="font-semibold">Create new post</h1>
@@ -97,7 +94,10 @@ const CreatePostModal = () => {
               ></textarea>
             </div>
             <div className="flex justify-end gap-4 border-t border-black px-4 py-2">
-              <button className="rounded-md border  border-purple-500 bg-white px-6 py-1 font-medium text-purple-500">
+              <button
+                className="rounded-md border  border-purple-500 bg-white px-6 py-1 font-medium text-purple-500"
+                onClick={() => dispatch(closeCreatePostModal())}
+              >
                 Cancel
               </button>
               <button
