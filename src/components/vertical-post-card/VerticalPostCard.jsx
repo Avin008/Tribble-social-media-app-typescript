@@ -6,8 +6,9 @@ import {
   MdOutlineFavoriteBorder,
   MdMoreHoriz,
 } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { openPostModal } from "../../redux-toolkit/features/postModalSlice";
 import EmojiKeyBoard from "../emoji-keyboard/EmojiKeyboard";
 import SavePost from "../save-post/SavePost";
 
@@ -19,6 +20,8 @@ const VerticalPostCard = ({ data }) => {
   const [toggleEmojiKeyboard, setToggleEmojiKeyboard] = useState(false);
   const commentRef = useRef(null);
   const { token } = useSelector((store) => store.authSlice);
+  const { postID } = useSelector((store) => store.postModalSlice);
+  const dispatch = useDispatch();
 
   const handleCommentFocus = () => {
     commentRef.current.focus();
@@ -86,7 +89,10 @@ const VerticalPostCard = ({ data }) => {
             </p>
           </div>
           <div className="">
-            <p className="cursor-pointer text-sm font-medium text-gray-700 hover:underline">
+            <p
+              className="cursor-pointer text-sm font-medium text-gray-700 hover:underline"
+              onClick={() => dispatch(openPostModal({ postID: data.postID }))}
+            >
               View all comments
             </p>
           </div>

@@ -3,16 +3,17 @@ import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import {
   LoggedInUserCard,
-  Navbar,
   PostOptions,
   Suggestions,
   VerticalPostCard,
+  ViewPostCard,
 } from "../../components";
 import { db } from "../../firebase/firebaseConfig";
 import { initiateUserData } from "../../redux-toolkit/features/userSlice";
 
 const HomePage = () => {
   const { token } = useSelector((store) => store.authSlice);
+  const { isModalOpen } = useSelector((store) => store.postModalSlice);
   const dispatch = useDispatch();
 
   const { data, isLoading } = useQuery(
@@ -48,7 +49,7 @@ const HomePage = () => {
   };
 
   if (isLoading) {
-    return <h1>Loading</h1>;
+    return <h1>Loading...</h1>;
   }
 
   return (
@@ -63,6 +64,7 @@ const HomePage = () => {
         <Suggestions data={data} />
       </div>
       {false && <PostOptions />}
+      {isModalOpen && <ViewPostCard />}
     </div>
   );
 };
