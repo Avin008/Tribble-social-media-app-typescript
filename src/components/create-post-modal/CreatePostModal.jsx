@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createPost } from "../../firebase/firebaseConfig";
 import { closeCreatePostModal } from "../../redux-toolkit/features/createPostModalSlice";
+import { avatarImg } from "../vertical-post-card/VerticalPostCard";
 const CreatePostModal = () => {
   const fileRef = useRef(null);
   const [files, setFile] = useState(null);
@@ -31,7 +32,7 @@ const CreatePostModal = () => {
     },
     {
       onSuccess: () => {
-        navigate(`/profile/${token}`);
+        dispatch(closeCreatePostModal());
       },
     }
   );
@@ -79,11 +80,17 @@ const CreatePostModal = () => {
               <div className="h-8 w-8">
                 <img
                   className="h-full w-full rounded-full border border-gray-500 object-cover"
-                  src="https://images.unsplash.com/photo-1503185912284-5271ff81b9a8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
+                  src={
+                    loggedInUser.profileImg
+                      ? loggedInUser.profileImg
+                      : avatarImg
+                  }
                   alt=""
                 />
               </div>
-              <h1 className="text-sm font-bold text-gray-800">Natasha Bora</h1>
+              <h1 className="text-sm font-bold text-gray-800">
+                {loggedInUser.username}
+              </h1>
             </div>
             <div className="p-1">
               <textarea
@@ -104,7 +111,7 @@ const CreatePostModal = () => {
                 className="rounded-md bg-purple-500 px-6 py-1 font-normal text-white"
                 onClick={() => mutate()}
               >
-                Post
+                {!isLoading ? "post" : "posting..."}
               </button>
             </div>
           </div>
