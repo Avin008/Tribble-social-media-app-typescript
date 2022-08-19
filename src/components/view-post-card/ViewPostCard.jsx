@@ -27,12 +27,12 @@ import {
 } from "../../firebase/firebaseConfig";
 import PostOptions from "../post-options/PostOptions";
 import { avatarImg } from "../vertical-post-card/VerticalPostCard";
+import { openPostOptionsModal } from "../../redux-toolkit/features/postOptionsModalSlice";
 
 const ViewPostCard = () => {
   const [toggleCollection, setToggleCollection] = useState(false);
   const [toggleEmojikeyboard, setTogglEmojiKeyboard] = useState(false);
   const [comment, setComment] = useState("");
-  const [togglePostOptions, setTogglePostOptions] = useState(false);
   const commentRef = useRef(null);
 
   const queryClient = useQueryClient();
@@ -47,6 +47,9 @@ const ViewPostCard = () => {
   const { loggedInUser } = useSelector((store) => store.userSlice);
   const { collectionModal } = useSelector(
     (store) => store.collectionModalSlice
+  );
+  const { postOptionsModal } = useSelector(
+    (store) => store.postOptionsModalSlice
   );
 
   // fetch post Data by postID
@@ -166,7 +169,7 @@ const ViewPostCard = () => {
               <MdOutlineMoreHoriz
                 size={25}
                 className="cursor-pointer"
-                onClick={() => setTogglePostOptions((prev) => !prev)}
+                onClick={() => dispatch(openPostOptionsModal())}
               />
             </div>
           </div>
@@ -287,7 +290,7 @@ const ViewPostCard = () => {
         </div>
       </div>
       {collectionModal && <CreateCollectionModal />}
-      {togglePostOptions && <PostOptions toggleFunc={setTogglePostOptions} />}
+      {postOptionsModal && <PostOptions />}
     </div>
   );
 };

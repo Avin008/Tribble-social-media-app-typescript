@@ -1,4 +1,8 @@
-const PostOptions = ({ toggleFunc }) => {
+import { useDispatch } from "react-redux";
+import { closePostOptionsModal } from "../../redux-toolkit/features/postOptionsModalSlice";
+
+const PostOptions = () => {
+  const dispatch = useDispatch();
   return (
     <div className="fixed top-0 bottom-0 left-0 right-0 z-20 flex items-center justify-center bg-black/50">
       <ul className="h-fit w-[30%] rounded-md bg-white py-1">
@@ -13,7 +17,7 @@ const PostOptions = ({ toggleFunc }) => {
         </li>
         <li
           className="flex cursor-pointer justify-center p-2 font-medium hover:bg-gray-200"
-          onClick={() => toggleFunc((prev) => !prev)}
+          onClick={() => dispatch(closePostOptionsModal())}
         >
           Cancel
         </li>

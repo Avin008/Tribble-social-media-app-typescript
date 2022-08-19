@@ -9,6 +9,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { openPostModal } from "../../redux-toolkit/features/postModalSlice";
+import { openPostOptionsModal } from "../../redux-toolkit/features/postOptionsModalSlice";
 import EmojiKeyBoard from "../emoji-keyboard/EmojiKeyboard";
 import SavePost from "../save-post/SavePost";
 
@@ -49,7 +50,10 @@ const VerticalPostCard = ({ data }) => {
             {data.username}
           </Link>
         </div>
-        <span className="cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300">
+        <span
+          className="cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300"
+          onClick={() => dispatch(openPostOptionsModal())}
+        >
           <MdMoreHoriz size={25} />
         </span>
       </div>

@@ -14,6 +14,9 @@ import { initiateUserData } from "../../redux-toolkit/features/userSlice";
 const HomePage = () => {
   const { token } = useSelector((store) => store.authSlice);
   const { isModalOpen } = useSelector((store) => store.postModalSlice);
+  const { isPostOptionsModalOpen } = useSelector(
+    (store) => store.postOptionsModalSlice
+  );
   const dispatch = useDispatch();
 
   const { data, isLoading } = useQuery(
@@ -63,7 +66,7 @@ const HomePage = () => {
         <LoggedInUserCard data={data} />
         <Suggestions data={data} />
       </div>
-      {false && <PostOptions />}
+      {isPostOptionsModalOpen && <PostOptions />}
       {isModalOpen && <ViewPostCard />}
     </div>
   );
