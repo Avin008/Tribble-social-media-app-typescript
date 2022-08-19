@@ -78,6 +78,7 @@ const VerticalPostCard = ({ data }) => {
           </span>
         </div>
         <div className="space-y-1 px-2">
+          <span className="font-semibold">{data.likes.length} Likes</span>
           <div className="flex">
             <p className="text-sm font-medium">
               <span className="font-semibold">{data.username}</span>{" "}
