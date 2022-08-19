@@ -9,6 +9,7 @@ import {
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { db } from "../../firebase/firebaseConfig";
+import { avatarImg } from "../vertical-post-card/VerticalPostCard";
 
 const Suggestions = () => {
   const { loggedInUser } = useSelector((store) => store.userSlice);
@@ -64,7 +65,7 @@ const Suggestions = () => {
             <div className="h-10 w-10">
               <img
                 className="aspect-square h-full w-full rounded-full border-2 border-black object-cover"
-                src={x.profileImg}
+                src={x.profileImg ? x.profileImg : avatarImg}
                 alt=""
               />
             </div>

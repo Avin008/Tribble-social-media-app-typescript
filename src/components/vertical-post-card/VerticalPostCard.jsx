@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import EmojiKeyBoard from "../emoji-keyboard/EmojiKeyboard";
 import SavePost from "../save-post/SavePost";
 
-const avatarImg =
+export const avatarImg =
   "https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png";
 
 const VerticalPostCard = ({ data }) => {
