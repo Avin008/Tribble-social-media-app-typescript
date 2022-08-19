@@ -116,6 +116,7 @@ const VerticalPostCard = ({ data }) => {
                 openPostOptionsModal({
                   userID: data.userID,
                   postID: data.postID,
+                  postData: data,
                 })
               )
             }

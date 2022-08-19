@@ -6,6 +6,7 @@ import {
   LoggedInUserCard,
   PostOptions,
   Suggestions,
+  UpdatePostModal,
   VerticalPostCard,
   ViewPostCard,
 } from "../../components";
@@ -20,6 +21,10 @@ const HomePage = () => {
   );
   const { collectionModal } = useSelector(
     (store) => store.collectionModalSlice
+  );
+
+  const { isUpdatePostModalOpen } = useSelector(
+    (store) => store.updatePostModalSlice
   );
   const dispatch = useDispatch();
 
@@ -77,6 +82,7 @@ const HomePage = () => {
       {isPostOptionsModalOpen && <PostOptions />}
       {isModalOpen && <ViewPostCard />}
       {collectionModal && <CreateCollectionModal />}
+      {isUpdatePostModalOpen && <UpdatePostModal />}
     </div>
   );
 };

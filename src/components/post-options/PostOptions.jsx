@@ -9,12 +9,14 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { db } from "../../firebase/firebaseConfig";
 import { closePostOptionsModal } from "../../redux-toolkit/features/postOptionsModalSlice";
+import { openUpdatePostModal } from "../../redux-toolkit/features/updatePostModalSlice";
 
 const PostOptions = () => {
   const { token } = useSelector((store) => store.authSlice);
   const { userID, postID } = useSelector(
     (store) => store.postOptionsModalSlice
   );
+
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
@@ -57,7 +59,13 @@ const PostOptions = () => {
           </li>
         )}
         {userID === token && (
-          <li className="flex cursor-pointer justify-center border-b border-gray-300 p-2 font-medium hover:bg-gray-200">
+          <li
+            className="flex cursor-pointer justify-center border-b border-gray-300 p-2 font-medium hover:bg-gray-200"
+            onClick={() => {
+              dispatch(openUpdatePostModal());
+              dispatch(closePostOptionsModal());
+            }}
+          >
             Edit Post
           </li>
         )}

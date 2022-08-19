@@ -5,7 +5,9 @@ import collectionModalSlice from "./features/collectionModalSlice";
 import createPostModalSlice from "./features/createPostModalSlice";
 import postModalSlice from "./features/postModalSlice";
 import postOptionsModalSlice from "./features/postOptionsModalSlice";
+import updatePostModalSlice from "./features/updatePostModalSlice";
 import userSlice from "./features/userSlice";
+
 export const store = configureStore({
   reducer: {
     authSlice,
@@ -15,5 +17,6 @@ export const store = configureStore({
     postOptionsModalSlice,
     collectionListSlice,
     createPostModalSlice,
+    updatePostModalSlice,
   },
 });
