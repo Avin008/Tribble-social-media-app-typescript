@@ -45,8 +45,6 @@ const HomePage = () => {
     }
   );
 
-  console.log(collectionModal);
-
   const getFollowedPosts = (allPosts, userFollowing) => {
     const filteredPosts = [];
     allPosts.forEach((x) => {
@@ -58,6 +56,10 @@ const HomePage = () => {
   };
 
   if (isLoading) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (followedPostLoading) {
     return <h1>Loading...</h1>;
   }
 
