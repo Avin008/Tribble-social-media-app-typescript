@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +18,8 @@ const CreatePostModal = () => {
     fileRef.current.click();
   };
 
+  const queryClient = useQueryClient();
+
   const { mutate, isLoading } = useMutation(
     async () => {
       return await createPost(
@@ -31,6 +33,7 @@ const CreatePostModal = () => {
     {
       onSuccess: () => {
         dispatch(closeCreatePostModal());
+        queryClient.invalidateQueries(["followed-user-post"]);
       },
     }
   );

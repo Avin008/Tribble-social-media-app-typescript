@@ -1,12 +1,20 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { arrayRemove, doc, getDoc, updateDoc } from "firebase/firestore";
+import {
+  arrayRemove,
+  deleteDoc,
+  doc,
+  getDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { db } from "../../firebase/firebaseConfig";
 import { closePostOptionsModal } from "../../redux-toolkit/features/postOptionsModalSlice";
 
 const PostOptions = () => {
   const { token } = useSelector((store) => store.authSlice);
-  const { userID } = useSelector((store) => store.postOptionsModalSlice);
+  const { userID, postID } = useSelector(
+    (store) => store.postOptionsModalSlice
+  );
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
@@ -20,6 +28,19 @@ const PostOptions = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["users"]);
+      },
+    }
+  );
+
+  const { mutate: removePost } = useMutation(
+    async () => {
+      const postDocRef = doc(db, "posts", postID);
+      return await deleteDoc(postDocRef, postID);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["followed-user-post"]);
+        dispatch(closePostOptionsModal());
       },
     }
   );
@@ -41,7 +62,10 @@ const PostOptions = () => {
           </li>
         )}
         {userID === token && (
-          <li className="flex cursor-pointer justify-center border-b border-gray-300 p-2 font-medium hover:bg-gray-200">
+          <li
+            className="flex cursor-pointer justify-center border-b border-gray-300 p-2 font-medium hover:bg-gray-200"
+            onClick={() => removePost()}
+          >
             Remove Post
           </li>
         )}

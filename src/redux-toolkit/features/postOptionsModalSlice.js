@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isPostOptionsModalOpen: false,
   userID: "",
+  postID: "",
 };
 
 const postOptionsModalSlice = createSlice({
@@ -12,6 +13,7 @@ const postOptionsModalSlice = createSlice({
     openPostOptionsModal: (state, action) => {
       state.isPostOptionsModalOpen = true;
       state.userID = action.payload.userID;
+      state.postID = action.payload.postID;
     },
     closePostOptionsModal: (state) => {
       state.isPostOptionsModalOpen = false;

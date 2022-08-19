@@ -112,7 +112,12 @@ const VerticalPostCard = ({ data }) => {
           <MdMoreHoriz
             size={25}
             onClick={() =>
-              dispatch(openPostOptionsModal({ userID: data.userID }))
+              dispatch(
+                openPostOptionsModal({
+                  userID: data.userID,
+                  postID: data.postID,
+                })
+              )
             }
           />
         </span>
