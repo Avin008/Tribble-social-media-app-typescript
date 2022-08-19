@@ -1,9 +1,66 @@
-import './App.css';
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
+import { RequireAuth } from "./components";
+import {
+  EditProfile,
+  ExplorePage,
+  HomePage,
+  Login,
+  ProfilePage,
+  SavedPostPage,
+  SharedLayout,
+  Signup,
+} from "./pages";
 
 function App() {
   return (
-    <div className="text-center">
-      <h1 className='text'>Hello World</h1>
+    <div className="">
+      <Routes>
+        <Route path="/" element={<SharedLayout />}>
+          <Route
+            index
+            element={
+              <RequireAuth>
+                <HomePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="profile/:id"
+            element={
+              <RequireAuth>
+                <ProfilePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="explore"
+            element={
+              <RequireAuth>
+                <ExplorePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="saved-posts/:collectionID"
+            element={
+              <RequireAuth>
+                <SavedPostPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="edit-profile/:userID"
+            element={
+              <RequireAuth>
+                <EditProfile />
+              </RequireAuth>
+            }
+          />
+        </Route>
+        <Route path="login" element={<Login />} />
+        <Route path="signup" element={<Signup />} />
+      </Routes>
     </div>
   );
 }
