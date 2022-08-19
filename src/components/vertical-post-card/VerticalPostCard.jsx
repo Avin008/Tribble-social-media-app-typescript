@@ -8,6 +8,7 @@ import {
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { closeCollectionList } from "../../redux-toolkit/features/collectionListSlice";
 import { openPostModal } from "../../redux-toolkit/features/postModalSlice";
 import { openPostOptionsModal } from "../../redux-toolkit/features/postOptionsModalSlice";
 import EmojiKeyBoard from "../emoji-keyboard/EmojiKeyboard";
@@ -19,9 +20,11 @@ export const avatarImg =
 const VerticalPostCard = ({ data }) => {
   const [toggleSavePost, setToggleSavePost] = useState(false);
   const [toggleEmojiKeyboard, setToggleEmojiKeyboard] = useState(false);
+  const [toggleCollection, setToggleCollection] = useState(false);
   const commentRef = useRef(null);
   const { token } = useSelector((store) => store.authSlice);
   const { postID } = useSelector((store) => store.postModalSlice);
+  const { loggedInUser } = useSelector((store) => store.userSlice);
   const dispatch = useDispatch();
 
   const handleCommentFocus = () => {
@@ -30,7 +33,7 @@ const VerticalPostCard = ({ data }) => {
 
   const comments = [];
 
-  console.log(data);
+  console.log(loggedInUser);
 
   return (
     <div className="h-fit w-96 rounded-lg border border-black bg-white">
@@ -54,7 +57,10 @@ const VerticalPostCard = ({ data }) => {
           className="cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300"
           onClick={() => dispatch(openPostOptionsModal())}
         >
-          <MdMoreHoriz size={25} />
+          <MdMoreHoriz
+            size={25}
+            onClick={() => dispatch(closeCollectionList())}
+          />
         </span>
       </div>
       <div className="h-auto border-b border-black">
@@ -79,9 +85,11 @@ const VerticalPostCard = ({ data }) => {
             <MdOutlineBookmarkBorder
               size={28}
               className=""
-              onClick={() => setToggleSavePost((prev) => !prev)}
+              onClick={() => setToggleCollection((prev) => !prev)}
             />
-            {toggleSavePost && <SavePost />}
+            {toggleCollection && (
+              <SavePost data={{ post: data, user: loggedInUser }} />
+            )}
           </span>
         </div>
         <div className="space-y-1 px-2">
@@ -120,10 +128,7 @@ const VerticalPostCard = ({ data }) => {
         </div>
       </div>
       <div className="flex items-center justify-between gap-1 p-2 px-2">
-        <span
-          className="relative cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300"
-          onClick={() => setToggleEmojiKeyboard((prev) => !prev)}
-        >
+        <span className="relative cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300">
           <MdOutlineEmojiEmotions size={25} />
           {toggleEmojiKeyboard && <EmojiKeyBoard />}
         </span>

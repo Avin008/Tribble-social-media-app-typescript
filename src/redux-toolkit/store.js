@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authSlice from "./features/authSlice";
+import collectionListSlice from "./features/collectionListSlice";
 import collectionModalSlice from "./features/collectionModalSlice";
 import postModalSlice from "./features/postModalSlice";
 import postOptionsModalSlice from "./features/postOptionsModalSlice";
@@ -11,5 +12,6 @@ export const store = configureStore({
     userSlice,
     collectionModalSlice,
     postOptionsModalSlice,
+    collectionListSlice,
   },
 });

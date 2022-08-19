@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  CreateCollectionModal,
   LoggedInUserCard,
   PostOptions,
   Suggestions,
@@ -16,6 +17,9 @@ const HomePage = () => {
   const { isModalOpen } = useSelector((store) => store.postModalSlice);
   const { isPostOptionsModalOpen } = useSelector(
     (store) => store.postOptionsModalSlice
+  );
+  const { collectionModal } = useSelector(
+    (store) => store.collectionModalSlice
   );
   const dispatch = useDispatch();
 
@@ -40,6 +44,8 @@ const HomePage = () => {
       return (await getDocs(postCollection)).docs.map((x) => x.data());
     }
   );
+
+  console.log(collectionModal);
 
   const getFollowedPosts = (allPosts, userFollowing) => {
     const filteredPosts = [];
@@ -68,6 +74,7 @@ const HomePage = () => {
       </div>
       {isPostOptionsModalOpen && <PostOptions />}
       {isModalOpen && <ViewPostCard />}
+      {collectionModal && <CreateCollectionModal />}
     </div>
   );
 };
