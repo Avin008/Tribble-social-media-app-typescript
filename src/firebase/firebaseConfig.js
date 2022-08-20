@@ -52,6 +52,8 @@ const initializeUserData = (
     profileImg: avatarImg,
     fullname: `${firstname} ${lastname}`,
     emailAddress: email,
+    bio: null,
+    portfolio: null,
     following: [],
     followers: [],
     savedPost: [],
