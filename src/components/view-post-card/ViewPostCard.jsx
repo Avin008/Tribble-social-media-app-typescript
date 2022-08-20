@@ -11,7 +11,7 @@ import {
 import { useRef, useState } from "react";
 import SavePost from "../save-post/SavePost";
 import EmojiKeyboard from "../emoji-keyboard/EmojiKeyboard";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import CreateCollectionModal from "../create-collection-modal/CreateCollectionModal";
 import { useDispatch, useSelector } from "react-redux";
 import { closePostModal } from "../../redux-toolkit/features/postModalSlice";
@@ -35,6 +35,7 @@ const ViewPostCard = () => {
   const [toggleEmojikeyboard, setTogglEmojiKeyboard] = useState(false);
   const [comment, setComment] = useState("");
   const commentRef = useRef(null);
+  const navigate = useNavigate();
 
   const queryClient = useQueryClient();
 
@@ -53,7 +54,6 @@ const ViewPostCard = () => {
     (store) => store.postOptionsModalSlice
   );
 
-  // const {} = useSelector((store) => store.isPostOptionSlice);
   const { isPostOptionsModalOpen } = useSelector(
     (store) => store.postOptionsModalSlice
   );
@@ -173,7 +173,15 @@ const ViewPostCard = () => {
                   className="h-full w-full rounded-full border border-black object-cover"
                 />
               </div>
-              <h5 className="font-medium">{postData.user.username}</h5>
+              <h5
+                className="cursor-pointer font-medium hover:underline"
+                onClick={() => {
+                  navigate(`/profile/${postData.user.userId}`);
+                  dispatch(closePostModal());
+                }}
+              >
+                {postData.user.username}
+              </h5>
             </div>
             <div className="rounded-full p-1 hover:bg-gray-200">
               <MdOutlineMoreHoriz
@@ -182,7 +190,7 @@ const ViewPostCard = () => {
                 onClick={() =>
                   dispatch(
                     openPostOptionsModal({
-                      userID: loggedInUser.userId,
+                      userID: postData.user.userId,
                       postID: postData.post.postID,
                       postData: postData.post,
                     })
@@ -192,7 +200,7 @@ const ViewPostCard = () => {
             </div>
           </div>
           <div className="scrollbar-hide flex h-3/5 flex-col gap-4 overflow-y-scroll p-3">
-            <p className="text-base font-normal">{postData.post.caption}</p>
+            <p className="text-base font-medium">{postData.post.caption}</p>
 
             {postData.post.comments.map((x) => {
               return (
