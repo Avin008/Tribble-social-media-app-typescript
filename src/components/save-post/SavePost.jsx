@@ -1,11 +1,20 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
-import { saveToCollection } from "../../firebase/firebaseConfig";
 import { MdAdd } from "../../icons";
+
+// firebase functions
+import { saveToCollection } from "../../firebase/firebaseConfig";
+
+// redux toolkit
 import { openCollectionModal } from "../../redux-toolkit/features/collectionModalSlice";
+import { closeCollectionList } from "../../redux-toolkit/features/collectionListSlice";
+
 const SavePost = ({ data }) => {
   const dispatch = useDispatch();
+
   const queryClient = useQueryClient();
+
+  // SAVE TO COLLECTION API CALL
 
   const { mutate, isLoading } = useMutation(
     async (folderName) => {
@@ -21,9 +30,13 @@ const SavePost = ({ data }) => {
       onSuccess: () => {
         queryClient.invalidateQueries(["posts"]);
         queryClient.invalidateQueries(["current-user-data"]);
+        queryClient.invalidateQueries(["users"]);
+        dispatch(closeCollectionList());
       },
     }
   );
+
+  //
 
   return (
     <div className="absolute bottom-12 right-0 h-56 w-60 rounded-md border border-gray-500 bg-white shadow-sm">

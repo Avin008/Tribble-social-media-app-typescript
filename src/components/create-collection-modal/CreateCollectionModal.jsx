@@ -17,6 +17,7 @@ const CreateCollectionModal = ({ data }) => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["posts"]);
+        queryClient.invalidateQueries(["users"]);
         setCollectionName("");
       },
     }

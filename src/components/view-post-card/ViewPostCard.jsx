@@ -28,6 +28,7 @@ import {
 import PostOptions from "../post-options/PostOptions";
 import { avatarImg } from "../vertical-post-card/VerticalPostCard";
 import { openPostOptionsModal } from "../../redux-toolkit/features/postOptionsModalSlice";
+import UpdatePostModal from "../update-post-modal/UpdatePostModal";
 
 const ViewPostCard = () => {
   const [toggleCollection, setToggleCollection] = useState(false);
@@ -49,6 +50,11 @@ const ViewPostCard = () => {
     (store) => store.collectionModalSlice
   );
   const { postOptionsModal } = useSelector(
+    (store) => store.postOptionsModalSlice
+  );
+
+  // const {} = useSelector((store) => store.isPostOptionSlice);
+  const { isPostOptionsModalOpen } = useSelector(
     (store) => store.postOptionsModalSlice
   );
 
@@ -126,6 +132,10 @@ const ViewPostCard = () => {
     }
   );
 
+  const { isUpdatePostModalOpen } = useSelector(
+    (store) => store.updatePostModalSlice
+  );
+
   if (isLoading) {
     return <h1>Loading...</h1>;
   }
@@ -169,11 +179,19 @@ const ViewPostCard = () => {
               <MdOutlineMoreHoriz
                 size={25}
                 className="cursor-pointer"
-                onClick={() => dispatch(openPostOptionsModal())}
+                onClick={() =>
+                  dispatch(
+                    openPostOptionsModal({
+                      userID: loggedInUser.userId,
+                      postID: postData.post.postID,
+                      postData: postData.post,
+                    })
+                  )
+                }
               />
             </div>
           </div>
-          <div className="scrollbar-hide flex h-3/5 flex-col gap-4 overflow-scroll p-3">
+          <div className="scrollbar-hide flex h-3/5 flex-col gap-4 overflow-y-scroll p-3">
             <p className="text-base font-normal">{postData.post.caption}</p>
 
             {postData.post.comments.map((x) => {
@@ -252,9 +270,6 @@ const ViewPostCard = () => {
                   </span>{" "}
                   Likes
                 </h5>
-                <h5 className="text-sm font-medium text-gray-700">
-                  {postData.post.dateCreated}
-                </h5>
               </div>
             </div>
             <div className="flex items-center justify-between gap-2 border-t border-black p-3">
@@ -290,7 +305,8 @@ const ViewPostCard = () => {
         </div>
       </div>
       {collectionModal && <CreateCollectionModal />}
-      {postOptionsModal && <PostOptions />}
+      {isPostOptionsModalOpen && <PostOptions />}
+      {isUpdatePostModalOpen && <UpdatePostModal />}
     </div>
   );
 };
