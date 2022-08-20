@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { db, storage } from "../../firebase/firebaseConfig";
+import { closePostModal } from "../../redux-toolkit/features/postModalSlice";
 import { closeUpdatePostModal } from "../../redux-toolkit/features/updatePostModalSlice";
 import { avatarImg } from "../vertical-post-card/VerticalPostCard";
 const UpdatePostModal = () => {
@@ -25,17 +26,26 @@ const UpdatePostModal = () => {
 
   const queryClient = useQueryClient();
 
-  const { mutate: mutateUpdatePost, isLoading } = useMutation(async () => {
-    const userPostRef = doc(db, "posts", postData.postID);
-    const storageRef = ref(storage, `/posts/${token}/${postData.postID}.jpg`);
-    const newImg = files && (await uploadBytes(storageRef, files));
-    const updatedPostObj = {
-      caption: post.caption,
-      img: (files && files) || post.img,
-      dateCreated: Date.now(),
-    };
-    return await updateDoc(userPostRef, updatedPostObj);
-  });
+  const { mutate: mutateUpdatePost, isLoading } = useMutation(
+    async () => {
+      const userPostRef = doc(db, "posts", postData.postID);
+      const storageRef = ref(storage, `/posts/${token}/${postData.postID}.jpg`);
+      const newImg = files && (await uploadBytes(storageRef, files));
+      const updatedPostObj = {
+        caption: post.caption,
+        img: (files && files) || post.img,
+        dateCreated: Date.now(),
+      };
+      return await updateDoc(userPostRef, updatedPostObj);
+    },
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries(["posts"]);
+        dispatch(closeUpdatePostModal());
+        dispatch(closePostModal());
+      },
+    }
+  );
 
   return (
     <div className="fixed top-0 bottom-0 left-0 right-0 z-10 flex items-center justify-center bg-black/50">
