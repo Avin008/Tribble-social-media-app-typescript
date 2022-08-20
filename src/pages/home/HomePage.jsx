@@ -71,9 +71,21 @@ const HomePage = () => {
   return (
     <div className="mx-auto mt-20 mb-5 grid h-full w-3/5 grid-cols-2 gap-12">
       <div className="space-y-4">
-        {getFollowedPosts(followedPosts, data.following).map((x) => (
-          <VerticalPostCard data={x} />
-        ))}
+        {getFollowedPosts(followedPosts, data.following).length !== 0 ? (
+          getFollowedPosts(followedPosts, data.following).map((x) => (
+            <VerticalPostCard data={x} />
+          ))
+        ) : (
+          <div className="flex h-full flex-col items-center justify-center">
+            <span className="p-4">
+              <h1 className="text-5xl">😎</h1>
+            </span>
+            <h1 className="font-semibold">
+              Currently you are not following anyone
+            </h1>
+            <h1 className="font-semibold">follow people to view posts</h1>
+          </div>
+        )}
       </div>
       <div className="space-y-1">
         <LoggedInUserCard data={data} />
