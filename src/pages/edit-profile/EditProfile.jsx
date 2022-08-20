@@ -3,7 +3,6 @@ import { doc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { avatarImg } from "../../components/vertical-post-card/VerticalPostCard";
 import { db, storage } from "../../firebase/firebaseConfig";
 
 const EditProfile = () => {
@@ -15,8 +14,6 @@ const EditProfile = () => {
   const onChangeHandler = (e) => {
     setProfileImg(e.target.files[0]);
   };
-
-  console.log(userInfo);
 
   const queryClient = useQueryClient();
 
@@ -50,8 +47,7 @@ const EditProfile = () => {
             className="h-full w-full rounded-full border-2 border-black object-cover"
             src={
               (profileImg && URL.createObjectURL(profileImg)) ||
-              userInfo.profileImg ||
-              avatarImg
+              userInfo.profileImg
             }
             alt=""
           />
@@ -70,7 +66,7 @@ const EditProfile = () => {
           Full Name
         </label>
         <input
-          className="border border-black p-2"
+          className="border border-black p-2 font-medium"
           placeholder="First Name"
           type="text"
           value={userInfo.fullname}
@@ -82,7 +78,7 @@ const EditProfile = () => {
           Bio
         </label>
         <textarea
-          className="h-20 resize-none border border-black p-2"
+          className="h-20 resize-none border border-black p-2 font-medium"
           placeholder="Bio"
           value={userInfo.bio}
           onChange={(e) =>
@@ -93,7 +89,7 @@ const EditProfile = () => {
           PortFolio Link
         </label>
         <input
-          className="border border-black p-2"
+          className="border border-black p-2 font-medium"
           type="text"
           placeholder="portfolio Link"
           value={userInfo.portfolio}
