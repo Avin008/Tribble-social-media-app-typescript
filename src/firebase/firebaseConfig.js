@@ -21,6 +21,7 @@ import {
   where,
 } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { avatarImg } from "../components/vertical-post-card/VerticalPostCard";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -48,7 +49,7 @@ const initializeUserData = (
   return {
     userId: userID,
     username: username,
-    profileImg: "",
+    profileImg: avatarImg,
     fullname: `${firstname} ${lastname}`,
     emailAddress: email,
     following: [],
