@@ -23,6 +23,7 @@ const Navbar = () => {
   const [toggleSearchBar, setToggleSearchBar] = useState(false);
   const [toggleProfileActions, setToggleProfileActions] = useState(false);
   const [toggleNotification, setToggleNotification] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   return (
     <div className="fixed top-0 left-0 right-0 z-10 flex h-14 items-center justify-evenly border border-gray-400 bg-white shadow-sm">
@@ -37,9 +38,11 @@ const Navbar = () => {
           className="w-full border-none bg-transparent px-2 outline-none"
           type="text"
           placeholder="Search profile"
+          onChange={(e) => setSearchQuery(e.target.value)}
+          value={searchQuery}
         />
         <MdSearch size={25} className="text-gray-500" />
-        {toggleSearchBar && <SearchResults />}
+        {toggleSearchBar && <SearchResults data={searchQuery} />}
       </div>
       <ul className="flex space-x-5">
         <li
