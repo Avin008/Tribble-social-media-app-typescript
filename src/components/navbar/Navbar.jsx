@@ -24,6 +24,7 @@ const Navbar = () => {
   const [toggleProfileActions, setToggleProfileActions] = useState(false);
   const [toggleNotification, setToggleNotification] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const { profileImg } = useSelector((store) => store.userSlice.loggedInUser);
 
   return (
     <div className="fixed top-0 left-0 right-0 z-10 flex h-14 items-center justify-evenly border border-gray-400 bg-white shadow-sm">
@@ -62,10 +63,16 @@ const Navbar = () => {
           <MdOutlineExplore size={25} />
         </li>
         <li
-          className="relative cursor-pointer rounded-full p-1 hover:bg-gray-200  active:bg-gray-300"
+          className="relative cursor-pointer rounded-full p-1 hover:bg-gray-300  active:bg-gray-300"
           onClick={() => setToggleProfileActions((prev) => !prev)}
         >
-          <MdAccountCircle size={25} />
+          <div className="flex h-7 w-7 items-center">
+            <img
+              className="h-full w-full rounded-full"
+              src={profileImg}
+              alt=""
+            />
+          </div>
           {toggleProfileActions && <UserProfileActions />}
         </li>
       </ul>
