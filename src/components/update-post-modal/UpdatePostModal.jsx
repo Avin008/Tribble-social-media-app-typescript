@@ -41,6 +41,7 @@ const UpdatePostModal = () => {
     {
       onSettled: () => {
         queryClient.invalidateQueries(["posts"]);
+        queryClient.invalidateQueries(["followed-user-post"]);
         dispatch(closeUpdatePostModal());
         dispatch(closePostModal());
       },
