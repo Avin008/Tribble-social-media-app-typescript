@@ -165,7 +165,7 @@ const emojis = [
 
 const EmojiKeyBoard = ({ addEmojiFunc }) => {
   return (
-    <div className="absolute bottom-10 left-0 grid h-60 w-60 select-none grid-flow-row auto-rows-max grid-cols-7 rounded-md  border border-black bg-white shadow-sm">
+    <div className="absolute bottom-12 left-0 grid h-60 w-60 select-none grid-flow-row auto-rows-max grid-cols-7 rounded-md  border border-black bg-white shadow-sm">
       {emojis.map((x) => (
         <div
           className="cursor-pointer text-2xl"
