@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // components
 import EmojiKeyBoard from "../emoji-keyboard/EmojiKeyboard";
@@ -10,11 +10,12 @@ import SavePost from "../save-post/SavePost";
 // icons
 import {
   MdOutlineEmojiEmotions,
-  MdOutlineBookmarkBorder,
   MdOutlineComment,
   MdMoreHoriz,
   MdOutlineFavorite,
   MdFavoriteBorder,
+  MdOutlineBookmark,
+  MdBookmarkBorder,
 } from "react-icons/md";
 
 // firebase services
@@ -22,6 +23,8 @@ import {
   likePost,
   unlikePost,
   postComment,
+  isPostSaved,
+  removedFromSavedPost,
 } from "../../firebase/firebaseConfig";
 
 // redux toolkit
@@ -43,6 +46,7 @@ const VerticalPostCard = ({ data }) => {
   const commentRef = useRef(null);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { token } = useSelector((store) => store.authSlice);
   const { postID } = useSelector((store) => store.postModalSlice);
@@ -107,7 +111,27 @@ const VerticalPostCard = ({ data }) => {
     }
   );
 
+  // REMOVE POST FROM SAVED
+
+  const { mutate: removePost } = useMutation(
+    async () => {
+      return await removedFromSavedPost(
+        loggedInUser.userId,
+        loggedInUser.savedPost,
+        data.postID
+      );
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["posts"]);
+        queryClient.invalidateQueries(["users"]);
+      },
+    }
+  );
+
   // API CALLS END
+
+  console.log(data.postID);
 
   return (
     <div className="h-fit w-96 rounded-lg border border-black bg-white">
@@ -173,11 +197,18 @@ const VerticalPostCard = ({ data }) => {
           </div>
 
           <span className="relative cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300">
-            <MdOutlineBookmarkBorder
-              size={28}
-              className=""
-              onClick={() => dispatch(toggleCollectionList())}
-            />
+            {isPostSaved(loggedInUser.savedPost, data.postID) ? (
+              <MdOutlineBookmark
+                size={28}
+                className=""
+                onClick={() => removePost()}
+              />
+            ) : (
+              <MdBookmarkBorder
+                size={28}
+                onClick={() => dispatch(toggleCollectionList())}
+              />
+            )}
             {isCollectionListOpen && (
               <SavePost data={{ post: data, user: loggedInUser }} />
             )}
@@ -187,7 +218,12 @@ const VerticalPostCard = ({ data }) => {
           <span className="font-semibold">{data.likes.length} Likes</span>
           <div className="flex">
             <p className="text-sm font-medium">
-              <span className="font-semibold">{data.username}</span>{" "}
+              <span
+                className="cursor-pointer font-semibold hover:underline"
+                onClick={() => navigate(`/profile/${loggedInUser.userId}`)}
+              >
+                {data.username}
+              </span>{" "}
               {data.caption}
             </p>
           </div>
@@ -207,7 +243,13 @@ const VerticalPostCard = ({ data }) => {
             })}
             {comments.map((x) => (
               <li className="text-sm font-medium">
-                <span className="font-semibold">{x.username}</span> {x.comment}
+                <span
+                  onClick={() => navigate(`/profile/${x.userId}`)}
+                  className="cursor-pointer font-semibold hover:underline"
+                >
+                  {x.username}
+                </span>{" "}
+                {x.comment}
               </li>
             ))}
           </ul>
