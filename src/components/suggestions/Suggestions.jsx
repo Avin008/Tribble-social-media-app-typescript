@@ -25,7 +25,11 @@ const Suggestions = () => {
   const { mutate } = useMutation(
     async (followerId) => {
       const userDoc = doc(db, "users", loggedInUser.userId);
-      return await updateDoc(userDoc, { following: arrayUnion(followerId) });
+      await updateDoc(userDoc, { following: arrayUnion(followerId) });
+      const followerDocRef = doc(db, "users", followerId);
+      await updateDoc(followerDocRef, {
+        followers: arrayUnion(loggedInUser.userId),
+      });
     },
     {
       onSuccess: () => {
