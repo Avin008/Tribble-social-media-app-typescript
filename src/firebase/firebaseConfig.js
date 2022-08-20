@@ -119,6 +119,7 @@ const postComment = async (username, profileImg, userId, postID, comment) => {
       userId,
       profileImg,
       comment,
+      dateCreated: Date.now(),
     }),
   });
 };
