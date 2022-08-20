@@ -1,6 +1,5 @@
 import {
   MdSearch,
-  MdOutlineFavoriteBorder,
   MdOutlineHome,
   MdOutlineExplore,
   MdAccountCircle,
@@ -10,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import CreatePostModal from "../create-post-modal/CreatePostModal";
 import UserProfileActions from "../user-profile-actions/UserProfileActions";
 import SearchResults from "../search-results/SearchResults";
-import Notifications from "../notifications/Notifications";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { openCreatePostModal } from "../../redux-toolkit/features/createPostModalSlice";
@@ -59,13 +57,6 @@ const Navbar = () => {
           onClick={() => navigate("/explore")}
         >
           <MdOutlineExplore size={25} />
-        </li>
-        <li
-          className="relative cursor-pointer rounded-full p-1 hover:bg-gray-200  active:bg-gray-300"
-          onClick={() => setToggleNotification((prev) => !prev)}
-        >
-          <MdOutlineFavoriteBorder size={25} />
-          {toggleNotification && <Notifications />}
         </li>
         <li
           className="relative cursor-pointer rounded-full p-1 hover:bg-gray-200  active:bg-gray-300"
