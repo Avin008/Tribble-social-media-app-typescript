@@ -27,7 +27,7 @@ const UserProfileActions = () => {
         <MdOutlineAccountCircle className="user-icons" /> Profile
       </Link>
       <Link
-        to="/edit-profile"
+        to={`/profile/${token}`}
         className="flex cursor-pointer items-center gap-2 px-4 py-1 hover:bg-gray-100"
       >
         <MdOutlineMiscellaneousServices /> Edit Profile
