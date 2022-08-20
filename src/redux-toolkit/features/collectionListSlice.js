@@ -14,10 +14,13 @@ const collectionListSlice = createSlice({
     closeCollectionList: (state) => {
       state.isCollectionListOpen = false;
     },
+    toggleCollectionList: (state) => {
+      state.isCollectionListOpen = !state.isCollectionListOpen;
+    },
   },
 });
 
-export const { openCollectionList, closeCollectionList } =
+export const { openCollectionList, closeCollectionList, toggleCollectionList } =
   collectionListSlice.actions;
 
 export default collectionListSlice.reducer;
