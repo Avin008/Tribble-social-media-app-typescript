@@ -57,7 +57,7 @@ const HomePage = () => {
         filteredPosts.push(x);
       }
     });
-    return filteredPosts;
+    return filteredPosts.sort((a, b) => b.dateCreated - a.dateCreated);
   };
 
   if (isLoading) {
