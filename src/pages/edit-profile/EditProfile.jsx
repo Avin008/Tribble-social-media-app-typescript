@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { doc, updateDoc } from "firebase/firestore";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -8,14 +8,29 @@ import { db, storage } from "../../firebase/firebaseConfig";
 const EditProfile = () => {
   const [profileImg, setProfileImg] = useState(null);
   const fileRef = useRef(null);
-  const { loggedInUser } = useSelector((store) => store.userSlice);
-  const [userInfo, setUserInfo] = useState(loggedInUser);
+  const { token } = useSelector((store) => store.authSlice);
+  const [userInfo, setUserInfo] = useState({});
 
   const onChangeHandler = (e) => {
     setProfileImg(e.target.files[0]);
   };
 
   const queryClient = useQueryClient();
+
+  //
+
+  const { data, isLoading: userDataLoading } = useQuery(
+    ["users"],
+    async () => {
+      const userDocRef = doc(db, "users", token);
+      return (await getDoc(userDocRef)).data();
+    },
+    {
+      onSettled: (data) => {
+        setUserInfo(data);
+      },
+    }
+  );
 
   const { mutate, isLoading } = useMutation(
     async () => {
@@ -38,6 +53,10 @@ const EditProfile = () => {
       },
     }
   );
+
+  if (userDataLoading) {
+    <h1>Loading...</h1>;
+  }
 
   return (
     <div className="mt-20">
@@ -102,7 +121,7 @@ const EditProfile = () => {
           className="active: mt-4  bg-purple-700 p-2 font-semibold text-white shadow-sm hover:bg-purple-600"
           onClick={() => mutate()}
         >
-          {isLoading ? "Updating Profile" : "update Profle"}
+          {isLoading ? "Updating Profile..." : "update Profile"}
         </button>
       </div>
     </div>
