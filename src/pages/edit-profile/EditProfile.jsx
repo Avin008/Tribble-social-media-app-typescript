@@ -40,7 +40,7 @@ const EditProfile = () => {
   );
 
   return (
-    <div className="m-20">
+    <div className="mt-20">
       <div className="mx-auto flex w-[50%] flex-col gap-1 border border-black bg-white p-4">
         <div className="relative mx-auto h-20 w-20 p-1">
           <img
