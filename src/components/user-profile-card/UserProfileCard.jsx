@@ -1,10 +1,45 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
+import { db } from "../../firebase/firebaseConfig";
 const UserProfileCard = ({ data }) => {
   const { userPostsData, userData } = data;
   const { token } = useSelector((store) => store.authSlice);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const { mutate: follow } = useMutation(
+    async () => {
+      const userDoc = doc(db, "users", token);
+      await updateDoc(userDoc, { following: arrayUnion(userData.userId) });
+      const followerDocRef = doc(db, "users", userData.userId);
+      await updateDoc(followerDocRef, {
+        followers: arrayUnion(token),
+      });
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["current-user-data"]);
+      },
+    }
+  );
+
+  const { mutate: unfollow } = useMutation(
+    async () => {
+      const userDoc = doc(db, "users", token);
+      await updateDoc(userDoc, { following: arrayRemove(userData.userId) });
+      const followerDocRef = doc(db, "users", userData.userId);
+      await updateDoc(followerDocRef, {
+        followers: arrayRemove(token),
+      });
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["current-user-data"]);
+      },
+    }
+  );
 
   return (
     <div className="relative flex h-fit w-full items-center gap-12 rounded-lg border border-gray-500 bg-white p-4">
@@ -31,11 +66,21 @@ const UserProfileCard = ({ data }) => {
               >
                 Edit Profile
               </button>
-            ) : (
-              <button className="cursor-pointer rounded-md border-0 bg-purple-700 px-4 py-1 text-sm font-medium text-white">
-                Follow
+            ) : userData.followers.includes(token) ? (
+              <button
+                className="cursor-pointer rounded-md border-0 bg-purple-700 px-4 py-1 text-sm font-medium text-white"
+                onClick={() => unfollow()}
+              >
+                unfollow
               </button>
-            )}{" "}
+            ) : (
+              <button
+                className="cursor-pointer rounded-md border-0 bg-purple-700 px-4 py-1 text-sm font-medium text-white"
+                onClick={() => follow()}
+              >
+                follow
+              </button>
+            )}
           </div>
         </div>
         <div className="flex space-x-8">
