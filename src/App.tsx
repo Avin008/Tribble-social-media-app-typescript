@@ -6,6 +6,7 @@ import {
   ExplorePage,
   HomePage,
   Login,
+  PostPage,
   ProfilePage,
   SavedPostPage,
   SharedLayout,
@@ -57,6 +58,7 @@ function App() {
               </RequireAuth>
             }
           />
+          <Route path="post/:postID" element={<PostPage />} />
         </Route>
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
