@@ -8,14 +8,12 @@ import {
   Suggestions,
   UpdatePostModal,
   VerticalPostCard,
-  ViewPostCard,
 } from "../../components";
 import { db } from "../../firebase/firebaseConfig";
 import { initiateUserData } from "../../redux-toolkit/features/userSlice";
 
 const HomePage = () => {
   const { token } = useSelector((store) => store.authSlice);
-  const { isModalOpen } = useSelector((store) => store.postModalSlice);
   const { isPostOptionsModalOpen } = useSelector(
     (store) => store.postOptionsModalSlice
   );
@@ -92,7 +90,6 @@ const HomePage = () => {
         <Suggestions data={data} />
       </div>
       {isPostOptionsModalOpen && <PostOptions />}
-      {isModalOpen && <ViewPostCard />}
       {collectionModal && <CreateCollectionModal />}
       {isUpdatePostModalOpen && <UpdatePostModal />}
     </div>

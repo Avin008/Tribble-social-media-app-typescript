@@ -1,4 +1,4 @@
-import { SavedCard, ViewPostCard } from "../../components";
+import { SavedCard } from "../../components";
 import { Link } from "react-router-dom";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { useParams } from "react-router-dom";
@@ -10,14 +10,11 @@ import { db } from "../../firebase/firebaseConfig";
 const SavedPostPage = () => {
   const { collectionID } = useParams();
   const { token } = useSelector((store) => store.authSlice);
-  const { postModal } = useSelector((store) => store.postModalSlice);
 
   const { data, isLoading } = useQuery(["saved-post"], async () => {
     const userDocRef = doc(db, "users", token);
     return (await getDoc(userDocRef)).data();
   });
-
-  const { isModalOpen } = useSelector((store) => store.postModalSlice);
 
   if (isLoading) {
     return <h1>Loading...</h1>;
@@ -45,7 +42,6 @@ const SavedPostPage = () => {
       ) : (
         <h1>No post To Show</h1>
       )}
-      {isModalOpen && <ViewPostCard />}
     </div>
   );
 };

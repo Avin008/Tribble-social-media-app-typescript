@@ -40,7 +40,10 @@ const UserProfileCard = ({ data }) => {
         </div>
         <div className="flex space-x-8">
           <h5 className="font-medium">
-            <span className="font-semibold">{userPostsData.length}</span> Posts
+            <span className="font-semibold">
+              {userPostsData?.length ? userPostsData.length : "0"}
+            </span>{" "}
+            Posts
           </h5>
           <h5 className="font-medium">
             <span className="font-semibold">{userData.followers.length}</span>{" "}

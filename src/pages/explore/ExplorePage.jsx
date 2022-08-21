@@ -1,11 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { collection, doc, getDocs } from "firebase/firestore";
 import { useSelector } from "react-redux";
-import { ExploreCard, ViewPostCard } from "../../components";
+import { ExploreCard } from "../../components";
 import { db } from "../../firebase/firebaseConfig";
 const ExplorePage = () => {
   const { token } = useSelector((store) => store.authSlice);
-  const { isModalOpen } = useSelector((store) => store.postModalSlice);
 
   const { data: posts, isLoading } = useQuery(["explore"], async () => {
     const postCollectionRef = collection(db, "posts");
@@ -21,7 +20,6 @@ const ExplorePage = () => {
       {posts.map((x) => (
         <ExploreCard data={x} />
       ))}
-      {isModalOpen && <ViewPostCard />}
     </div>
   );
 };
