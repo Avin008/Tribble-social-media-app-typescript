@@ -10,6 +10,7 @@ import {
 import { useParams } from "react-router-dom";
 import { ProfileTabs, UserProfileCard } from "../../components";
 import { db } from "../../firebase/firebaseConfig";
+import { ClipLoader } from "react-spinners";
 
 const ProfilePage = () => {
   const { id } = useParams();
@@ -35,7 +36,11 @@ const ProfilePage = () => {
   );
 
   if (isLoading) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center">
+        <ClipLoader color="gray" size={40} loading={isLoading} />
+      </div>
+    );
   }
 
   return (
