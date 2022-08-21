@@ -23,19 +23,21 @@ import {
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { avatarImg } from "../components/vertical-post-card/VerticalPostCard";
 
-// Your web app's Firebase configuration
+//
+
 const firebaseConfig = {
-  apiKey: "AIzaSyCBStHd4ile-mrI3ZaFoK2Ab-CIs-qkJA0",
-  authDomain: "social-media-19487.firebaseapp.com",
-  projectId: "social-media-19487",
-  storageBucket: "social-media-19487.appspot.com",
-  messagingSenderId: "921388339387",
-  appId: "1:921388339387:web:233c9dd1b7dad56b2bd99e",
+  apiKey: "AIzaSyDFCGsl6CdAtSRSuj2d7RYoheaFeI9acyw",
+  authDomain: "tribble-social-media.firebaseapp.com",
+  projectId: "tribble-social-media",
+  storageBucket: "tribble-social-media.appspot.com",
+  messagingSenderId: "330045885565",
+  appId: "1:330045885565:web:9387b8c04858b64d6fb514",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+//
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
