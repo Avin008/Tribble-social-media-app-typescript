@@ -74,15 +74,13 @@ const Suggestions = () => {
               <h2 className="text-sm">{x.fullname}</h2>
             </span>
           </div>
-          {!loggedInUser.following.includes(x.userId) ? (
+          {!loggedInUser.following.includes(x.userId) && (
             <button
               className="font-medium text-purple-800"
               onClick={() => mutate(x.userId)}
             >
               Follow
             </button>
-          ) : (
-            <button className="font-medium text-purple-800">unFollow</button>
           )}
         </div>
       ))}
