@@ -3,6 +3,7 @@ import { collection, doc, getDocs } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { ExploreCard } from "../../components";
 import { db } from "../../firebase/firebaseConfig";
+import { ClipLoader } from "react-spinners";
 const ExplorePage = () => {
   const { token } = useSelector((store) => store.authSlice);
 
@@ -12,7 +13,11 @@ const ExplorePage = () => {
   });
 
   if (isLoading) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center">
+        <ClipLoader color="gray" size={40} loading={isLoading} />
+      </div>
+    );
   }
 
   return (
