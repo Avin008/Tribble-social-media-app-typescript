@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
+import { ClipLoader } from "react-spinners";
 
 const SavedPostPage = () => {
   const { collectionID } = useParams();
@@ -17,7 +18,11 @@ const SavedPostPage = () => {
   });
 
   if (isLoading) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center">
+        <ClipLoader color="gray" size={40} loading={isLoading} />
+      </div>
+    );
   }
 
   const savedPosts = data.savedPost.filter(
@@ -26,12 +31,6 @@ const SavedPostPage = () => {
 
   return (
     <div className="mx-auto mb-4 mt-20 flex w-3/5 flex-col gap-3">
-      <Link
-        className="flex items-center text-sm font-semibold text-gray-500"
-        to="/"
-      >
-        <MdKeyboardArrowLeft size={25} /> Saved
-      </Link>
       <h1 className="text-lg font-semibold">{savedPosts[0].folderName}</h1>
       {savedPosts[0].posts.length ? (
         <div className=" grid  grid-flow-row auto-rows-[300px] grid-cols-3 gap-4">
