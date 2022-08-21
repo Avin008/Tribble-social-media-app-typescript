@@ -4,6 +4,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { db, storage } from "../../firebase/firebaseConfig";
+import { ClipLoader } from "react-spinners";
 
 const EditProfile = () => {
   const [profileImg, setProfileImg] = useState(null);
@@ -55,7 +56,11 @@ const EditProfile = () => {
   );
 
   if (userDataLoading) {
-    <h1>Loading...</h1>;
+    return (
+      <div className="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center">
+        <ClipLoader color="gray" size={40} loading={userDataLoading} />
+      </div>
+    );
   }
 
   return (
