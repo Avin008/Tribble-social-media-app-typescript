@@ -28,6 +28,7 @@ import PostOptions from "../post-options/PostOptions";
 import { avatarImg } from "../vertical-post-card/VerticalPostCard";
 import { openPostOptionsModal } from "../../redux-toolkit/features/postOptionsModalSlice";
 import UpdatePostModal from "../update-post-modal/UpdatePostModal";
+import { ClipLoader } from "react-spinners";
 
 const FullPostCard = () => {
   const [toggleCollection, setToggleCollection] = useState(false);
@@ -136,7 +137,11 @@ const FullPostCard = () => {
   );
 
   if (isLoading) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center">
+        <ClipLoader color="gray" size={40} loading={isLoading} />
+      </div>
+    );
   }
 
   return (
