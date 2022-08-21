@@ -11,6 +11,7 @@ import {
 } from "../../components";
 import { db } from "../../firebase/firebaseConfig";
 import { initiateUserData } from "../../redux-toolkit/features/userSlice";
+import { ClipLoader } from "react-spinners";
 
 const HomePage = () => {
   const { token } = useSelector((store) => store.authSlice);
@@ -59,11 +60,19 @@ const HomePage = () => {
   };
 
   if (isLoading) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center">
+        <ClipLoader size={40} color="gray" loading={isLoading} />;
+      </div>
+    );
   }
 
   if (followedPostLoading) {
-    return <h1>Loading...</h1>;
+    return (
+      <div>
+        <ClipLoader size={40} loading={followedPostLoading} color="gray" />;
+      </div>
+    );
   }
 
   return (
