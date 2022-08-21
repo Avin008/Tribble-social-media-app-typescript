@@ -10,7 +10,7 @@ import {
 import { useRef, useState } from "react";
 import SavePost from "../save-post/SavePost";
 import EmojiKeyboard from "../emoji-keyboard/EmojiKeyboard";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import CreateCollectionModal from "../create-collection-modal/CreateCollectionModal";
 import { useDispatch, useSelector } from "react-redux";
 import { closePostModal } from "../../redux-toolkit/features/postModalSlice";
@@ -36,6 +36,7 @@ const FullPostCard = () => {
   const [comment, setComment] = useState("");
   const commentRef = useRef(null);
   const navigate = useNavigate();
+  const { postID } = useParams();
 
   const queryClient = useQueryClient();
 
@@ -44,7 +45,6 @@ const FullPostCard = () => {
   };
 
   const dispatch = useDispatch();
-  const postID = useSelector((store) => store.postModalSlice.postID);
   const token = useSelector((store) => store.authSlice.token);
   const { loggedInUser } = useSelector((store) => store.userSlice);
   const { collectionModal } = useSelector(
@@ -62,7 +62,7 @@ const FullPostCard = () => {
 
   const { data: postData, isLoading } = useQuery(["posts"], async () => {
     const post = { post: "", user: "" };
-    const postDocRef = doc(db, "posts", "04884dca-68b7-4001-8303-a2ecb4871217");
+    const postDocRef = doc(db, "posts", postID);
     post.post = (await getDoc(postDocRef)).data();
     const userDocRef = doc(db, "users", post.post.userID);
     post.user = (await getDoc(userDocRef)).data();

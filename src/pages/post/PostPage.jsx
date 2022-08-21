@@ -1,4 +1,4 @@
-import { FullPostCard, ViewPostCard } from "../../components";
+import { FullPostCard } from "../../components";
 
 const PostPage = () => {
   return (
