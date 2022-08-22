@@ -23,8 +23,6 @@ const PostOptions = () => {
   const { mutate: unFollowUser } = useMutation(
     async () => {
       const userDocRef = doc(db, "users", token);
-      const followerDocRef = doc(db, "users", userID);
-      await updateDoc(followerDocRef, { followers: arrayRemove(token) });
       return await updateDoc(userDocRef, {
         following: arrayRemove(userID),
       });
@@ -55,10 +53,7 @@ const PostOptions = () => {
         {userID !== token && (
           <li
             className="flex cursor-pointer justify-center border-b border-gray-300 p-2 font-medium hover:bg-gray-200"
-            onClick={() => {
-              unFollowUser();
-              dispatch(closePostOptionsModal());
-            }}
+            onClick={() => unFollowUser()}
           >
             Unfollow
           </li>
