@@ -1,5 +1,6 @@
 const { defaults } = require("autoprefixer");
 const defaultTheme = require("tailwindcss/defaultTheme");
+const scrollbarHide = require("tailwind-scrollbar-hide");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -11,5 +12,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [scrollbarHide],
 };

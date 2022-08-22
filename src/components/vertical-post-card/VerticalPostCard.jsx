@@ -131,8 +131,6 @@ const VerticalPostCard = ({ data }) => {
 
   // API CALLS END
 
-  console.log(data.postID);
-
   return (
     <div className="h-fit w-96 rounded-lg border border-black bg-white">
       <div className="flex h-14 items-center justify-between border-b border-black p-2">
@@ -230,7 +228,7 @@ const VerticalPostCard = ({ data }) => {
           <div className="">
             <p
               className="cursor-pointer text-sm font-medium text-gray-700 hover:underline"
-              onClick={() => dispatch(openPostModal({ postID: data.postID }))}
+              onClick={() => navigate(`/post/${data.postID}`)}
             >
               View all comments
             </p>

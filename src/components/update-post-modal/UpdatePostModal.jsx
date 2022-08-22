@@ -11,7 +11,6 @@ import { avatarImg } from "../vertical-post-card/VerticalPostCard";
 const UpdatePostModal = () => {
   const fileRef = useRef(null);
   const [files, setFile] = useState(null);
-  const [caption, setCaption] = useState("");
   const dispatch = useDispatch();
 
   const { token } = useSelector((store) => store.authSlice);
@@ -42,8 +41,9 @@ const UpdatePostModal = () => {
       onSettled: () => {
         queryClient.invalidateQueries(["posts"]);
         queryClient.invalidateQueries(["followed-user-post"]);
+        window.location.reload();
         dispatch(closeUpdatePostModal());
-        dispatch(closePostModal());
+        // dispatch(closePostModal());
       },
     }
   );

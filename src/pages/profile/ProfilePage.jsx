@@ -7,15 +7,13 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { ProfileTabs, UserProfileCard, ViewPostCard } from "../../components";
+import { ProfileTabs, UserProfileCard } from "../../components";
 import { db } from "../../firebase/firebaseConfig";
+import { ClipLoader } from "react-spinners";
 
 const ProfilePage = () => {
   const { id } = useParams();
-  const { isModalOpen } = useSelector((store) => store.postModalSlice);
-  const { token } = useSelector((store) => store.authSlice);
 
   // fetch userData by userID
   const { data: userData, isLoading } = useQuery(
@@ -38,7 +36,11 @@ const ProfilePage = () => {
   );
 
   if (isLoading) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center">
+        <ClipLoader color="gray" size={40} loading={isLoading} />
+      </div>
+    );
   }
 
   return (
@@ -49,8 +51,6 @@ const ProfilePage = () => {
       ) : (
         <ProfileTabs data={{ userData, userPostsData }} />
       )}
-
-      {isModalOpen && <ViewPostCard />}
     </div>
   );
 };

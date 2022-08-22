@@ -19,5 +19,6 @@ import SearchResults from "./search-results/SearchResults";
 import Notifications from "./notifications/Notifications";
 import RequireAuth from "./requireAuth/RequireAuth";
 import UpdatePostModal from "./update-post-modal/UpdatePostModal";
+import FullPostCard from "./full-post-card/FullPostCard";
 
-export {Navbar, UpdatePostModal, UserProfileActions, Notifications, RequireAuth, PostOptions, SearchResults, VerticalPostCard, CreateCollectionModal, CreatePostModal, ViewPostCard, ExploreCard, SavePost, SavedCard, EmojiKeyBoard, LoggedInUserCard, Suggestions, UserProfileCard, SavedPostCard, UserPostCard, ProfileTabs}
+export {Navbar, UpdatePostModal, FullPostCard, UserProfileActions, Notifications, RequireAuth, PostOptions, SearchResults, VerticalPostCard, CreateCollectionModal, CreatePostModal, ViewPostCard, ExploreCard, SavePost, SavedCard, EmojiKeyBoard, LoggedInUserCard, Suggestions, UserProfileCard, SavedPostCard, UserPostCard, ProfileTabs}

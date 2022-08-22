@@ -1,24 +1,37 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { doc, updateDoc } from "firebase/firestore";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { avatarImg } from "../../components/vertical-post-card/VerticalPostCard";
 import { db, storage } from "../../firebase/firebaseConfig";
+import { ClipLoader } from "react-spinners";
 
 const EditProfile = () => {
   const [profileImg, setProfileImg] = useState(null);
   const fileRef = useRef(null);
-  const { loggedInUser } = useSelector((store) => store.userSlice);
-  const [userInfo, setUserInfo] = useState(loggedInUser);
+  const { token } = useSelector((store) => store.authSlice);
+  const [userInfo, setUserInfo] = useState({});
 
   const onChangeHandler = (e) => {
     setProfileImg(e.target.files[0]);
   };
 
-  console.log(userInfo);
-
   const queryClient = useQueryClient();
+
+  //
+
+  const { data, isLoading: userDataLoading } = useQuery(
+    ["users"],
+    async () => {
+      const userDocRef = doc(db, "users", token);
+      return (await getDoc(userDocRef)).data();
+    },
+    {
+      onSettled: (data) => {
+        setUserInfo(data);
+      },
+    }
+  );
 
   const { mutate, isLoading } = useMutation(
     async () => {
@@ -42,16 +55,23 @@ const EditProfile = () => {
     }
   );
 
+  if (userDataLoading) {
+    return (
+      <div className="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center">
+        <ClipLoader color="gray" size={40} loading={userDataLoading} />
+      </div>
+    );
+  }
+
   return (
-    <div className="m-20">
+    <div className="mt-20">
       <div className="mx-auto flex w-[50%] flex-col gap-1 border border-black bg-white p-4">
         <div className="relative mx-auto h-20 w-20 p-1">
           <img
             className="h-full w-full rounded-full border-2 border-black object-cover"
             src={
               (profileImg && URL.createObjectURL(profileImg)) ||
-              userInfo.profileImg ||
-              avatarImg
+              userInfo.profileImg
             }
             alt=""
           />
@@ -70,7 +90,7 @@ const EditProfile = () => {
           Full Name
         </label>
         <input
-          className="border border-black p-2"
+          className="border border-black p-2 font-medium"
           placeholder="First Name"
           type="text"
           value={userInfo.fullname}
@@ -82,7 +102,7 @@ const EditProfile = () => {
           Bio
         </label>
         <textarea
-          className="h-20 resize-none border border-black p-2"
+          className="h-20 resize-none border border-black p-2 font-medium"
           placeholder="Bio"
           value={userInfo.bio}
           onChange={(e) =>
@@ -93,7 +113,7 @@ const EditProfile = () => {
           PortFolio Link
         </label>
         <input
-          className="border border-black p-2"
+          className="border border-black p-2 font-medium"
           type="text"
           placeholder="portfolio Link"
           value={userInfo.portfolio}
@@ -106,7 +126,7 @@ const EditProfile = () => {
           className="active: mt-4  bg-purple-700 p-2 font-semibold text-white shadow-sm hover:bg-purple-600"
           onClick={() => mutate()}
         >
-          {isLoading ? "Updating Profile" : "update Profle"}
+          {isLoading ? "Updating Profile..." : "update Profile"}
         </button>
       </div>
     </div>
