@@ -203,10 +203,10 @@ const VerticalPostCard = ({ data }) => {
             ) : (
               <MdBookmarkBorder
                 size={28}
-                onClick={() => setToggleSavePost((prev) => !prev)}
+                onClick={() => dispatch(toggleCollectionList())}
               />
             )}
-            {toggleSavePost && (
+            {isCollectionListOpen && (
               <SavePost data={{ post: data, user: loggedInUser }} />
             )}
           </span>
