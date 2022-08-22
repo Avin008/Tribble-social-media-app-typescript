@@ -52,7 +52,7 @@ const PostOptions = () => {
       onSuccess: () => {
         queryClient.invalidateQueries(["followed-user-post"]);
         dispatch(closePostOptionsModal());
-        navigate(`/profile/${token}`);
+        navigate(`/`);
       },
     }
   );
