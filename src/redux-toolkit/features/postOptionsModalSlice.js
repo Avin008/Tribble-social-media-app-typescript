@@ -4,7 +4,7 @@ const initialState = {
   isPostOptionsModalOpen: false,
   userID: "",
   postID: "",
-  userData: {},
+  postData: {},
 };
 
 const postOptionsModalSlice = createSlice({
@@ -15,7 +15,7 @@ const postOptionsModalSlice = createSlice({
       state.isPostOptionsModalOpen = true;
       state.userID = action.payload.userID;
       state.postID = action.payload.postID;
-      state.userData = action.payload.userData;
+      state.postData = action.payload.postData;
     },
     closePostOptionsModal: (state) => {
       state.isPostOptionsModalOpen = false;
