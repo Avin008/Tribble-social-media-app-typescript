@@ -15,7 +15,7 @@ const Login = () => {
   };
 
   const guestLogin = () => {
-    setLoginInfo({ email: "maxdoe@gmail.com", password: "123456" });
+    setLoginInfo({ email: "maricaward@gmail.com", password: "123456" });
   };
 
   const signinUser = async ({ email, password }) => {
