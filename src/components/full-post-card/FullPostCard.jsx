@@ -13,7 +13,6 @@ import EmojiKeyboard from "../emoji-keyboard/EmojiKeyboard";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import CreateCollectionModal from "../create-collection-modal/CreateCollectionModal";
 import { useDispatch, useSelector } from "react-redux";
-import { closePostModal } from "../../redux-toolkit/features/postModalSlice";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { doc, getDoc } from "firebase/firestore";
 import {
@@ -29,6 +28,11 @@ import { avatarImg } from "../vertical-post-card/VerticalPostCard";
 import { openPostOptionsModal } from "../../redux-toolkit/features/postOptionsModalSlice";
 import UpdatePostModal from "../update-post-modal/UpdatePostModal";
 import { ClipLoader } from "react-spinners";
+import {
+  closeCollectionList,
+  openCollectionList,
+  toggleCollectionList,
+} from "../../redux-toolkit/features/collectionListSlice";
 
 const FullPostCard = () => {
   const [toggleCollection, setToggleCollection] = useState(false);
@@ -46,17 +50,23 @@ const FullPostCard = () => {
 
   const dispatch = useDispatch();
   const token = useSelector((store) => store.authSlice.token);
-  const { loggedInUser } = useSelector((store) => store.userSlice);
   const { collectionModal } = useSelector(
     (store) => store.collectionModalSlice
   );
-  const { postOptionsModal } = useSelector(
-    (store) => store.postOptionsModalSlice
+
+  const { isCollectionListOpen } = useSelector(
+    (store) => store.collectionListSlice
   );
 
   const { isPostOptionsModalOpen } = useSelector(
     (store) => store.postOptionsModalSlice
   );
+
+  // fetch userData by userID
+  const { data: userData } = useQuery(["current-user-data"], async () => {
+    const userDocRef = doc(db, "users", token);
+    return (await getDoc(userDocRef)).data();
+  });
 
   // fetch post Data by postID
 
@@ -117,9 +127,9 @@ const FullPostCard = () => {
   const { mutate: mutateAddComment } = useMutation(
     async () => {
       return await postComment(
-        loggedInUser.username,
-        loggedInUser.profileImg,
-        loggedInUser.userId,
+        userData.username,
+        userData.profileImg,
+        userData.userId,
         postData.post.postID,
         comment
       );
@@ -173,7 +183,6 @@ const FullPostCard = () => {
               className="cursor-pointer font-medium hover:underline"
               onClick={() => {
                 navigate(`/profile/${postData.user.userId}`);
-                dispatch(closePostModal());
               }}
             >
               {postData.user.username}
@@ -188,7 +197,7 @@ const FullPostCard = () => {
                   openPostOptionsModal({
                     userID: postData.user.userId,
                     postID: postData.post.postID,
-                    postData: postData.post,
+                    userData: userData,
                   })
                 )
               }
@@ -257,10 +266,10 @@ const FullPostCard = () => {
                   <MdOutlineBookmarkBorder
                     size={25}
                     className="cursor-pointer"
-                    onClick={() => setToggleCollection((prev) => !prev)}
+                    onClick={() => dispatch(toggleCollectionList())}
                   />
                 )}
-                {toggleCollection && (
+                {isCollectionListOpen && (
                   <div className="relative">
                     <SavePost data={postData} />
                   </div>
