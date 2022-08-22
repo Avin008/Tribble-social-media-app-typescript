@@ -8,11 +8,13 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { db } from "../../firebase/firebaseConfig";
 import { closePostOptionsModal } from "../../redux-toolkit/features/postOptionsModalSlice";
 import { openUpdatePostModal } from "../../redux-toolkit/features/updatePostModalSlice";
 
 const PostOptions = () => {
+  const navigate = useNavigate();
   const { token } = useSelector((store) => store.authSlice);
   const { userID, postID } = useSelector(
     (store) => store.postOptionsModalSlice
@@ -33,6 +35,7 @@ const PostOptions = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["post"]);
+        queryClient.invalidateQueries(["users"]);
       },
       onError: (err) => {
         console.log(err);
@@ -49,6 +52,7 @@ const PostOptions = () => {
       onSuccess: () => {
         queryClient.invalidateQueries(["followed-user-post"]);
         dispatch(closePostOptionsModal());
+        navigate(`/profile/${token}`);
       },
     }
   );
@@ -70,6 +74,7 @@ const PostOptions = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["post"]);
+        queryClient.invalidateQueries(["users"]);
       },
     }
   );
