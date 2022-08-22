@@ -57,7 +57,7 @@ const UserProfileCard = ({ data }) => {
         <div className="flex items-center justify-between">
           <h4 className="text-3xl font-light">{userData.username}</h4>
 
-          <div className="absolute right-60">
+          <div className="absolute right-40">
             {" "}
             {userData.userId === token ? (
               <button
