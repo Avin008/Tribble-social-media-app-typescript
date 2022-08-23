@@ -32,6 +32,11 @@ const ProfilePage = () => {
       const postsCollectionRef = collection(db, "posts");
       const queryKey = query(postsCollectionRef, where("userID", "==", id));
       return (await getDocs(queryKey)).docs.map((x) => x.data());
+    },
+    {
+      select: (data) => {
+        return data.sort((a, b) => b.dateCreated - a.dateCreated);
+      },
     }
   );
 
