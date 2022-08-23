@@ -40,7 +40,7 @@ const ProfileTabs = ({ data }) => {
           ) : (
             <div className="absolute left-0 right-0 flex flex-col items-center justify-center gap-2 p-5">
               <MdOutlineBookmarkBorder size={50} />
-              <h1 className="font-semibold">You Haven't posted anything yet</h1>
+              <h1 className="font-semibold">Haven't posted anything yet</h1>
             </div>
           )
         ) : userData.savedPost.length ? (
