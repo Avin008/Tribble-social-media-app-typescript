@@ -45,7 +45,7 @@ const HomePage = () => {
 
   if (followedPostLoading) {
     return (
-      <div>
+      <div className="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center">
         <ClipLoader size={40} loading={followedPostLoading} color="gray" />;
       </div>
     );
