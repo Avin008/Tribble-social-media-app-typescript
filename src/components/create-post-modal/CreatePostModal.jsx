@@ -1,8 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { createPost } from "../../firebase/firebaseConfig";
+import { useCreatePost } from "../../hooks/useCreatePost";
 import { closeCreatePostModal } from "../../redux-toolkit/features/createPostModalSlice";
 import { avatarImg } from "../vertical-post-card/VerticalPostCard";
 const CreatePostModal = () => {
@@ -20,22 +20,16 @@ const CreatePostModal = () => {
 
   const queryClient = useQueryClient();
 
-  const { mutate, isLoading } = useMutation(
-    async () => {
-      return await createPost(
-        token,
-        loggedInUser.username,
-        loggedInUser.profileImg,
-        files,
-        caption
-      );
-    },
-    {
-      onSuccess: () => {
-        dispatch(closeCreatePostModal());
-        queryClient.invalidateQueries(["followed-user-post"]);
-      },
-    }
+  const onSuccess = () => {
+    dispatch(closeCreatePostModal());
+    queryClient.invalidateQueries(["followed-user-post"]);
+  };
+
+  const { mutate: createPost, isLoading } = useCreatePost(
+    loggedInUser,
+    files,
+    caption,
+    onSuccess
   );
 
   return (
@@ -110,7 +104,7 @@ const CreatePostModal = () => {
               </button>
               <button
                 className="rounded-md bg-purple-500 px-6 py-1 font-normal text-white"
-                onClick={() => mutate()}
+                onClick={() => createPost()}
               >
                 {!isLoading ? "post" : "posting..."}
               </button>
