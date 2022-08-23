@@ -170,7 +170,7 @@ const VerticalPostCard = ({ data }) => {
       <div className="space-y-1 border border-b-black p-1">
         <div className="flex items-center justify-between p-1">
           <div className="flex gap-2">
-            <span className="cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300">
+            <span className="cursor-pointer rounded-full p-1  hover:text-gray-500 active:bg-gray-300">
               {data.likes.map((x) => x.userId).includes(token) ? (
                 <MdOutlineFavorite
                   className="cursor-pointer"
@@ -185,7 +185,7 @@ const VerticalPostCard = ({ data }) => {
                 />
               )}
             </span>
-            <span className="cursor-pointer rounded-full p-1 hover:bg-gray-200 active:bg-gray-300">
+            <span className="cursor-pointer rounded-full p-1 hover:text-gray-500 active:bg-gray-300">
               <MdOutlineComment
                 size={28}
                 className=""
@@ -208,7 +208,9 @@ const VerticalPostCard = ({ data }) => {
               />
             )}
             {isCollectionListOpen && (
-              <SavePost data={{ post: data, user: loggedInUser }} />
+              <SavePost
+                data={{ userData: loggedInUser, postData: { post: data } }}
+              />
             )}
           </span>
         </div>
