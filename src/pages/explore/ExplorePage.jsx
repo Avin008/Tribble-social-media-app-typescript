@@ -1,16 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
-import { collection, doc, getDocs } from "firebase/firestore";
-import { useSelector } from "react-redux";
 import { ExploreCard } from "../../components";
-import { db } from "../../firebase/firebaseConfig";
 import { ClipLoader } from "react-spinners";
+import { useGetAllPosts } from "../../hooks/useGetAllPosts";
 const ExplorePage = () => {
-  const { token } = useSelector((store) => store.authSlice);
-
-  const { data: posts, isLoading } = useQuery(["explore"], async () => {
-    const postCollectionRef = collection(db, "posts");
-    return (await getDocs(postCollectionRef)).docs.map((x) => x.data());
-  });
+  const { data: posts, isLoading } = useGetAllPosts("explore");
 
   if (isLoading) {
     return (
