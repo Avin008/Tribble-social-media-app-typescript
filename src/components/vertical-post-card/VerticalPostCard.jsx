@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -19,21 +19,17 @@ import {
 } from "react-icons/md";
 
 // firebase services
-import {
-  likePost,
-  unlikePost,
-  postComment,
-  isPostSaved,
-  removedFromSavedPost,
-} from "../../firebase/firebaseConfig";
+import { isPostSaved } from "../../firebase/firebaseConfig";
 
 // redux toolkit
 
 import { toggleCollectionList } from "../../redux-toolkit/features/collectionListSlice";
-import { openPostModal } from "../../redux-toolkit/features/postModalSlice";
 import { openPostOptionsModal } from "../../redux-toolkit/features/postOptionsModalSlice";
+import { useLikePost } from "../../hooks/useLikePost";
+import { useUnLikePost } from "../../hooks/useUnLikePost";
+import { usePostComment } from "../../hooks/usePostComment";
+import { useRemovePostFromSavedPosts } from "../../hooks/useRemovePostFromSavedPosts";
 
-// avatar Img
 export const avatarImg =
   "https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png";
 
@@ -49,7 +45,6 @@ const VerticalPostCard = ({ data }) => {
   const navigate = useNavigate();
 
   const { token } = useSelector((store) => store.authSlice);
-  const { postID } = useSelector((store) => store.postModalSlice);
   const { loggedInUser } = useSelector((store) => store.userSlice);
   const { isCollectionListOpen } = useSelector(
     (store) => store.collectionListSlice
@@ -63,70 +58,43 @@ const VerticalPostCard = ({ data }) => {
 
   const comments = [];
 
-  // API CALLS
+  const onLikeSuccess = () => {
+    queryClient.invalidateQueries(["followed-user-post"]);
+  };
 
-  // LIKE POST
+  const {
+    mutate: likePost,
+    isLoading,
+    isError,
+  } = useLikePost(data.postID, onLikeSuccess);
 
-  const { mutate: mutateLike } = useMutation(
-    async () => {
-      return await likePost(data.postID, token);
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["followed-user-post"]);
-      },
-    }
+  const onUnlikeSuccess = () => {
+    queryClient.invalidateQueries(["followed-user-post"]);
+  };
+
+  const { mutate: unlikePost } = useUnLikePost(data.postID, onUnlikeSuccess);
+
+  const onPostCommentSuccess = () => {
+    setComment("");
+    queryClient.invalidateQueries(["followed-user-post"]);
+  };
+
+  const { mutate: postComment } = usePostComment(
+    loggedInUser,
+    data.postID,
+    comment,
+    onPostCommentSuccess
   );
 
-  // UNLIKE POST
+  const onRemovePostFromSavedSuccess = () => {
+    queryClient.invalidateQueries(["posts"]);
+    queryClient.invalidateQueries(["users"]);
+  };
 
-  const { mutate: mutateUnLike } = useMutation(
-    async () => {
-      return await unlikePost(data.postID, token);
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["followed-user-post"]);
-      },
-    }
-  );
-
-  // POST COMMENT ON POST
-
-  const { mutate: mutateAddComment } = useMutation(
-    async () => {
-      return await postComment(
-        loggedInUser.username,
-        loggedInUser.profileImg,
-        loggedInUser.userId,
-        data.postID,
-        comment
-      );
-    },
-    {
-      onSuccess: () => {
-        setComment("");
-        queryClient.invalidateQueries(["followed-user-post"]);
-      },
-    }
-  );
-
-  // REMOVE POST FROM SAVED
-
-  const { mutate: removePost } = useMutation(
-    async () => {
-      return await removedFromSavedPost(
-        loggedInUser.userId,
-        loggedInUser.savedPost,
-        data.postID
-      );
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["posts"]);
-        queryClient.invalidateQueries(["users"]);
-      },
-    }
+  const { mutate: removePostFromSaved } = useRemovePostFromSavedPosts(
+    loggedInUser,
+    data.postID,
+    onRemovePostFromSavedSuccess
   );
 
   // API CALLS END
@@ -175,13 +143,13 @@ const VerticalPostCard = ({ data }) => {
                 <MdOutlineFavorite
                   className="cursor-pointer"
                   size={25}
-                  onClick={() => mutateUnLike()}
+                  onClick={() => unlikePost()}
                 />
               ) : (
                 <MdFavoriteBorder
                   className="cursor-pointer"
                   size={25}
-                  onClick={() => mutateLike()}
+                  onClick={() => likePost()}
                 />
               )}
             </span>
@@ -199,7 +167,7 @@ const VerticalPostCard = ({ data }) => {
               <MdOutlineBookmark
                 size={28}
                 className=""
-                onClick={() => removePost()}
+                onClick={() => removePostFromSaved()}
               />
             ) : (
               <MdBookmarkBorder
@@ -279,7 +247,7 @@ const VerticalPostCard = ({ data }) => {
         <button
           className="font-medium"
           disabled={comment ? false : true}
-          onClick={() => mutateAddComment()}
+          onClick={() => postComment()}
         >
           Post
         </button>
