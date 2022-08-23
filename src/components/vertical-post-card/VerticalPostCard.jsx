@@ -208,7 +208,9 @@ const VerticalPostCard = ({ data }) => {
               />
             )}
             {isCollectionListOpen && (
-              <SavePost data={{ post: data, user: loggedInUser }} />
+              <SavePost
+                data={{ userData: loggedInUser, postData: { post: data } }}
+              />
             )}
           </span>
         </div>
