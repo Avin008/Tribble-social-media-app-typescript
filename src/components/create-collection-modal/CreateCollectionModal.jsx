@@ -1,13 +1,12 @@
 import { MdOutlineClose } from "../../icons/";
 import { useState } from "react";
 import { closeCollectionModal } from "../../redux-toolkit/features/collectionModalSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCreateCollection } from "../../hooks/useCreateCollection";
 const CreateCollectionModal = ({ data }) => {
   const [collectionName, setCollectionName] = useState("");
   const dispatch = useDispatch();
-  const { token } = useSelector((store) => store.authSlice);
   const queryClient = useQueryClient();
 
   const onSuccess = () => {
