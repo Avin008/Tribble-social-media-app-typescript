@@ -1,58 +1,44 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { db, storage } from "../../firebase/firebaseConfig";
 import { ClipLoader } from "react-spinners";
+import { useGetUserDataById } from "../../hooks/useGetUserDataById";
+import { useGetUserData } from "../../hooks/useGetUserInfo";
+import { useMutationEditProfile } from "../../hooks/useMutatationEditProfile";
 
 const EditProfile = () => {
   const [profileImg, setProfileImg] = useState(null);
   const fileRef = useRef(null);
-  const { token } = useSelector((store) => store.authSlice);
   const [userInfo, setUserInfo] = useState({});
+
+  const { token } = useSelector((store) => store.authSlice);
 
   const onChangeHandler = (e) => {
     setProfileImg(e.target.files[0]);
   };
 
-  const queryClient = useQueryClient();
+  const onSuccess = (data) => {
+    setUserInfo(data);
+  };
 
-  //
-
-  const { data, isLoading: userDataLoading } = useQuery(
-    ["users"],
-    async () => {
-      const userDocRef = doc(db, "users", token);
-      return (await getDoc(userDocRef)).data();
-    },
-    {
-      onSettled: (data) => {
-        setUserInfo(data);
-      },
-    }
+  const { data, isLoading: userDataLoading } = useGetUserData(
+    "users",
+    onSuccess
   );
 
-  const { mutate, isLoading } = useMutation(
-    async () => {
-      const userDocRef = doc(db, "users", userInfo.userId);
-      const profileImgRef = ref(storage, `/profileImg/${userInfo.userId}.jpg`);
-      const res = profileImg && (await uploadBytes(profileImgRef, profileImg));
-      const imgUrl = profileImg && (await getDownloadURL(profileImgRef, res));
+  const onSuccessMutation = () => {
+    console.log("successfully updated profile");
+  };
 
-      const updatedUserobj = {
-        fullname: userInfo.fullname,
-        bio: userInfo.bio,
-        portfolio: userInfo.portfolio,
-        profileImg: (profileImg && imgUrl) || userInfo.profileImg,
-      };
-      return await updateDoc(userDocRef, updatedUserobj);
-    },
-    {
-      onError: (err) => {
-        console.log(err);
-      },
-    }
+  const onError = (err) => {
+    console.log(err);
+  };
+
+  const { mutate: updateProfile, isLoading } = useMutationEditProfile(
+    token,
+    userInfo,
+    profileImg,
+    onSuccessMutation,
+    onError
   );
 
   if (userDataLoading) {
@@ -124,7 +110,7 @@ const EditProfile = () => {
 
         <button
           className="active: mt-4  bg-purple-700 p-2 font-semibold text-white shadow-sm hover:bg-purple-600"
-          onClick={() => mutate()}
+          onClick={() => updateProfile()}
         >
           {isLoading ? "Updating Profile..." : "update Profile"}
         </button>
