@@ -39,7 +39,7 @@ const CreatePostModal = () => {
   );
 
   return (
-    <div className="fixed top-0 bottom-0 left-0 right-0 flex items-center justify-center bg-black/50">
+    <div className="fixed top-0 bottom-0 left-0 right-0 z-20 flex items-center justify-center bg-black/50">
       <div className="h-2/4 w-2/4 rounded-xl border bg-white">
         <div className="flex justify-center border-b border-black p-2">
           <h1 className="font-semibold">Create new post</h1>

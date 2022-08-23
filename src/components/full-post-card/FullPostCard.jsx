@@ -29,9 +29,9 @@ import { avatarImg } from "../vertical-post-card/VerticalPostCard";
 import { openPostOptionsModal } from "../../redux-toolkit/features/postOptionsModalSlice";
 import UpdatePostModal from "../update-post-modal/UpdatePostModal";
 import { ClipLoader } from "react-spinners";
+import { toggleCollectionList } from "../../redux-toolkit/features/collectionListSlice";
 
 const FullPostCard = () => {
-  const [toggleCollection, setToggleCollection] = useState(false);
   const [toggleEmojikeyboard, setTogglEmojiKeyboard] = useState(false);
   const [comment, setComment] = useState("");
   const commentRef = useRef(null);
@@ -58,9 +58,17 @@ const FullPostCard = () => {
     (store) => store.postOptionsModalSlice
   );
 
+  const { isCollectionListOpen } = useSelector(
+    (store) => store.collectionListSlice
+  );
+
   // fetch post Data by postID
 
-  const { data: postData, isLoading } = useQuery(["posts"], async () => {
+  const {
+    data: postData,
+    isLoading,
+    isFetched,
+  } = useQuery(["posts"], async () => {
     const post = { post: "", user: "" };
     const postDocRef = doc(db, "posts", postID);
     post.post = (await getDoc(postDocRef)).data();
@@ -257,10 +265,13 @@ const FullPostCard = () => {
                   <MdOutlineBookmarkBorder
                     size={25}
                     className="cursor-pointer"
-                    onClick={() => setToggleCollection((prev) => !prev)}
+                    onClick={() => {
+                      dispatch(toggleCollectionList());
+                      console.log(isCollectionListOpen);
+                    }}
                   />
                 )}
-                {toggleCollection && (
+                {isCollectionListOpen && (
                   <div className="relative">
                     <SavePost data={postData} />
                   </div>

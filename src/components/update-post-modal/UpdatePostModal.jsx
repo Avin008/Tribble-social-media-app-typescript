@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { doc, updateDoc } from "firebase/firestore";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes } from "firebase/storage";
 import { useRef, useState } from "react";
 import { MdOutlineAddPhotoAlternate } from "react-icons/md";
@@ -12,7 +12,6 @@ const UpdatePostModal = () => {
   const fileRef = useRef(null);
   const [files, setFile] = useState(null);
   const dispatch = useDispatch();
-
   const { token } = useSelector((store) => store.authSlice);
   const { loggedInUser } = useSelector((store) => store.userSlice);
   const { postData } = useSelector((store) => store.postOptionsModalSlice);
@@ -47,6 +46,18 @@ const UpdatePostModal = () => {
       },
     }
   );
+
+  const { data: userData, isLoading: isUserDataLoading } = useQuery(
+    ["users"],
+    async () => {
+      const userDoc = doc(db, "users", token);
+      return (await getDoc(userDoc)).data();
+    }
+  );
+
+  if (isUserDataLoading) {
+    return <h1>Loading...</h1>;
+  }
 
   return (
     <div className="fixed top-0 bottom-0 left-0 right-0 z-10 flex items-center justify-center bg-black/50">
@@ -84,16 +95,12 @@ const UpdatePostModal = () => {
               <div className="h-8 w-8">
                 <img
                   className="h-full w-full rounded-full border border-gray-500 object-cover"
-                  src={
-                    loggedInUser.profileImg
-                      ? loggedInUser.profileImg
-                      : avatarImg
-                  }
+                  src={userData.profileImg ? userData.profileImg : avatarImg}
                   alt=""
                 />
               </div>
               <h1 className="text-sm font-bold text-gray-800">
-                {loggedInUser.username}
+                {userData.username}
               </h1>
             </div>
             <div className="p-1">
