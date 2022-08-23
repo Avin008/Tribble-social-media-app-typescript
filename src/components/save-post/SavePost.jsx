@@ -10,6 +10,7 @@ import { openCollectionModal } from "../../redux-toolkit/features/collectionModa
 import { closeCollectionList } from "../../redux-toolkit/features/collectionListSlice";
 
 const SavePost = ({ data }) => {
+  const { userData, postData } = data;
   const dispatch = useDispatch();
 
   const queryClient = useQueryClient();
@@ -19,11 +20,11 @@ const SavePost = ({ data }) => {
   const { mutate, isLoading } = useMutation(
     async (folderName) => {
       return await saveToCollection(
-        data.user.userId,
+        userData.userId,
         folderName,
-        data.user.savedPost,
-        data.post.img,
-        data.post.postID
+        userData.savedPost,
+        postData.post.img,
+        postData.post.postID
       );
     },
     {
@@ -35,8 +36,6 @@ const SavePost = ({ data }) => {
       },
     }
   );
-
-  //
 
   return (
     <div className="absolute bottom-12 right-0 h-56 w-60 rounded-md border border-gray-500 bg-white shadow-sm">
@@ -56,7 +55,7 @@ const SavePost = ({ data }) => {
         </span>
       </div>
       <ul className="m-0 h-4/5 list-none overflow-y-scroll p-1">
-        {data.user.savedPost.map((x) => (
+        {userData.savedPost?.map((x) => (
           <li
             className="cursor-pointer py-1 px-4 font-medium text-gray-700 hover:bg-gray-100"
             onClick={() => mutate(x.folderName)}

@@ -30,6 +30,7 @@ import { openPostOptionsModal } from "../../redux-toolkit/features/postOptionsMo
 import UpdatePostModal from "../update-post-modal/UpdatePostModal";
 import { ClipLoader } from "react-spinners";
 import { toggleCollectionList } from "../../redux-toolkit/features/collectionListSlice";
+import { useGetUserData } from "../../hooks/useGetUserInfo";
 
 const FullPostCard = () => {
   const [toggleEmojikeyboard, setTogglEmojiKeyboard] = useState(false);
@@ -62,6 +63,14 @@ const FullPostCard = () => {
     (store) => store.collectionListSlice
   );
 
+  // fetch user data
+
+  const {
+    data: userData,
+    isLoading: userDataLoading,
+    isError: userDataError,
+  } = useGetUserData("users");
+
   // fetch post Data by postID
 
   const {
@@ -79,20 +88,22 @@ const FullPostCard = () => {
 
   // remove post from saved
 
-  const { isLoading: isWritingData, mutate } = useMutation(
-    async () => {
-      return await removedFromSavedPost(
-        postData.user.userId,
-        postData.user.savedPost,
-        postData.post.postID
-      );
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["posts"]);
+  const { isLoading: isWritingData, mutate: removePostFromSavedPost } =
+    useMutation(
+      async () => {
+        return await removedFromSavedPost(
+          userData.userId,
+          userData.savedPost,
+          postID
+        );
       },
-    }
-  );
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries(["posts"]);
+          queryClient.invalidateQueries(["users"]);
+        },
+      }
+    );
 
   // like post
 
@@ -255,11 +266,11 @@ const FullPostCard = () => {
                 />
               </div>
               <div className="card-secondary-actions">
-                {isPostSaved(postData.user.savedPost, postID) ? (
+                {isPostSaved(userData.savedPost, postID) ? (
                   <MdOutlineBookmark
                     size={25}
                     className="cursor-pointer"
-                    onClick={() => mutate()}
+                    onClick={() => removePostFromSavedPost()}
                   />
                 ) : (
                   <MdOutlineBookmarkBorder
@@ -273,7 +284,7 @@ const FullPostCard = () => {
                 )}
                 {isCollectionListOpen && (
                   <div className="relative">
-                    <SavePost data={postData} />
+                    <SavePost data={{ userData, postData }} />
                   </div>
                 )}
               </div>
