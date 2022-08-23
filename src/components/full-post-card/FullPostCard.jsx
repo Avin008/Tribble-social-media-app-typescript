@@ -14,16 +14,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import CreateCollectionModal from "../create-collection-modal/CreateCollectionModal";
 import { useDispatch, useSelector } from "react-redux";
 import { closePostModal } from "../../redux-toolkit/features/postModalSlice";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { doc, getDoc } from "firebase/firestore";
-import {
-  db,
-  isPostSaved,
-  likePost,
-  postComment,
-  removedFromSavedPost,
-  unlikePost,
-} from "../../firebase/firebaseConfig";
+import { useQueryClient } from "@tanstack/react-query";
+import { isPostSaved } from "../../firebase/firebaseConfig";
 import PostOptions from "../post-options/PostOptions";
 import { avatarImg } from "../vertical-post-card/VerticalPostCard";
 import { openPostOptionsModal } from "../../redux-toolkit/features/postOptionsModalSlice";
@@ -31,6 +23,11 @@ import UpdatePostModal from "../update-post-modal/UpdatePostModal";
 import { ClipLoader } from "react-spinners";
 import { toggleCollectionList } from "../../redux-toolkit/features/collectionListSlice";
 import { useGetUserData } from "../../hooks/useGetUserInfo";
+import { useRemovePostFromSavedPosts } from "../../hooks/useRemovePostFromSavedPosts";
+import { useLikePost } from "../../hooks/useLikePost";
+import { useUnLikePost } from "../../hooks/useUnLikePost";
+import { usePostComment } from "../../hooks/usePostComment";
+import { useGetPostAndUserData } from "../../hooks/useGetPostAndUserData";
 
 const FullPostCard = () => {
   const [toggleEmojikeyboard, setTogglEmojiKeyboard] = useState(false);
@@ -63,92 +60,47 @@ const FullPostCard = () => {
     (store) => store.collectionListSlice
   );
 
-  // fetch user data
-
   const {
     data: userData,
     isLoading: userDataLoading,
     isError: userDataError,
   } = useGetUserData("users");
 
-  // fetch post Data by postID
+  const { data: postData, isLoading } = useGetPostAndUserData("posts", postID);
 
-  const {
-    data: postData,
-    isLoading,
-    isFetched,
-  } = useQuery(["posts"], async () => {
-    const post = { post: "", user: "" };
-    const postDocRef = doc(db, "posts", postID);
-    post.post = (await getDoc(postDocRef)).data();
-    const userDocRef = doc(db, "users", post.post.userID);
-    post.user = (await getDoc(userDocRef)).data();
-    return post;
-  });
+  const onRemoveFromSavedPostSuccess = () => {
+    queryClient.invalidateQueries(["posts"]);
+    queryClient.invalidateQueries(["users"]);
+  };
 
-  // remove post from saved
-
-  const { isLoading: isWritingData, mutate: removePostFromSavedPost } =
-    useMutation(
-      async () => {
-        return await removedFromSavedPost(
-          userData.userId,
-          userData.savedPost,
-          postID
-        );
-      },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries(["posts"]);
-          queryClient.invalidateQueries(["users"]);
-        },
-      }
-    );
-
-  // like post
-
-  const { mutate: mutateLike } = useMutation(
-    async () => {
-      return await likePost(postData.post.postID, token);
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["posts"]);
-      },
-    }
+  const { mutate: removePostFromSavedPost } = useRemovePostFromSavedPosts(
+    loggedInUser,
+    postID,
+    onRemoveFromSavedPostSuccess
   );
 
-  // unlike post
+  const onLikeSuccess = () => {
+    queryClient.invalidateQueries(["posts"]);
+  };
 
-  const { mutate: mutateUnLike } = useMutation(
-    async () => {
-      return await unlikePost(postData.post.postID, token);
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["posts"]);
-      },
-    }
-  );
+  const { mutate: likePost, isError } = useLikePost(postID, onLikeSuccess);
 
-  // post comment
+  const onUnlikeSuccess = () => {
+    queryClient.invalidateQueries(["posts"]);
+  };
 
-  const { mutate: mutateAddComment } = useMutation(
-    async () => {
-      return await postComment(
-        loggedInUser.username,
-        loggedInUser.profileImg,
-        loggedInUser.userId,
-        postData.post.postID,
-        comment
-      );
-    },
-    {
-      onSuccess: () => {
-        setComment("");
-        queryClient.invalidateQueries(["posts"]);
-      },
-    }
+  const { mutate: unlikePost } = useUnLikePost(postID, onUnlikeSuccess);
+
+  const onPostCommentSuccess = () => {
+    setComment("");
+    queryClient.invalidateQueries(["posts"]);
+  };
+
+  const { mutate: postComment } = usePostComment(
+    loggedInUser,
+    postID,
+    comment,
+    onPostCommentSuccess
   );
 
   const { isUpdatePostModalOpen } = useSelector(
@@ -250,13 +202,13 @@ const FullPostCard = () => {
                   <MdOutlineFavorite
                     className="cursor-pointer"
                     size={25}
-                    onClick={() => mutateUnLike()}
+                    onClick={() => unlikePost()}
                   />
                 ) : (
                   <MdFavoriteBorder
                     className="cursor-pointer"
                     size={25}
-                    onClick={() => mutateLike()}
+                    onClick={() => likePost()}
                   />
                 )}
                 <MdOutlineComment
@@ -321,7 +273,7 @@ const FullPostCard = () => {
               className={`border-0 bg-transparent p-0 text-sm font-semibold outline-none ${
                 !comment ? `: text-gray-500` : `text-black`
               }`}
-              onClick={() => mutateAddComment()}
+              onClick={() => postComment()}
               disabled={comment ? false : true}
             >
               Post
