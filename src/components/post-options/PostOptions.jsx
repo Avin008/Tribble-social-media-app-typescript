@@ -20,7 +20,7 @@ const PostOptions = () => {
   const queryClient = useQueryClient();
 
   const onUnfollowSuccess = () => {
-    queryClient.invalidateQueries(["post"]);
+    queryClient.invalidateQueries(["posts"]);
     queryClient.invalidateQueries(["users"]);
   };
 
@@ -40,7 +40,7 @@ const PostOptions = () => {
   const { data: getpostUser, isLoading } = useGetUserDataById("posts", userID);
 
   const onFollowSuccess = () => {
-    queryClient.invalidateQueries(["post"]);
+    queryClient.invalidateQueries(["posts"]);
     queryClient.invalidateQueries(["users"]);
   };
 
