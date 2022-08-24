@@ -209,17 +209,19 @@ const VerticalPostCard = ({ data }) => {
                 comments.push(x);
               }
             })}
-            {comments.map((x) => (
-              <li className="text-sm font-medium">
-                <span
-                  onClick={() => navigate(`/profile/${x.userId}`)}
-                  className="cursor-pointer font-semibold hover:underline"
-                >
-                  {x.username}
-                </span>{" "}
-                {x.comment}
-              </li>
-            ))}
+            {comments
+              .sort((a, b) => b.dateCreated - a.dateCreated)
+              .map((x) => (
+                <li className="text-sm font-medium">
+                  <span
+                    onClick={() => navigate(`/profile/${x.userId}`)}
+                    className="cursor-pointer font-semibold hover:underline"
+                  >
+                    {x.username}
+                  </span>{" "}
+                  {x.comment}
+                </li>
+              ))}
           </ul>
           <div className="">
             <p className="text-sm font-medium text-gray-500">
