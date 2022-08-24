@@ -1,15 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  arrayRemove,
-  arrayUnion,
-  deleteDoc,
-  doc,
-  getDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { useQueryClient } from "@tanstack/react-query";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { db } from "../../firebase/firebaseConfig";
+import { useDeletePost } from "../../hooks/useDeletePost";
+import { useFollowUser } from "../../hooks/useFollowUser";
+import { useGetUserDataById } from "../../hooks/useGetUserDataById";
+import { useUnfollowUser } from "../../hooks/useUnfollowUser";
 import { closePostOptionsModal } from "../../redux-toolkit/features/postOptionsModalSlice";
 import { openUpdatePostModal } from "../../redux-toolkit/features/updatePostModalSlice";
 
@@ -23,61 +19,32 @@ const PostOptions = () => {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
-  const { mutate: unFollowUser, isLoading: unfollowLoading } = useMutation(
-    async () => {
-      const userDocRef = doc(db, "users", token);
-      const followerDocRef = doc(db, "users", userID);
-      await updateDoc(followerDocRef, { followers: arrayRemove(token) });
-      return await updateDoc(userDocRef, {
-        following: arrayRemove(userID),
-      });
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["post"]);
-        queryClient.invalidateQueries(["users"]);
-      },
-      onError: (err) => {
-        console.log(err);
-      },
-    }
+  const onUnfollowSuccess = () => {
+    queryClient.invalidateQueries(["post"]);
+    queryClient.invalidateQueries(["users"]);
+  };
+
+  const { mutate: unFollowUser, isLoading: unfollowLoading } = useUnfollowUser(
+    userID,
+    onUnfollowSuccess
   );
 
-  const { mutate: removePost } = useMutation(
-    async () => {
-      const postDocRef = doc(db, "posts", postID);
-      return await deleteDoc(postDocRef, postID);
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["followed-user-post"]);
-        dispatch(closePostOptionsModal());
-        navigate(`/`);
-      },
-    }
-  );
+  const onDeletePostSuccess = () => {
+    queryClient.invalidateQueries(["followed-user-post"]);
+    dispatch(closePostOptionsModal());
+    navigate(`/`);
+  };
 
-  const { data: getpostUser, isLoading } = useQuery(["post"], async () => {
-    const userDocRef = doc(db, "users", userID);
-    return (await getDoc(userDocRef)).data();
-  });
+  const { mutate: deletePost } = useDeletePost(postID, onDeletePostSuccess);
 
-  const { mutate: followUser, isLoading: loadingFollowing } = useMutation(
-    async () => {
-      const userDocRef = doc(db, "users", token);
-      const followerDocRef = doc(db, "users", userID);
-      await updateDoc(followerDocRef, { followers: arrayUnion(token) });
-      return await updateDoc(userDocRef, {
-        following: arrayUnion(userID),
-      });
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["post"]);
-        queryClient.invalidateQueries(["users"]);
-      },
-    }
-  );
+  const { data: getpostUser, isLoading } = useGetUserDataById("posts", userID);
+
+  const onFollowSuccess = () => {
+    queryClient.invalidateQueries(["post"]);
+    queryClient.invalidateQueries(["users"]);
+  };
+
+  const { mutate: followUser } = useFollowUser(userID, onFollowSuccess);
 
   if (isLoading) {
     return;
@@ -114,7 +81,7 @@ const PostOptions = () => {
         {userID === token && (
           <li
             className="flex cursor-pointer justify-center border-b border-gray-300 p-2 font-medium hover:bg-gray-200"
-            onClick={() => removePost()}
+            onClick={() => deletePost()}
           >
             Remove Post
           </li>
