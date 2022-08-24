@@ -3,7 +3,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { db } from "../firebase/firebaseConfig";
 
-const useGetUserData = (queryKey) => {
+const useGetUserData = (queryKey, onSuccess, onError) => {
   const { token } = useSelector((store) => store.authSlice);
 
   const getUserDataAPiCall = async (token) => {
@@ -11,9 +11,16 @@ const useGetUserData = (queryKey) => {
     return (await getDoc(userDocRef)).data();
   };
 
-  const { data, isLoading, isError } = useQuery([`${queryKey}`], async () => {
-    return await getUserDataAPiCall(token);
-  });
+  const { data, isLoading, isError } = useQuery(
+    [`${queryKey}`],
+    async () => {
+      return await getUserDataAPiCall(token);
+    },
+    {
+      onSuccess,
+      onError,
+    }
+  );
 
   return { data, isLoading, isError };
 };

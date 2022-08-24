@@ -1,21 +1,14 @@
 import { SavedCard } from "../../components";
-import { Link } from "react-router-dom";
-import { MdKeyboardArrowLeft } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useQuery } from "@tanstack/react-query";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../firebase/firebaseConfig";
 import { ClipLoader } from "react-spinners";
+import { useGetUserDataById } from "../../hooks/useGetUserDataById";
 
 const SavedPostPage = () => {
   const { collectionID } = useParams();
   const { token } = useSelector((store) => store.authSlice);
 
-  const { data, isLoading } = useQuery(["saved-post"], async () => {
-    const userDocRef = doc(db, "users", token);
-    return (await getDoc(userDocRef)).data();
-  });
+  const { data, isLoading } = useGetUserDataById("saved-post", token);
 
   if (isLoading) {
     return (

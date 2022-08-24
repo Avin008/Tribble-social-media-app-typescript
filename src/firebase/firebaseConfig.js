@@ -203,6 +203,28 @@ const isPostSaved = (dataArr, postID) => {
   return postObj.map((x) => x.postID).includes(postID);
 };
 
+// filter followed and user posts
+
+const getFollowedPosts = (allPosts, userFollowing, token) => {
+  const filteredPosts = [];
+  allPosts.forEach((x) => {
+    if (userFollowing.includes(x.userID) || x.userID === token) {
+      filteredPosts.push(x);
+    }
+  });
+  return filteredPosts.sort((a, b) => b.dateCreated - a.dateCreated);
+};
+
+const getSuggestions = (suggestions, userFollowers, userId) => {
+  const filteredSuggestions = [];
+  suggestions.forEach((x) => {
+    if (!userFollowers.includes(x.userId) && x.userId !== userId) {
+      filteredSuggestions.push(x);
+    }
+  });
+  return filteredSuggestions;
+};
+
 export {
   auth,
   db,
@@ -220,4 +242,6 @@ export {
   loginUser,
   getCurrentUser,
   isPostSaved,
+  getFollowedPosts,
+  getSuggestions,
 };

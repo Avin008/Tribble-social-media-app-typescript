@@ -1,26 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
-import { collection, getDocs } from "firebase/firestore";
 import { Link } from "react-router-dom";
-import { db } from "../../firebase/firebaseConfig";
+import useGetSearchResult from "../../hooks/useGetSearchResults";
 
 const SearchResults = ({ data: search }) => {
-  const { data: result, isLoading } = useQuery(
-    ["search-key"],
-    async () => {
-      const userCollectionRef = collection(db, "users");
-      return (await getDocs(userCollectionRef)).docs.map((x) => x.data());
-    },
-    {
-      select: (data = "") => {
-        return data.filter((x) => x.username.includes(search ? search : null));
-      },
-    }
-  );
+  const { data: result, isLoading, isError } = useGetSearchResult(search);
 
   return (
     <ul className="absolute top-12 -left-10 flex min-h-[4rem] w-80 list-none flex-col gap-1 rounded-md border border-black bg-white py-1">
+      <p className="px-4 font-medium">Search Results</p>
       {search && result.length === 0 && (
-        <span className="flex justify-center p-1 font-semibold">
+        <span className="flex justify-center p-1 font-medium">
           user not found
         </span>
       )}
