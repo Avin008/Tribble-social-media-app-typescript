@@ -215,6 +215,16 @@ const getFollowedPosts = (allPosts, userFollowing, token) => {
   return filteredPosts.sort((a, b) => b.dateCreated - a.dateCreated);
 };
 
+const getSuggestions = (suggestions, userFollowers, userId) => {
+  const filteredSuggestions = [];
+  suggestions.forEach((x) => {
+    if (!userFollowers.includes(x.userId) && x.userId !== userId) {
+      filteredSuggestions.push(x);
+    }
+  });
+  return filteredSuggestions;
+};
+
 export {
   auth,
   db,
@@ -233,4 +243,5 @@ export {
   getCurrentUser,
   isPostSaved,
   getFollowedPosts,
+  getSuggestions,
 };

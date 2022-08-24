@@ -1,52 +1,25 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  arrayUnion,
-  collection,
-  doc,
-  getDocs,
-  updateDoc,
-} from "firebase/firestore";
+import { useQueryClient } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { db } from "../../firebase/firebaseConfig";
+import { getSuggestions } from "../../firebase/firebaseConfig";
+import { useFollowSuggestedUsers } from "../../hooks/useFollowSuggestedUsers";
+import { useGetAllUsers } from "../../hooks/useGetAllUsers";
 import { avatarImg } from "../vertical-post-card/VerticalPostCard";
 
 const Suggestions = () => {
   const { loggedInUser } = useSelector((store) => store.userSlice);
   const queryClient = useQueryClient();
-  const { data: suggestions, isLoading } = useQuery(
-    ["suggestions"],
-    async () => {
-      const userCollectionRef = collection(db, "users");
-      return (await getDocs(userCollectionRef)).docs.map((x) => x.data());
-    }
-  );
 
-  const { mutate } = useMutation(
-    async (followerId) => {
-      const userDoc = doc(db, "users", loggedInUser.userId);
-      await updateDoc(userDoc, { following: arrayUnion(followerId) });
-      const followerDocRef = doc(db, "users", followerId);
-      await updateDoc(followerDocRef, {
-        followers: arrayUnion(loggedInUser.userId),
-      });
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["users"]);
-      },
-    }
-  );
+  const { data: suggestions, isLoading } = useGetAllUsers("suggestions");
 
-  const getSuggestions = (suggestions, userFollowers, userId) => {
-    const filteredSuggestions = [];
-    suggestions.forEach((x) => {
-      if (!userFollowers.includes(x.userId) && x.userId !== userId) {
-        filteredSuggestions.push(x);
-      }
-    });
-    return filteredSuggestions;
+  const onFollowSuggestedUserSuccess = () => {
+    queryClient.invalidateQueries(["users"]);
   };
+
+  const { mutate: followUser } = useFollowSuggestedUsers(
+    loggedInUser.userId,
+    onFollowSuggestedUserSuccess
+  );
 
   if (isLoading) {
     return <h1>Loading...</h1>;
@@ -77,7 +50,7 @@ const Suggestions = () => {
           {!loggedInUser.following.includes(x.userId) && (
             <button
               className="font-medium text-purple-800"
-              onClick={() => mutate(x.userId)}
+              onClick={() => followUser(x.userId)}
             >
               Follow
             </button>
