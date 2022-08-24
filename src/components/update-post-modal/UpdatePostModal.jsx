@@ -1,19 +1,15 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { ref, uploadBytes } from "firebase/storage";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { db, storage } from "../../firebase/firebaseConfig";
-import { closePostModal } from "../../redux-toolkit/features/postModalSlice";
+import { useGetUserData } from "../../hooks/useGetUserInfo";
+import { useUpdatePost } from "../../hooks/useUpdatePost";
 import { closeUpdatePostModal } from "../../redux-toolkit/features/updatePostModalSlice";
 import { avatarImg } from "../vertical-post-card/VerticalPostCard";
 const UpdatePostModal = () => {
   const fileRef = useRef(null);
   const [files, setFile] = useState(null);
   const dispatch = useDispatch();
-  const { token } = useSelector((store) => store.authSlice);
-  const { loggedInUser } = useSelector((store) => store.userSlice);
   const { postData } = useSelector((store) => store.postOptionsModalSlice);
 
   const [post, setPost] = useState(postData);
@@ -24,36 +20,20 @@ const UpdatePostModal = () => {
 
   const queryClient = useQueryClient();
 
-  const { mutate: mutateUpdatePost, isLoading } = useMutation(
-    async () => {
-      const userPostRef = doc(db, "posts", postData.postID);
-      const storageRef = ref(storage, `/posts/${token}/${postData.postID}.jpg`);
-      const newImg = files && (await uploadBytes(storageRef, files));
-      const updatedPostObj = {
-        caption: post.caption,
-        img: (files && files) || post.img,
-        dateCreated: Date.now(),
-      };
-      return await updateDoc(userPostRef, updatedPostObj);
-    },
-    {
-      onSettled: () => {
-        queryClient.invalidateQueries(["posts"]);
-        queryClient.invalidateQueries(["followed-user-post"]);
-        window.location.reload();
-        dispatch(closeUpdatePostModal());
-        // dispatch(closePostModal());
-      },
-    }
-  );
+  const onUpdatePostSuccess = () => {
+    queryClient.invalidateQueries(["posts"]);
+    queryClient.invalidateQueries(["followed-user-post"]);
+    window.location.reload();
+  };
 
-  const { data: userData, isLoading: isUserDataLoading } = useQuery(
-    ["users"],
-    async () => {
-      const userDoc = doc(db, "users", token);
-      return (await getDoc(userDoc)).data();
-    }
-  );
+  const {
+    mutate: updatePost,
+    isLoading,
+    isError,
+  } = useUpdatePost(postData.postID, files, post.caption, onUpdatePostSuccess);
+
+  const { data: userData, isLoading: isUserDataLoading } =
+    useGetUserData("users");
 
   if (isUserDataLoading) {
     return <h1>Loading...</h1>;
@@ -122,7 +102,7 @@ const UpdatePostModal = () => {
               </button>
               <button
                 className="rounded-md bg-purple-500 px-4 py-1 font-normal text-white"
-                onClick={() => mutateUpdatePost()}
+                onClick={() => updatePost()}
               >
                 {!isLoading ? "update post" : "updating..."}
               </button>
