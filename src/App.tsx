@@ -58,7 +58,14 @@ function App() {
               </RequireAuth>
             }
           />
-          <Route path="post/:postID" element={<PostPage />} />
+          <Route
+            path="post/:postID"
+            element={
+              <RequireAuth>
+                <PostPage />
+              </RequireAuth>
+            }
+          />
         </Route>
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
