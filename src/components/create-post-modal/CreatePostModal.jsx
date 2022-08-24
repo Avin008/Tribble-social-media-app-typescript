@@ -62,7 +62,7 @@ const CreatePostModal = () => {
               />
               <p
                 className={
-                  files === null ? `text-black` : `font-semibold text-gray-800`
+                  files === null ? `text-black` : `font-semibold text-white`
                 }
               >
                 {files && "Click here to change Image"}
