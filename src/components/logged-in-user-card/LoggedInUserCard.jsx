@@ -1,9 +1,7 @@
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { avatarImg } from "../vertical-post-card/VerticalPostCard";
 
 const LoggedInUserCard = ({ data }) => {
-  const { token } = useSelector((store) => store.authSlice);
   const navigate = useNavigate();
 
   return (
@@ -13,7 +11,7 @@ const LoggedInUserCard = ({ data }) => {
           <img
             className="aspect-square h-full w-full rounded-full border-2 border-black object-cover"
             src={data.profileImg ? data.profileImg : avatarImg}
-            alt=""
+            alt="avatar"
           />
         </div>
         <span className="leading-4">

@@ -35,7 +35,7 @@ const UserProfileCard = ({ data }) => {
         <div className="h-32 w-32">
           <img
             src={userData.profileImg}
-            alt=""
+            alt="avatar"
             className="h-full w-full rounded-full border-2 border-black object-cover"
           />
         </div>

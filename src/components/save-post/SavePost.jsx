@@ -1,6 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { MdAdd, MdClose } from "../../icons";
+import { uuidv4 as uuid } from "@firebase/util";
 
 import { openCollectionModal } from "../../redux-toolkit/features/collectionModalSlice";
 import { closeCollectionList } from "../../redux-toolkit/features/collectionListSlice";
@@ -46,6 +47,7 @@ const SavePost = ({ data }) => {
         {userData.savedPost?.map((x) => (
           <li
             className="cursor-pointer py-1 px-4 font-medium text-gray-700 hover:bg-gray-100"
+            key={uuid()}
             onClick={() => saveToCollection(x.folderName)}
           >
             {x.folderName}

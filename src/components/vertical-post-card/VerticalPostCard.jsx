@@ -2,12 +2,10 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-
-// components
+import { uuidv4 as uuid } from "@firebase/util";
 import EmojiKeyBoard from "../emoji-keyboard/EmojiKeyboard";
 import SavePost from "../save-post/SavePost";
 
-// icons
 import {
   MdOutlineEmojiEmotions,
   MdOutlineComment,
@@ -16,12 +14,9 @@ import {
   MdFavoriteBorder,
   MdOutlineBookmark,
   MdBookmarkBorder,
-} from "react-icons/md";
+} from "../../icons";
 
-// firebase services
 import { isPostSaved } from "../../firebase/firebaseConfig";
-
-// redux toolkit
 
 import { toggleCollectionList } from "../../redux-toolkit/features/collectionListSlice";
 import { openPostOptionsModal } from "../../redux-toolkit/features/postOptionsModalSlice";
@@ -36,7 +31,6 @@ export const avatarImg =
 //
 
 const VerticalPostCard = ({ data }) => {
-  const [toggleSavePost, setToggleSavePost] = useState(false);
   const [toggleEmojiKeyboard, setToggleEmojiKeyboard] = useState(false);
   const [comment, setComment] = useState("");
   const commentRef = useRef(null);
@@ -107,7 +101,7 @@ const VerticalPostCard = ({ data }) => {
             <img
               className="aspect-square h-full w-full rounded-full border-2 border-black object-cover"
               src={data.profileImg ? data.profileImg : `${avatarImg}`}
-              alt=""
+              alt="avatar"
             />
           </div>
           <Link
@@ -133,7 +127,7 @@ const VerticalPostCard = ({ data }) => {
         </span>
       </div>
       <div className="h-auto border-b border-black">
-        <img className="aspect-auto h-full w-full" src={data.img} alt="" />
+        <img className="aspect-auto h-full w-full" src={data.img} alt="post" />
       </div>
       <div className="space-y-1 border border-b-black p-1">
         <div className="flex items-center justify-between p-1">
@@ -212,7 +206,7 @@ const VerticalPostCard = ({ data }) => {
             {comments
               .sort((a, b) => b.dateCreated - a.dateCreated)
               .map((x) => (
-                <li className="text-sm font-medium">
+                <li key={uuid()} className="text-sm font-medium">
                   <span
                     onClick={() => navigate(`/profile/${x.userId}`)}
                     className="cursor-pointer font-semibold hover:underline"

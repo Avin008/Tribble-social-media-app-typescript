@@ -28,6 +28,7 @@ import { useLikePost } from "../../hooks/useLikePost";
 import { useUnLikePost } from "../../hooks/useUnLikePost";
 import { usePostComment } from "../../hooks/usePostComment";
 import { useGetSinglePost } from "../../hooks/useGetSinglePost";
+import { uuidv4 as uuid } from "@firebase/util";
 
 const FullPostCard = () => {
   const [toggleEmojikeyboard, setTogglEmojiKeyboard] = useState(false);
@@ -134,7 +135,7 @@ const FullPostCard = () => {
           <img
             className="h-full w-full object-cover"
             src={postData.img}
-            alt=""
+            alt="post"
           />
         </div>
       </div>
@@ -144,7 +145,7 @@ const FullPostCard = () => {
             <div className="h-10 w-10">
               <img
                 src={postData.profileImg ? postData.profileImg : avatarImg}
-                alt=""
+                alt="avatar"
                 className="h-full w-full rounded-full border border-black object-cover"
               />
             </div>
@@ -179,7 +180,7 @@ const FullPostCard = () => {
 
           {sortedComments(postData.comments).map((x) => {
             return (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2" key={uuid()}>
                 <div>
                   <div className="h-10 w-10">
                     <img

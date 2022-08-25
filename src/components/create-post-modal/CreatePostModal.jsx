@@ -11,7 +11,6 @@ const CreatePostModal = () => {
   const [caption, setCaption] = useState("");
   const dispatch = useDispatch();
 
-  const { token } = useSelector((store) => store.authSlice);
   const { loggedInUser } = useSelector((store) => store.userSlice);
 
   const handleClick = () => {
@@ -43,7 +42,7 @@ const CreatePostModal = () => {
             <img
               className="h-full w-full object-contain"
               src={files && URL.createObjectURL(files)}
-              alt=""
+              alt="user-post"
             />
 
             <div

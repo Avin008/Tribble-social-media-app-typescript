@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
-import { MdOutlineAddPhotoAlternate } from "react-icons/md";
+import { MdOutlineAddPhotoAlternate } from "../../icons/";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetUserData } from "../../hooks/useGetUserInfo";
 import { useUpdatePost } from "../../hooks/useUpdatePost";
@@ -50,7 +50,7 @@ const UpdatePostModal = () => {
             <img
               className="h-full w-full object-contain"
               src={(files && URL.createObjectURL(files)) || post.img}
-              alt=""
+              alt="post"
             />
 
             <div
@@ -76,7 +76,7 @@ const UpdatePostModal = () => {
                 <img
                   className="h-full w-full rounded-full border border-gray-500 object-cover"
                   src={userData.profileImg ? userData.profileImg : avatarImg}
-                  alt=""
+                  alt="avatar"
                 />
               </div>
               <h1 className="text-sm font-bold text-gray-800">

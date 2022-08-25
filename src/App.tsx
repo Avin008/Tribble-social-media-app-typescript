@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import { RequireAuth } from "./components";
+import { PageNotFound, RequireAuth } from "./components";
 import {
   EditProfile,
   ExplorePage,
@@ -66,6 +66,7 @@ function App() {
               </RequireAuth>
             }
           />
+          <Route path="*" element={<PageNotFound />} />
         </Route>
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />

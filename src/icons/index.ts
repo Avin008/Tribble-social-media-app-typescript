@@ -16,7 +16,13 @@
     MdClose,
     MdOutlineFavorite,
     MdOutlineBookmark,
+    MdOutlineAddPhotoAlternate,
+    MdMoreHoriz,
+    MdBookmarkBorder
   } from "react-icons/md";
+
+
+
 
   export {
     MdAccountCircle, 
@@ -35,5 +41,8 @@
     MdOutlineExplore, 
     MdOutlineFavoriteBorder, 
     CgAddR, 
-    MdOutlineHome
+    MdOutlineHome,
+    MdOutlineAddPhotoAlternate,
+    MdMoreHoriz,
+    MdBookmarkBorder
   }
