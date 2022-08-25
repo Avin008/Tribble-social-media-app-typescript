@@ -55,7 +55,7 @@ const HomePage = () => {
   return (
     <div className="mx-auto mt-20 mb-5 grid h-full w-3/5 grid-cols-2 gap-12">
       <div className="space-y-4">
-        {getFollowedPosts(followedPosts, data.following).length !== 0 ? (
+        {getFollowedPosts(followedPosts, data.following, token).length !== 0 ? (
           getFollowedPosts(followedPosts, data.following, token).map((x) => (
             <VerticalPostCard key={uuid()} data={x} />
           ))
