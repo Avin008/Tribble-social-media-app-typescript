@@ -101,7 +101,7 @@ const VerticalPostCard = ({ data }) => {
             <img
               className="aspect-square h-full w-full rounded-full border-2 border-black object-cover"
               src={data.profileImg ? data.profileImg : `${avatarImg}`}
-              alt="avatar"
+              alt=""
             />
           </div>
           <Link
@@ -127,7 +127,7 @@ const VerticalPostCard = ({ data }) => {
         </span>
       </div>
       <div className="h-auto border-b border-black">
-        <img className="aspect-auto h-full w-full" src={data.img} alt="post" />
+        <img className="aspect-auto h-full w-full" src={data.img} alt="" />
       </div>
       <div className="space-y-1 border border-b-black p-1">
         <div className="flex items-center justify-between p-1">

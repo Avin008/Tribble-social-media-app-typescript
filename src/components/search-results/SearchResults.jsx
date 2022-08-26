@@ -24,7 +24,7 @@ const SearchResults = ({ data: search }) => {
             <img
               className="h-full w-full rounded-full object-cover"
               src={x.profileImg}
-              alt="avatar"
+              alt=""
             />
           </div>
           <div className="leading-4">

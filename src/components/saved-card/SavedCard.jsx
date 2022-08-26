@@ -7,7 +7,7 @@ const SavedCard = ({ data }) => {
       className="relative h-72 w-full cursor-pointer"
       onClick={() => navigate(`/post/${data.postID}`)}
     >
-      <img className="h-full w-full object-cover" src={data.img} alt="post" />
+      <img className="h-full w-full object-cover" src={data.img} alt="" />
     </div>
   );
 };

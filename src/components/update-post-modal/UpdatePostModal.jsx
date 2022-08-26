@@ -50,7 +50,7 @@ const UpdatePostModal = () => {
             <img
               className="h-full w-full object-contain"
               src={(files && URL.createObjectURL(files)) || post.img}
-              alt="post"
+              alt=""
             />
 
             <div
@@ -76,7 +76,7 @@ const UpdatePostModal = () => {
                 <img
                   className="h-full w-full rounded-full border border-gray-500 object-cover"
                   src={userData.profileImg ? userData.profileImg : avatarImg}
-                  alt="avatar"
+                  alt=""
                 />
               </div>
               <h1 className="text-sm font-bold text-gray-800">

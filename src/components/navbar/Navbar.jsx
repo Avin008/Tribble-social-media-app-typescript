@@ -73,7 +73,7 @@ const Navbar = () => {
               <img
                 className="h-full w-full rounded-full"
                 src={userData.profileImg}
-                alt="avatar"
+                alt=""
               />
             )}
           </div>

@@ -11,7 +11,7 @@ const LoggedInUserCard = ({ data }) => {
           <img
             className="aspect-square h-full w-full rounded-full border-2 border-black object-cover"
             src={data.profileImg ? data.profileImg : avatarImg}
-            alt="avatar"
+            alt=""
           />
         </div>
         <span className="leading-4">

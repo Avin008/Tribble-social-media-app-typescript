@@ -135,7 +135,7 @@ const FullPostCard = () => {
           <img
             className="h-full w-full object-cover"
             src={postData.img}
-            alt="post"
+            alt=""
           />
         </div>
       </div>
@@ -145,7 +145,7 @@ const FullPostCard = () => {
             <div className="h-10 w-10">
               <img
                 src={postData.profileImg ? postData.profileImg : avatarImg}
-                alt="avatar"
+                alt=""
                 className="h-full w-full rounded-full border border-black object-cover"
               />
             </div>

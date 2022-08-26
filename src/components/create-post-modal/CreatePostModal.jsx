@@ -42,7 +42,7 @@ const CreatePostModal = () => {
             <img
               className="h-full w-full object-contain"
               src={files && URL.createObjectURL(files)}
-              alt="user-post"
+              alt=""
             />
 
             <div
