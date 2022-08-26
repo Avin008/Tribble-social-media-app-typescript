@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { loginUser } from "../../firebase/firebaseConfig";
 import { addAuth } from "../../redux-toolkit/features/authSlice";
 
@@ -23,8 +24,9 @@ const Login = () => {
       const res = await loginUser(email, password);
       dispatch(addAuth({ authStatus: true, token: res.user.uid }));
       navigate("/");
+      toast.success("user successfully loggedin");
     } catch (error) {
-      console.log(error);
+      toast.error(error.code);
     }
   };
 

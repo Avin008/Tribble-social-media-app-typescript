@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
+import { toast } from "react-toastify";
 import { useGetUserData } from "../../hooks/useGetUserInfo";
 import { useMutationEditProfile } from "../../hooks/useMutatationEditProfile";
 
@@ -8,6 +10,7 @@ const EditProfile = () => {
   const [profileImg, setProfileImg] = useState(null);
   const fileRef = useRef(null);
   const [userInfo, setUserInfo] = useState({});
+  const navigate = useNavigate();
 
   const { token } = useSelector((store) => store.authSlice);
 
@@ -24,10 +27,16 @@ const EditProfile = () => {
     onSuccess
   );
 
+  const onProfileUpdateSuccess = () => {
+    navigate("/");
+    toast.success("profile upadated!");
+  };
+
   const { mutate: updateProfile, isLoading } = useMutationEditProfile(
     token,
     userInfo,
-    profileImg
+    profileImg,
+    onProfileUpdateSuccess
   );
 
   if (userDataLoading) {

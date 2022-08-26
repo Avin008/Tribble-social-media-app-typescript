@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import { PageNotFound, RequireAuth } from "./components";
+import { PageNotFound, RequireAuth, Toast } from "./components";
 import {
   EditProfile,
   ExplorePage,
@@ -71,6 +71,7 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
       </Routes>
+      <Toast />
     </div>
   );
 }

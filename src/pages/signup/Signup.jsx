@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
   createNewUser,
   createUserData,
@@ -33,11 +34,14 @@ const Signup = () => {
       if (usernameExist) {
         const userID = await createNewUser(signupInfo);
         await createUserData(userID, signupInfo);
-        navigate("/");
+        navigate(`/edit-profile/${userID}`);
         dispatch(addAuth({ authStatus: true, token: userID }));
+        toast.success("user successfully signedup");
+      } else {
+        toast.error("username already exist");
       }
     } catch (error) {
-      console.log(error);
+      toast.error(error.code);
     }
   };
 
