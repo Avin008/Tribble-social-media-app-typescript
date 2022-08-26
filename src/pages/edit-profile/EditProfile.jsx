@@ -48,7 +48,7 @@ const EditProfile = () => {
               (profileImg && URL.createObjectURL(profileImg)) ||
               userInfo.profileImg
             }
-            alt="avatar"
+            alt=""
           />
           <input onChange={onChangeHandler} ref={fileRef} type="file" hidden />
         </div>
