@@ -19,5 +19,6 @@ import RequireAuth from "./requireAuth/RequireAuth";
 import UpdatePostModal from "./update-post-modal/UpdatePostModal";
 import FullPostCard from "./full-post-card/FullPostCard";
 import PageNotFound from "./page-not-found/PageNotFound";
+import Toast from "./toast/Toast";
 
-export {Navbar, UpdatePostModal, FullPostCard, PageNotFound, UserProfileActions, RequireAuth, PostOptions, SearchResults, VerticalPostCard, CreateCollectionModal, CreatePostModal, ExploreCard, SavePost, SavedCard, EmojiKeyBoard, LoggedInUserCard, Suggestions, UserProfileCard, SavedPostCard, UserPostCard, ProfileTabs}
+export {Navbar, Toast, UpdatePostModal, FullPostCard, PageNotFound, UserProfileActions, RequireAuth, PostOptions, SearchResults, VerticalPostCard, CreateCollectionModal, CreatePostModal, ExploreCard, SavePost, SavedCard, EmojiKeyBoard, LoggedInUserCard, Suggestions, UserProfileCard, SavedPostCard, UserPostCard, ProfileTabs}
