@@ -3,7 +3,7 @@ import { MdGridOn, MdOutlineBookmarkBorder } from "../../icons";
 import UserPostCard from "../user-post-card/UserPostCard";
 import SavedPostCard from "../saved-post-card/SavedPostCard";
 import { useSelector } from "react-redux";
-import { MdBookmark, MdBookmarkBorder } from "react-icons/md";
+import { uuidv4 as uuid } from "@firebase/util";
 
 const ProfileTabs = ({ data }) => {
   const [tabs, setTabs] = useState(0);
@@ -36,7 +36,7 @@ const ProfileTabs = ({ data }) => {
       <div className="grid h-fit w-full grid-cols-3 gap-4 border-t border-black py-4 px-0">
         {tabs === 0 ? (
           userPostsData.length ? (
-            userPostsData.map((x) => <UserPostCard data={x} />)
+            userPostsData.map((x) => <UserPostCard key={uuid()} data={x} />)
           ) : (
             <div className="absolute left-0 right-0 flex flex-col items-center justify-center gap-2 p-5">
               <MdOutlineBookmarkBorder size={50} />
@@ -44,7 +44,7 @@ const ProfileTabs = ({ data }) => {
             </div>
           )
         ) : userData.savedPost.length ? (
-          userData.savedPost.map((x) => <SavedPostCard data={x} />)
+          userData.savedPost.map((x) => <SavedPostCard key={uuid()} data={x} />)
         ) : (
           <div className="absolute left-0 right-0 flex flex-col items-center justify-center gap-2 p-5">
             <MdOutlineBookmarkBorder size={50} />

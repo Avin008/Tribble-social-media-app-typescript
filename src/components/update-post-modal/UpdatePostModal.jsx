@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
-import { MdOutlineAddPhotoAlternate } from "react-icons/md";
+import { MdOutlineAddPhotoAlternate } from "../../icons/";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetUserData } from "../../hooks/useGetUserInfo";
 import { useUpdatePost } from "../../hooks/useUpdatePost";

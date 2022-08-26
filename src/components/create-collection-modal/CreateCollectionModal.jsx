@@ -4,7 +4,7 @@ import { closeCollectionModal } from "../../redux-toolkit/features/collectionMod
 import { useDispatch } from "react-redux";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCreateCollection } from "../../hooks/useCreateCollection";
-const CreateCollectionModal = ({ data }) => {
+const CreateCollectionModal = () => {
   const [collectionName, setCollectionName] = useState("");
   const dispatch = useDispatch();
   const queryClient = useQueryClient();

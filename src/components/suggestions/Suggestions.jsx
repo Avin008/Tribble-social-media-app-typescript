@@ -5,6 +5,7 @@ import { getSuggestions } from "../../firebase/firebaseConfig";
 import { useFollowSuggestedUsers } from "../../hooks/useFollowSuggestedUsers";
 import { useGetAllUsers } from "../../hooks/useGetAllUsers";
 import { avatarImg } from "../vertical-post-card/VerticalPostCard";
+import { uuidv4 as uuid } from "@firebase/util";
 
 const Suggestions = () => {
   const { loggedInUser } = useSelector((store) => store.userSlice);
@@ -33,7 +34,7 @@ const Suggestions = () => {
         loggedInUser.following,
         loggedInUser.userId
       ).map((x) => (
-        <div className="flex h-fit justify-between py-2">
+        <div key={uuid()} className="flex h-fit justify-between py-2">
           <div className="flex items-center gap-2 px-2 font-medium">
             <div className="h-10 w-10">
               <img

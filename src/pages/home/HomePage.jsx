@@ -12,6 +12,7 @@ import { initiateUserData } from "../../redux-toolkit/features/userSlice";
 import { ClipLoader } from "react-spinners";
 import { useGetUserData } from "../../hooks/useGetUserInfo";
 import { useGetAllPosts } from "../../hooks/useGetAllPosts";
+import { uuidv4 as uuid } from "@firebase/util";
 
 const HomePage = () => {
   const { token } = useSelector((store) => store.authSlice);
@@ -54,9 +55,9 @@ const HomePage = () => {
   return (
     <div className="mx-auto mt-20 mb-5 grid h-full w-3/5 grid-cols-2 gap-12">
       <div className="space-y-4">
-        {getFollowedPosts(followedPosts, data.following).length !== 0 ? (
+        {getFollowedPosts(followedPosts, data.following, token).length !== 0 ? (
           getFollowedPosts(followedPosts, data.following, token).map((x) => (
-            <VerticalPostCard data={x} />
+            <VerticalPostCard key={uuid()} data={x} />
           ))
         ) : (
           <div className="flex h-full flex-col items-center justify-center">

@@ -1,9 +1,6 @@
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { openPostModal } from "../../redux-toolkit/features/postModalSlice";
 
 const SavedCard = ({ data }) => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   return (
     <div

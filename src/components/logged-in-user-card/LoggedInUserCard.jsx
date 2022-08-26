@@ -1,9 +1,7 @@
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { avatarImg } from "../vertical-post-card/VerticalPostCard";
 
 const LoggedInUserCard = ({ data }) => {
-  const { token } = useSelector((store) => store.authSlice);
   const navigate = useNavigate();
 
   return (

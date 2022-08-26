@@ -11,7 +11,6 @@ const CreatePostModal = () => {
   const [caption, setCaption] = useState("");
   const dispatch = useDispatch();
 
-  const { token } = useSelector((store) => store.authSlice);
   const { loggedInUser } = useSelector((store) => store.userSlice);
 
   const handleClick = () => {

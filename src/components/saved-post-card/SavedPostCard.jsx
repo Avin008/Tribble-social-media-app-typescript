@@ -8,11 +8,13 @@ const SavedPostCard = ({ data }) => {
       className="relative h-72 w-full cursor-pointer"
       onClick={() => navigate(`/saved-posts/${data.collectionID}`)}
     >
-      <img
-        className="h-full w-full object-cover"
-        src={data.posts[0]?.img}
-        alt=""
-      />
+      {data.posts.length > 0 && (
+        <img
+          className="h-full w-full object-cover"
+          src={data?.posts[0]?.img}
+          alt=""
+        />
+      )}
       {!data.posts.length && (
         <div className="absolute top-24 left-12 font-medium">
           No Posts to Show

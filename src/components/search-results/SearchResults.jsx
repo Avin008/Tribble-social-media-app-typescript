@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import useGetSearchResult from "../../hooks/useGetSearchResults";
+import { uuidv4 as uuid } from "@firebase/util";
 
 const SearchResults = ({ data: search }) => {
   const { data: result, isLoading, isError } = useGetSearchResult(search);
@@ -16,6 +17,7 @@ const SearchResults = ({ data: search }) => {
         <Link
           to={`/profile/${x.userId}`}
           className="flex cursor-pointer items-center gap-2 px-3 py-2 hover:bg-gray-100"
+          key={uuid()}
           onClick
         >
           <div className="h-10 w-10">

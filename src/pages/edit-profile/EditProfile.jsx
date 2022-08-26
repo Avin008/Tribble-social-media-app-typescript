@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { ClipLoader } from "react-spinners";
-import { useGetUserDataById } from "../../hooks/useGetUserDataById";
 import { useGetUserData } from "../../hooks/useGetUserInfo";
 import { useMutationEditProfile } from "../../hooks/useMutatationEditProfile";
 
@@ -25,20 +24,10 @@ const EditProfile = () => {
     onSuccess
   );
 
-  const onSuccessMutation = () => {
-    console.log("successfully updated profile");
-  };
-
-  const onError = (err) => {
-    console.log(err);
-  };
-
   const { mutate: updateProfile, isLoading } = useMutationEditProfile(
     token,
     userInfo,
-    profileImg,
-    onSuccessMutation,
-    onError
+    profileImg
   );
 
   if (userDataLoading) {

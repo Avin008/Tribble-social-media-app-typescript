@@ -1,3 +1,4 @@
+import { uuidv4 as uuid } from "@firebase/util";
 const emojis = [
   {
     emoji: "😀",
@@ -169,6 +170,7 @@ const EmojiKeyBoard = ({ addEmojiFunc }) => {
       {emojis.map((x) => (
         <div
           className="cursor-pointer text-2xl"
+          key={uuid()}
           onClick={() => addEmojiFunc((prev) => prev + x.emoji)}
         >
           {x.emoji}

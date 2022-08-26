@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ClipLoader } from "react-spinners";
 import { useGetUserDataById } from "../../hooks/useGetUserDataById";
+import { uuidv4 as uuid } from "@firebase/util";
 
 const SavedPostPage = () => {
   const { collectionID } = useParams();
@@ -28,11 +29,15 @@ const SavedPostPage = () => {
       {savedPosts[0].posts.length ? (
         <div className=" grid  grid-flow-row auto-rows-[300px] grid-cols-3 gap-4">
           {savedPosts[0]?.posts.map((x) => (
-            <SavedCard data={x} />
+            <SavedCard key={uuid()} data={x} />
           ))}
         </div>
       ) : (
-        <h1>No post To Show</h1>
+        <div className="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center">
+          <h1 className="text-lg font-medium">
+            Collection Empty. No posts To Show
+          </h1>
+        </div>
       )}
     </div>
   );
