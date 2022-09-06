@@ -1,17 +1,13 @@
 <h1 align="center">Tribble - A Social Media App</h1>
 
-
-
-
-
-
-
 <h2>Features</h2>
 <ul>
 <li>Authentication - Login/Signup</li>
-<li>Follow Users</li>
+<li>Follow / Unfollow Users</li>
 <li>Follower Suggestions</li>
+<li>Search Functionality</li>
 <li>Create Image based post</li>
+<li>Edit Post</li>
 <li>Delete post</li>
 <li>Like && comment on posts</li>
 <li>Create Collection</li>
@@ -19,19 +15,18 @@
 <li>Explore Page</li>
 </ul>
 
-
 ## Getting Started
 
 - Clone the project
 
 ```bash
-https://github.com/Avin008/Tribble-social-media-app-typescript
+https://github.com/Avin008/Tribble-A-Social-Media-App
 ```
 
 - Go to the project directory
 
 ```bash
-  cd Tribble-social-media-app-typescript
+  cd Tribble-A-Social-Media-App
 ```
 
 - Install dependencies
@@ -43,9 +38,14 @@ https://github.com/Avin008/Tribble-social-media-app-typescript
 - Start the server
 
 ```bash
-  npm start
+  npm run dev
 ```
 
+- Run Test
+
+```bash
+  npm test
+```
 
 <h2>Technologies used</h2>
 <ul>
@@ -54,4 +54,6 @@ https://github.com/Avin008/Tribble-social-media-app-typescript
 <li>React Router</li>
 <li>React Query</li>
 <li>Firebase</li>
+<li>React Spinners</li>
+<li>Tailwind Css</li>
 </ul>
