@@ -22,6 +22,7 @@ import {
 } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { avatarImg } from "../components/vertical-post-card/VerticalPostCard";
+import { Posts, SavedPosts, User, UserPost } from "../types/type";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -42,10 +43,23 @@ const storage = getStorage(app);
 
 // create new user && initialize with data
 
+type InitialUserData = {
+  username: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+};
+
 const initializeUserData = (
+<<<<<<< Updated upstream:src/firebase/firebaseConfig.js
   userID,
   { username, firstname, lastname, email }
 ) => {
+=======
+  userID: string,
+  { username, firstname, lastname, email }: InitialUserData
+): User => {
+>>>>>>> Stashed changes:src/firebase/firebaseConfig.ts
   return {
     userId: userID,
     username: username,
@@ -61,19 +75,43 @@ const initializeUserData = (
   };
 };
 
+<<<<<<< Updated upstream:src/firebase/firebaseConfig.js
 const createNewUser = async ({ email, password }) => {
+=======
+type CreateNewUser = {
+  email: string;
+  password: string;
+};
+
+const createNewUser = async ({
+  email,
+  password,
+}: CreateNewUser): Promise<string> => {
+>>>>>>> Stashed changes:src/firebase/firebaseConfig.ts
   const res = await createUserWithEmailAndPassword(auth, email, password);
   return res.user.uid;
 };
 
+<<<<<<< Updated upstream:src/firebase/firebaseConfig.js
 const userExist = async ({ username }) => {
+=======
+type UserExist = {
+  username: string;
+};
+
+const userExist = async ({ username }: UserExist): Promise<boolean> => {
+>>>>>>> Stashed changes:src/firebase/firebaseConfig.ts
   const collectionRef = collection(db, "users");
   const q = query(collectionRef, where("username", "==", username));
   const res = (await getDocs(q)).docs.map((x) => x.data()).length === 0;
   return res;
 };
 
+<<<<<<< Updated upstream:src/firebase/firebaseConfig.js
 const createUserData = async (userID, userData) => {
+=======
+const createUserData = async (userID: string, userData: InitialUserData) => {
+>>>>>>> Stashed changes:src/firebase/firebaseConfig.ts
   const docRef = doc(db, "users", userID);
   await setDoc(docRef, initializeUserData(userID, userData));
 };
@@ -87,14 +125,32 @@ const loginUser = async (email, password) => {
 
 // create new post
 
+<<<<<<< Updated upstream:src/firebase/firebaseConfig.js
 const uploadImg = async (userID, file, postID) => {
+=======
+const uploadImg = async (
+  userID: string,
+  file: any,
+  postID: string
+): Promise<string> => {
+>>>>>>> Stashed changes:src/firebase/firebaseConfig.ts
   const storageRef = ref(storage, `posts/${userID}/${postID}.jpg`);
   await uploadBytes(storageRef, file);
   const imgUrl = await getDownloadURL(storageRef);
   return imgUrl;
 };
 
+<<<<<<< Updated upstream:src/firebase/firebaseConfig.js
 const createPost = async (userID, username, profileImg, file, caption) => {
+=======
+const createPost = async (
+  userID: string,
+  username: string,
+  profileImg: string,
+  file: any,
+  caption: string
+): Promise<void> => {
+>>>>>>> Stashed changes:src/firebase/firebaseConfig.ts
   const postID = uuid();
   const img = await uploadImg(userID, file, postID);
   const colllectionRef = doc(db, "posts", postID);
@@ -113,7 +169,17 @@ const createPost = async (userID, username, profileImg, file, caption) => {
 
 // post a comment
 
+<<<<<<< Updated upstream:src/firebase/firebaseConfig.js
 const postComment = async (username, profileImg, userId, postID, comment) => {
+=======
+const postComment = async (
+  username: string,
+  profileImg: string,
+  userId: string,
+  postID: string,
+  comment: string
+): Promise<void> => {
+>>>>>>> Stashed changes:src/firebase/firebaseConfig.ts
   const docRef = doc(db, "posts", postID);
   return await updateDoc(docRef, {
     comments: arrayUnion({
@@ -128,21 +194,36 @@ const postComment = async (username, profileImg, userId, postID, comment) => {
 
 // like post
 
+<<<<<<< Updated upstream:src/firebase/firebaseConfig.js
 const likePost = async (postID, userId) => {
+=======
+const likePost = async (postID: string, userId: string): Promise<void> => {
+>>>>>>> Stashed changes:src/firebase/firebaseConfig.ts
   const postRef = doc(db, "posts", postID);
   return await updateDoc(postRef, { likes: arrayUnion({ userId }) });
 };
 
 // unlike post
 
+<<<<<<< Updated upstream:src/firebase/firebaseConfig.js
 const unlikePost = async (postID, userId) => {
+=======
+const unlikePost = async (postID: string, userId: string): Promise<void> => {
+>>>>>>> Stashed changes:src/firebase/firebaseConfig.ts
   const postRef = doc(db, "posts", postID);
   return await updateDoc(postRef, { likes: arrayRemove({ userId }) });
 };
 
 // create saved post folder
 
+<<<<<<< Updated upstream:src/firebase/firebaseConfig.js
 const createCollection = async (userId, folderName) => {
+=======
+const createCollection = async (
+  userId: string,
+  folderName: string
+): Promise<void> => {
+>>>>>>> Stashed changes:src/firebase/firebaseConfig.ts
   const userRef = doc(db, "users", userId);
   return await updateDoc(userRef, {
     savedPost: arrayUnion({
@@ -153,9 +234,20 @@ const createCollection = async (userId, folderName) => {
   });
 };
 
+<<<<<<< Updated upstream:src/firebase/firebaseConfig.js
 const saveToCollection = async (userId, folderName, savedPost, img, postID) => {
   console.log(userId, folderName, savedPost, img, postID);
   const data = savedPost.map((x) => {
+=======
+const saveToCollection = async (
+  userId: string,
+  folderName: string,
+  savedPost: SavedPosts[],
+  img: string,
+  postID: string
+): Promise<void> => {
+  const data = savedPost.map((x): SavedPosts => {
+>>>>>>> Stashed changes:src/firebase/firebaseConfig.ts
     if (x.folderName === folderName) {
       return {
         ...x,
@@ -172,9 +264,18 @@ const saveToCollection = async (userId, folderName, savedPost, img, postID) => {
   });
 };
 
+<<<<<<< Updated upstream:src/firebase/firebaseConfig.js
 const removedFromSavedPost = async (userId, savedPost, postID) => {
   console.log(userId, savedPost, postID);
   const result = savedPost.map((x) => {
+=======
+const removedFromSavedPost = async (
+  userId: string,
+  savedPost: SavedPosts[],
+  postID: string
+): Promise<void> => {
+  const result = savedPost.map((x): SavedPosts => {
+>>>>>>> Stashed changes:src/firebase/firebaseConfig.ts
     if (x.posts.length > 0) {
       return { ...x, posts: x.posts.filter((x) => x.postID !== postID) };
     } else {
@@ -188,6 +289,7 @@ const removedFromSavedPost = async (userId, savedPost, postID) => {
   });
 };
 
+<<<<<<< Updated upstream:src/firebase/firebaseConfig.js
 const getCurrentUser = async (userID) => {
   const userDocRef = doc(db, "users", userID);
   return await getDoc(userDocRef).data();
@@ -197,6 +299,18 @@ const getCurrentUser = async (userID) => {
 const isPostSaved = (dataArr, postID) => {
   const posts = dataArr.filter((x) => x.posts.length > 0).map((x) => x.posts);
   const postObj = [];
+=======
+const getCurrentUser = async (userID: string): Promise<User> => {
+  const userDocRef = doc(db, "users", userID);
+  const res: any = await getDoc(userDocRef);
+  return res.data();
+};
+
+// isPostSaved
+const isPostSaved = (dataArr: SavedPosts[], postID: string): boolean => {
+  const posts = dataArr.filter((x) => x.posts.length > 0).map((x) => x.posts);
+  const postObj: Posts[] = [];
+>>>>>>> Stashed changes:src/firebase/firebaseConfig.ts
   posts.forEach((x) => {
     postObj.push(...x);
   });
@@ -205,8 +319,17 @@ const isPostSaved = (dataArr, postID) => {
 
 // filter followed and user posts
 
+<<<<<<< Updated upstream:src/firebase/firebaseConfig.js
 const getFollowedPosts = (allPosts, userFollowing, token) => {
   const filteredPosts = [];
+=======
+const getFollowedPosts = (
+  allPosts: UserPost[],
+  userFollowing: string[],
+  token: string
+): UserPost[] => {
+  const filteredPosts: UserPost[] = [];
+>>>>>>> Stashed changes:src/firebase/firebaseConfig.ts
   allPosts.forEach((x) => {
     if (userFollowing.includes(x.userID) || x.userID === token) {
       filteredPosts.push(x);
@@ -215,8 +338,17 @@ const getFollowedPosts = (allPosts, userFollowing, token) => {
   return filteredPosts.sort((a, b) => b.dateCreated - a.dateCreated);
 };
 
+<<<<<<< Updated upstream:src/firebase/firebaseConfig.js
 const getSuggestions = (suggestions, userFollowers, userId) => {
   const filteredSuggestions = [];
+=======
+const getSuggestions = (
+  suggestions: User[],
+  userFollowers: string[],
+  userId: string
+): User[] => {
+  const filteredSuggestions: User[] = [];
+>>>>>>> Stashed changes:src/firebase/firebaseConfig.ts
   suggestions.forEach((x) => {
     if (!userFollowers.includes(x.userId) && x.userId !== userId) {
       filteredSuggestions.push(x);
