@@ -17,7 +17,7 @@ export type User = {
   following: string[];
   followers: string[];
   savedPost: SavedPosts[];
-  dateCreated: number;
+  dateCreated: number | null;
 };
 
 export type LikePost = {

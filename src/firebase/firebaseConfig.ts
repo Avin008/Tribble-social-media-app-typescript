@@ -93,7 +93,10 @@ const userExist = async ({ username }: UserExist): Promise<boolean> => {
   return res;
 };
 
-const createUserData = async (userID: string, userData: InitialUserData) => {
+const createUserData = async (
+  userID: string,
+  userData: InitialUserData
+): Promise<void> => {
   const docRef = doc(db, "users", userID);
   await setDoc(docRef, initializeUserData(userID, userData));
 };
