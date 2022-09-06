@@ -41,6 +41,8 @@ export type UserPost = {
   dateCreated: number;
   comments: Comments[];
   caption: string;
+  username?: string;
+  dateOfCreation?: string;
 };
 
 export type functionVoid = () => void;
