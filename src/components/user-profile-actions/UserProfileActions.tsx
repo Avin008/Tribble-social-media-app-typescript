@@ -3,14 +3,15 @@ import {
   MdOutlineLogout,
   MdOutlineMiscellaneousServices,
 } from "react-icons/md";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { removeAuth } from "../../redux-toolkit/features/authSlice";
 import { useQueryClient } from "@tanstack/react-query";
+import { useAppSelector } from "../../redux-toolkit/hooks";
 
 const UserProfileActions = () => {
   const dispatch = useDispatch();
-  const { token } = useSelector((store) => store.authSlice);
+  const { token } = useAppSelector((store) => store.authSlice);
   const queryClient = useQueryClient();
 
   const signOut = () => {

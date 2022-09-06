@@ -6,8 +6,13 @@ import { uuidv4 as uuid } from "@firebase/util";
 import { openCollectionModal } from "../../redux-toolkit/features/collectionModalSlice";
 import { closeCollectionList } from "../../redux-toolkit/features/collectionListSlice";
 import { useSaveToCollection } from "../../hooks/useSaveToCollection";
+import { User, UserPost } from "../../types/type";
 
-const SavePost = ({ data }) => {
+type Props = {
+  data: { userData: User; postData: { post: UserPost } };
+};
+
+const SavePost = ({ data }: Props) => {
   const { userData, postData } = data;
   const dispatch = useDispatch();
 
@@ -20,11 +25,11 @@ const SavePost = ({ data }) => {
     dispatch(closeCollectionList());
   };
 
-  const {
-    mutate: saveToCollection,
-    isLoading,
-    isError,
-  } = useSaveToCollection(userData, postData, onSavePostToCollectionSuccess);
+  const { mutate: saveToCollection } = useSaveToCollection(
+    userData,
+    postData,
+    onSavePostToCollectionSuccess
+  );
 
   return (
     <div className="absolute bottom-12 right-0 h-56 w-60 rounded-md border border-gray-500 bg-white shadow-sm">

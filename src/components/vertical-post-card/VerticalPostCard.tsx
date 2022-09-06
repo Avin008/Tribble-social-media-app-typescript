@@ -1,6 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { uuidv4 as uuid } from "@firebase/util";
 import EmojiKeyBoard from "../emoji-keyboard/EmojiKeyboard";
@@ -24,43 +23,41 @@ import { useLikePost } from "../../hooks/useLikePost";
 import { useUnLikePost } from "../../hooks/useUnLikePost";
 import { usePostComment } from "../../hooks/usePostComment";
 import { useRemovePostFromSavedPosts } from "../../hooks/useRemovePostFromSavedPosts";
+import { useAppDispatch, useAppSelector } from "../../redux-toolkit/hooks";
+import { Comments, UserPost } from "../../types/type";
 
 export const avatarImg =
   "https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png";
 
 //
 
-const VerticalPostCard = ({ data }) => {
+const VerticalPostCard = ({ data }: { data: UserPost }) => {
   const [toggleEmojiKeyboard, setToggleEmojiKeyboard] = useState(false);
   const [comment, setComment] = useState("");
-  const commentRef = useRef(null);
+  const commentRef = useRef<HTMLTextAreaElement>(null);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { token } = useSelector((store) => store.authSlice);
-  const { loggedInUser } = useSelector((store) => store.userSlice);
-  const { isCollectionListOpen } = useSelector(
+  const { token } = useAppSelector((store) => store.authSlice);
+  const { loggedInUser } = useAppSelector((store) => store.userSlice);
+  const { isCollectionListOpen } = useAppSelector(
     (store) => store.collectionListSlice
   );
 
   const handleCommentFocus = () => {
-    commentRef.current.focus();
+    commentRef.current!.focus();
   };
 
   const queryClient = useQueryClient();
 
-  const comments = [];
+  const comments: Comments[] = [];
 
   const onLikeSuccess = () => {
     queryClient.invalidateQueries(["followed-user-post"]);
   };
 
-  const {
-    mutate: likePost,
-    isLoading,
-    isError,
-  } = useLikePost(data.postID, onLikeSuccess);
+  const { mutate: likePost } = useLikePost(data.postID, onLikeSuccess);
 
   const onUnlikeSuccess = () => {
     queryClient.invalidateQueries(["followed-user-post"]);
@@ -119,6 +116,7 @@ const VerticalPostCard = ({ data }) => {
                 openPostOptionsModal({
                   userID: data.userID,
                   postID: data.postID,
+                  // @ts-ignore
                   postData: data,
                 })
               )
@@ -133,7 +131,7 @@ const VerticalPostCard = ({ data }) => {
         <div className="flex items-center justify-between p-1">
           <div className="flex gap-2">
             <span className="cursor-pointer rounded-full p-1  hover:text-gray-500 active:bg-gray-300">
-              {data.likes.map((x) => x.userId).includes(token) ? (
+              {data.likes.map((x) => x.userId).includes(token!) ? (
                 <MdOutlineFavorite
                   className="cursor-pointer"
                   size={25}
@@ -198,24 +196,26 @@ const VerticalPostCard = ({ data }) => {
             </p>
           </div>
           <ul className="">
-            {data.comments.forEach((x) => {
-              if (x.userId === token) {
-                comments.push(x);
-              }
-            })}
-            {comments
-              .sort((a, b) => b.dateCreated - a.dateCreated)
-              .map((x) => (
-                <li key={uuid()} className="text-sm font-medium">
-                  <span
-                    onClick={() => navigate(`/profile/${x.userId}`)}
-                    className="cursor-pointer font-semibold hover:underline"
-                  >
-                    {x.username}
-                  </span>{" "}
-                  {x.comment}
-                </li>
-              ))}
+            <>
+              {data.comments.forEach((x) => {
+                if (x.userId === token) {
+                  comments.push(x);
+                }
+              })}
+              {comments
+                .sort((a, b) => b.dateCreated - a.dateCreated)
+                .map((x) => (
+                  <li key={uuid()} className="text-sm font-medium">
+                    <span
+                      onClick={() => navigate(`/profile/${x.userId}`)}
+                      className="cursor-pointer font-semibold hover:underline"
+                    >
+                      {x.username}
+                    </span>{" "}
+                    {x.comment}
+                  </li>
+                ))}
+            </>
           </ul>
           <div className="">
             <p className="text-sm font-medium text-gray-500">

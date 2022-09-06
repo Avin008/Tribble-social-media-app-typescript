@@ -1,21 +1,22 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
-import { MdOutlineAddPhotoAlternate } from "../../icons/";
-import { useDispatch, useSelector } from "react-redux";
+import { MdOutlineAddPhotoAlternate } from "../../icons";
+import { useDispatch } from "react-redux";
 import { useGetUserData } from "../../hooks/useGetUserInfo";
 import { useUpdatePost } from "../../hooks/useUpdatePost";
 import { closeUpdatePostModal } from "../../redux-toolkit/features/updatePostModalSlice";
 import { avatarImg } from "../vertical-post-card/VerticalPostCard";
+import { useAppSelector } from "../../redux-toolkit/hooks";
 const UpdatePostModal = () => {
-  const fileRef = useRef(null);
+  const fileRef = useRef<HTMLImageElement>(null);
   const [files, setFile] = useState(null);
   const dispatch = useDispatch();
-  const { postData } = useSelector((store) => store.postOptionsModalSlice);
+  const { postData } = useAppSelector((store) => store.postOptionsModalSlice);
 
   const [post, setPost] = useState(postData);
 
   const handleClick = () => {
-    fileRef.current.click();
+    fileRef.current!.click();
   };
 
   const queryClient = useQueryClient();
@@ -30,6 +31,7 @@ const UpdatePostModal = () => {
     mutate: updatePost,
     isLoading,
     isError,
+    // @ts-ignore
   } = useUpdatePost(postData.postID, files, post.caption, onUpdatePostSuccess);
 
   const { data: userData, isLoading: isUserDataLoading } =
@@ -49,6 +51,7 @@ const UpdatePostModal = () => {
           <div className={`relative h-60 w-full p-1`}>
             <img
               className="h-full w-full object-contain"
+              // @ts-ignore
               src={(files && URL.createObjectURL(files)) || post.img}
               alt=""
             />
@@ -59,8 +62,10 @@ const UpdatePostModal = () => {
             >
               <input
                 type="file"
+                // @ts-ignore
                 ref={fileRef}
                 hidden
+                // @ts-ignore
                 onChange={(e) => setFile(e.target.files[0])}
               />
               <MdOutlineAddPhotoAlternate size={40} className={`text-white`} />
@@ -75,12 +80,12 @@ const UpdatePostModal = () => {
               <div className="h-8 w-8">
                 <img
                   className="h-full w-full rounded-full border border-gray-500 object-cover"
-                  src={userData.profileImg ? userData.profileImg : avatarImg}
+                  src={userData?.profileImg ? userData?.profileImg : avatarImg}
                   alt=""
                 />
               </div>
               <h1 className="text-sm font-bold text-gray-800">
-                {userData.username}
+                {userData?.username}
               </h1>
             </div>
             <div className="p-1">
@@ -90,7 +95,8 @@ const UpdatePostModal = () => {
                 onChange={(e) =>
                   setPost((prev) => ({ ...prev, caption: e.target.value }))
                 }
-                value={post.caption}
+                // @ts-ignore
+                value={post?.caption}
               ></textarea>
             </div>
             <div className="flex justify-end gap-4 border-t border-black px-4 py-2">

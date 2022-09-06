@@ -1,12 +1,12 @@
-import { MdOutlineClose } from "../../icons/";
+import { MdOutlineClose } from "../../icons";
 import { useState } from "react";
 import { closeCollectionModal } from "../../redux-toolkit/features/collectionModalSlice";
-import { useDispatch } from "react-redux";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCreateCollection } from "../../hooks/useCreateCollection";
+import { useAppDispatch } from "../../redux-toolkit/hooks";
 const CreateCollectionModal = () => {
   const [collectionName, setCollectionName] = useState("");
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   const onSuccess = () => {
@@ -15,11 +15,10 @@ const CreateCollectionModal = () => {
     setCollectionName("");
   };
 
-  const {
-    mutate: createCollection,
-    isLoading,
-    isError,
-  } = useCreateCollection(collectionName, onSuccess);
+  const { mutate: createCollection } = useCreateCollection(
+    collectionName,
+    onSuccess
+  );
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 z-10 flex items-center justify-center bg-black/40">

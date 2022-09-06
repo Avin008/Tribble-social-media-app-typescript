@@ -1,6 +1,11 @@
 import { useNavigate } from "react-router-dom";
+import { Posts } from "../../types/type";
 
-const ExploreCard = ({ data }) => {
+type Props = {
+  data: Posts;
+};
+
+const ExploreCard = ({ data }: Props) => {
   const navigate = useNavigate();
 
   return (

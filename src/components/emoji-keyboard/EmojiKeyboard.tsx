@@ -1,5 +1,16 @@
 import { uuidv4 as uuid } from "@firebase/util";
-const emojis = [
+
+type Emojis = {
+  emoji: string;
+  description: string;
+  category: string;
+  aliases: string[];
+  tags: string[];
+  unicode_version: string;
+  ios_version: string;
+};
+
+const emojis: Emojis[] = [
   {
     emoji: "😀",
     description: "grinning face",
@@ -164,14 +175,14 @@ const emojis = [
   },
 ];
 
-const EmojiKeyBoard = ({ addEmojiFunc }) => {
+const EmojiKeyBoard = ({ addEmojiFunc }: { addEmojiFunc: any }) => {
   return (
     <div className="absolute bottom-12 left-0 grid h-60 w-60 select-none grid-flow-row auto-rows-max grid-cols-7 rounded-md  border border-black bg-white shadow-sm">
       {emojis.map((x) => (
         <div
           className="cursor-pointer text-2xl"
           key={uuid()}
-          onClick={() => addEmojiFunc((prev) => prev + x.emoji)}
+          onClick={() => addEmojiFunc((prev: any) => prev + x.emoji)}
         >
           {x.emoji}
         </div>

@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import useGetSearchResult from "../../hooks/useGetSearchResults";
 import { uuidv4 as uuid } from "@firebase/util";
-
+// @ts-ignore
 const SearchResults = ({ data: search }) => {
-  const { data: result, isLoading, isError } = useGetSearchResult(search);
+  const { data: result } = useGetSearchResult(search);
 
   return (
     <ul className="absolute top-12 -left-10 flex min-h-[4rem] w-80 list-none flex-col gap-1 rounded-md border border-black bg-white py-1">
@@ -13,12 +13,11 @@ const SearchResults = ({ data: search }) => {
           user not found
         </span>
       )}
-      {result?.map((x) => (
+      {result?.map((x: any) => (
         <Link
           to={`/profile/${x.userId}`}
           className="flex cursor-pointer items-center gap-2 px-3 py-2 hover:bg-gray-100"
           key={uuid()}
-          onClick
         >
           <div className="h-10 w-10">
             <img

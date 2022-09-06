@@ -1,20 +1,21 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { MdOutlineAddPhotoAlternate } from "react-icons/md";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useCreatePost } from "../../hooks/useCreatePost";
 import { closeCreatePostModal } from "../../redux-toolkit/features/createPostModalSlice";
+import { useAppSelector } from "../../redux-toolkit/hooks";
 import { avatarImg } from "../vertical-post-card/VerticalPostCard";
 const CreatePostModal = () => {
-  const fileRef = useRef(null);
-  const [files, setFile] = useState(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [files, setFile] = useState<null | Blob>(null);
   const [caption, setCaption] = useState("");
   const dispatch = useDispatch();
 
-  const { loggedInUser } = useSelector((store) => store.userSlice);
+  const { loggedInUser } = useAppSelector((store) => store.userSlice);
 
   const handleClick = () => {
-    fileRef.current.click();
+    fileRef.current!.click();
   };
 
   const queryClient = useQueryClient();
@@ -26,7 +27,7 @@ const CreatePostModal = () => {
 
   const { mutate: createPost, isLoading } = useCreatePost(
     loggedInUser,
-    files,
+    files!,
     caption,
     onSuccess
   );
@@ -41,7 +42,7 @@ const CreatePostModal = () => {
           <div className={`relative h-60 w-full p-1`}>
             <img
               className="h-full w-full object-contain"
-              src={files && URL.createObjectURL(files)}
+              src={files! && URL.createObjectURL(files)}
               alt=""
             />
 
@@ -53,7 +54,7 @@ const CreatePostModal = () => {
                 type="file"
                 ref={fileRef}
                 hidden
-                onChange={(e) => setFile(e.target.files[0])}
+                onChange={(e) => setFile(e.target.files![0])}
               />
               <MdOutlineAddPhotoAlternate
                 size={40}

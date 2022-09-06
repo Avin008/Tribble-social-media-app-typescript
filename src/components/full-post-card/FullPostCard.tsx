@@ -12,7 +12,7 @@ import SavePost from "../save-post/SavePost";
 import EmojiKeyboard from "../emoji-keyboard/EmojiKeyboard";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import CreateCollectionModal from "../create-collection-modal/CreateCollectionModal";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { closePostModal } from "../../redux-toolkit/features/postModalSlice";
 import { useQueryClient } from "@tanstack/react-query";
 import { isPostSaved } from "../../firebase/firebaseConfig";
@@ -29,45 +29,41 @@ import { useUnLikePost } from "../../hooks/useUnLikePost";
 import { usePostComment } from "../../hooks/usePostComment";
 import { useGetSinglePost } from "../../hooks/useGetSinglePost";
 import { uuidv4 as uuid } from "@firebase/util";
+import { useAppSelector } from "../../redux-toolkit/hooks";
+import { Comments } from "../../types/type";
 
 const FullPostCard = () => {
   const [toggleEmojikeyboard, setTogglEmojiKeyboard] = useState(false);
   const [comment, setComment] = useState("");
-  const commentRef = useRef(null);
+  const commentRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { postID } = useParams();
 
   const queryClient = useQueryClient();
 
   const focusCommentBox = () => {
-    commentRef.current.focus();
+    commentRef.current!.focus();
   };
 
   const dispatch = useDispatch();
-  const token = useSelector((store) => store.authSlice.token);
-  const { loggedInUser } = useSelector((store) => store.userSlice);
-  const { collectionModal } = useSelector(
+  const { collectionModal } = useAppSelector(
     (store) => store.collectionModalSlice
   );
-  const { postOptionsModal } = useSelector(
+  const { isPostOptionsModalOpen } = useAppSelector(
     (store) => store.postOptionsModalSlice
   );
 
-  const { isPostOptionsModalOpen } = useSelector(
-    (store) => store.postOptionsModalSlice
-  );
-
-  const { isUpdatePostModalOpen } = useSelector(
+  const { isUpdatePostModalOpen } = useAppSelector(
     (store) => store.updatePostModalSlice
   );
 
-  const { isCollectionListOpen } = useSelector(
+  const { isCollectionListOpen } = useAppSelector(
     (store) => store.collectionListSlice
   );
 
   const { data: postData, isLoading } = useGetSinglePost(
     "current-post",
-    postID
+    postID!
   );
 
   const { data: userData, isLoading: userDataLoading } =
@@ -77,19 +73,20 @@ const FullPostCard = () => {
     queryClient.invalidateQueries(["current-post"]);
   };
 
-  const { mutate: likePost, isError } = useLikePost(postID, onLikePostSuccess);
+  const { mutate: likePost } = useLikePost(postID!, onLikePostSuccess);
 
   const onUnlikePostSuccess = () => {
     queryClient.invalidateQueries(["current-post"]);
   };
 
-  const { mutate: unLikePost } = useUnLikePost(postID, onUnlikePostSuccess);
+  const { mutate: unLikePost } = useUnLikePost(postID!, onUnlikePostSuccess);
 
   const onRemoveSavedPostSuccess = () => {
     queryClient.invalidateQueries(["users"]);
   };
 
   const { mutate: removePostFromSaved } = useRemovePostFromSavedPosts(
+    // @ts-ignore
     userData,
     postID,
     onRemoveSavedPostSuccess
@@ -102,13 +99,14 @@ const FullPostCard = () => {
   };
 
   const { mutate: postComment } = usePostComment(
+    // @ts-ignore
     userData,
     postID,
     comment,
     onPostCommentSuccess
   );
 
-  const sortedComments = (comments) => {
+  const sortedComments = (comments: Comments[]) => {
     return [...comments].sort((a, b) => b.dateCreated - a.dateCreated);
   };
 
@@ -134,7 +132,7 @@ const FullPostCard = () => {
         <div className="h-full w-full">
           <img
             className="h-full w-full object-cover"
-            src={postData.img}
+            src={postData?.img}
             alt=""
           />
         </div>
@@ -144,7 +142,7 @@ const FullPostCard = () => {
           <div className="flex items-center gap-2">
             <div className="h-10 w-10">
               <img
-                src={postData.profileImg ? postData.profileImg : avatarImg}
+                src={postData?.profileImg ? postData.profileImg : avatarImg}
                 alt=""
                 className="h-full w-full rounded-full border border-black object-cover"
               />
@@ -152,11 +150,11 @@ const FullPostCard = () => {
             <h5
               className="cursor-pointer font-medium hover:underline"
               onClick={() => {
-                navigate(`/profile/${postData.userID}`);
+                navigate(`/profile/${postData?.userID}`);
                 dispatch(closePostModal());
               }}
             >
-              {postData.username}
+              {postData?.username}
             </h5>
           </div>
           <div className="rounded-full p-1 hover:bg-gray-200">
@@ -166,8 +164,9 @@ const FullPostCard = () => {
               onClick={() =>
                 dispatch(
                   openPostOptionsModal({
-                    userID: postData.userID,
-                    postID: postData.postID,
+                    userID: postData?.userID,
+                    postID: postData?.postID,
+                    // @ts-ignore
                     postData: postData,
                   })
                 )
@@ -176,9 +175,9 @@ const FullPostCard = () => {
           </div>
         </div>
         <div className="flex h-3/5 flex-col gap-4 overflow-y-scroll p-3 scrollbar-hide">
-          <p className="text-base font-medium">{postData.caption}</p>
+          <p className="text-base font-medium">{postData?.caption}</p>
 
-          {sortedComments(postData.comments).map((x) => {
+          {sortedComments(postData?.comments).map((x) => {
             return (
               <div className="flex items-center gap-2" key={uuid()}>
                 <div>
@@ -207,9 +206,9 @@ const FullPostCard = () => {
           <div className="space-y-2 p-2">
             <div className="flex justify-between">
               <div className="flex gap-2">
-                {postData.likes
-                  .map((x) => x.userId)
-                  .includes(userData.userId) ? (
+                {postData?.likes
+                  .map((x: any) => x.userId)
+                  .includes(userData?.userId) ? (
                   <MdOutlineFavorite
                     className="cursor-pointer"
                     size={25}
@@ -229,7 +228,7 @@ const FullPostCard = () => {
                 />
               </div>
               <div className="card-secondary-actions">
-                {isPostSaved(userData.savedPost, postID) ? (
+                {isPostSaved(userData?.savedPost, postID!) ? (
                   <MdOutlineBookmark
                     size={25}
                     className="cursor-pointer"
@@ -248,6 +247,7 @@ const FullPostCard = () => {
                 {isCollectionListOpen && (
                   <div className="relative">
                     <SavePost
+                      // @ts-ignore
                       data={{ userData, postData: { post: postData } }}
                     />
                   </div>
@@ -256,7 +256,7 @@ const FullPostCard = () => {
             </div>
             <div className="px-2">
               <h5 className="text-md font-medium">
-                <span className="font-semibold">{postData.likes.length}</span>{" "}
+                <span className="font-semibold">{postData?.likes.length}</span>{" "}
                 Likes
               </h5>
             </div>

@@ -1,5 +1,4 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useDeletePost } from "../../hooks/useDeletePost";
 import { useFollowUser } from "../../hooks/useFollowUser";
@@ -7,15 +6,16 @@ import { useGetUserDataById } from "../../hooks/useGetUserDataById";
 import { useUnfollowUser } from "../../hooks/useUnfollowUser";
 import { closePostOptionsModal } from "../../redux-toolkit/features/postOptionsModalSlice";
 import { openUpdatePostModal } from "../../redux-toolkit/features/updatePostModalSlice";
+import { useAppDispatch, useAppSelector } from "../../redux-toolkit/hooks";
 
-const PostOptions = () => {
+const PostOptions = (): JSX.Element | null => {
   const navigate = useNavigate();
-  const { token } = useSelector((store) => store.authSlice);
-  const { userID, postID } = useSelector(
+  const { token } = useAppSelector((store) => store.authSlice);
+  const { userID, postID } = useAppSelector(
     (store) => store.postOptionsModalSlice
   );
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   const onUnfollowSuccess = () => {
@@ -23,10 +23,7 @@ const PostOptions = () => {
     queryClient.invalidateQueries(["users"]);
   };
 
-  const { mutate: unFollowUser, isLoading: unfollowLoading } = useUnfollowUser(
-    userID,
-    onUnfollowSuccess
-  );
+  const { mutate: unFollowUser } = useUnfollowUser(userID, onUnfollowSuccess);
 
   const onDeletePostSuccess = () => {
     queryClient.invalidateQueries(["followed-user-post"]);
@@ -46,7 +43,7 @@ const PostOptions = () => {
   const { mutate: followUser } = useFollowUser(userID, onFollowSuccess);
 
   if (isLoading) {
-    return;
+    return <h1>Loading...</h1>;
   }
 
   return (
@@ -62,7 +59,7 @@ const PostOptions = () => {
           >
             Edit Post
           </li>
-        ) : getpostUser.followers.includes(token) ? (
+        ) : getpostUser?.followers.includes(token) ? (
           <li
             className="flex cursor-pointer justify-center border-b border-gray-300 p-2 font-medium hover:bg-gray-200"
             onClick={() => unFollowUser()}

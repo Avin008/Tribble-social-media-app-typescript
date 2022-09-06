@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
+import { UserPost } from "../../types/type";
 
-const SavedCard = ({ data }) => {
+const UserPostCard = ({ data }: { data: UserPost }) => {
   const navigate = useNavigate();
   return (
     <div
@@ -12,4 +13,4 @@ const SavedCard = ({ data }) => {
   );
 };
 
-export default SavedCard;
+export default UserPostCard;

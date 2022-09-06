@@ -1,7 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { avatarImg } from "../vertical-post-card/VerticalPostCard";
 
-const LoggedInUserCard = ({ data }) => {
+type Props = {
+  data: {
+    profileImg: string;
+    fullName: string;
+    userId: string;
+    username: string;
+  };
+};
+
+const LoggedInUserCard = ({ data }: Props) => {
   const navigate = useNavigate();
 
   return (

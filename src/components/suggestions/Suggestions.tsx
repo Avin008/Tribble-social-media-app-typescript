@@ -1,14 +1,14 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getSuggestions } from "../../firebase/firebaseConfig";
 import { useFollowSuggestedUsers } from "../../hooks/useFollowSuggestedUsers";
 import { useGetAllUsers } from "../../hooks/useGetAllUsers";
 import { avatarImg } from "../vertical-post-card/VerticalPostCard";
 import { uuidv4 as uuid } from "@firebase/util";
+import { useAppSelector } from "../../redux-toolkit/hooks";
 
 const Suggestions = () => {
-  const { loggedInUser } = useSelector((store) => store.userSlice);
+  const { loggedInUser } = useAppSelector((store) => store.userSlice);
   const queryClient = useQueryClient();
 
   const { data: suggestions, isLoading } = useGetAllUsers("suggestions");
@@ -30,6 +30,7 @@ const Suggestions = () => {
     <div className="h-fit w-72 p-3">
       <h1 className="font-semibold text-gray-500">Suggestions for you</h1>
       {getSuggestions(
+        // @ts-ignore
         suggestions,
         loggedInUser.following,
         loggedInUser.userId

@@ -1,24 +1,28 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useFollowUser } from "../../hooks/useFollowUser";
 import { useUnfollowUser } from "../../hooks/useUnfollowUser";
-const UserProfileCard = ({ data }) => {
+import { useAppSelector } from "../../redux-toolkit/hooks";
+import { User, UserPost } from "../../types/type";
+const UserProfileCard = ({
+  data,
+}: {
+  data: { userPostsData: UserPost[]; userData: User };
+}) => {
   const { userPostsData, userData } = data;
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { token } = useSelector((store) => store.authSlice);
+  const { token } = useAppSelector((store) => store.authSlice);
 
   const onFollowUserSuccess = () => {
     queryClient.invalidateQueries(["current-user-data"]);
   };
 
-  const {
-    mutate: followUser,
-    isLoading,
-    isError,
-  } = useFollowUser(userData.userId, onFollowUserSuccess);
+  const { mutate: followUser } = useFollowUser(
+    userData.userId,
+    onFollowUserSuccess
+  );
 
   const onUnfollowUserSuccess = () => {
     queryClient.invalidateQueries(["current-user-data"]);
@@ -54,7 +58,7 @@ const UserProfileCard = ({ data }) => {
               >
                 Edit Profile
               </button>
-            ) : userData.followers.includes(token) ? (
+            ) : userData.followers.includes(token!) ? (
               <button
                 className="cursor-pointer rounded-md border-0 bg-purple-700 px-4 py-1 text-sm font-medium text-white"
                 onClick={() => unFollowUser()}

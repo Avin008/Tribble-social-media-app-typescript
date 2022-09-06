@@ -4,15 +4,16 @@ import CreatePostModal from "../create-post-modal/CreatePostModal";
 import UserProfileActions from "../user-profile-actions/UserProfileActions";
 import SearchResults from "../search-results/SearchResults";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { openCreatePostModal } from "../../redux-toolkit/features/createPostModalSlice";
 import { useGetUserData } from "../../hooks/useGetUserInfo";
+import { useAppSelector } from "../../redux-toolkit/hooks";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { isCreatePostModalOpen } = useSelector(
+  const { isCreatePostModalOpen } = useAppSelector(
     (store) => store.createPostModalSlice
   );
 
@@ -20,11 +21,8 @@ const Navbar = () => {
   const [toggleProfileActions, setToggleProfileActions] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const {
-    data: userData,
-    isLoading: isUserDataLoading,
-    isError: isUserDataError,
-  } = useGetUserData("users");
+  const { data: userData, isLoading: isUserDataLoading } =
+    useGetUserData("users");
 
   return (
     <div className="fixed top-0 left-0 right-0 z-10 flex h-14 items-center justify-evenly border border-gray-400 bg-white shadow-sm">
@@ -72,7 +70,7 @@ const Navbar = () => {
             {!isUserDataLoading && (
               <img
                 className="h-full w-full rounded-full"
-                src={userData.profileImg}
+                src={userData?.profileImg}
                 alt=""
               />
             )}

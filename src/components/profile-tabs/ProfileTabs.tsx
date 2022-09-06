@@ -2,14 +2,14 @@ import { useState } from "react";
 import { MdGridOn, MdOutlineBookmarkBorder } from "../../icons";
 import UserPostCard from "../user-post-card/UserPostCard";
 import SavedPostCard from "../saved-post-card/SavedPostCard";
-import { useSelector } from "react-redux";
 import { uuidv4 as uuid } from "@firebase/util";
+import { useAppSelector } from "../../redux-toolkit/hooks";
 
-const ProfileTabs = ({ data }) => {
+const ProfileTabs = ({ data }: any) => {
   const [tabs, setTabs] = useState(0);
 
   const { userPostsData, userData } = data;
-  const { token } = useSelector((store) => store.authSlice);
+  const { token } = useAppSelector((store) => store.authSlice);
 
   return (
     <div className="relative flex w-full flex-col items-center">
@@ -36,7 +36,9 @@ const ProfileTabs = ({ data }) => {
       <div className="grid h-fit w-full grid-cols-3 gap-4 border-t border-black py-4 px-0">
         {tabs === 0 ? (
           userPostsData.length ? (
-            userPostsData.map((x) => <UserPostCard key={uuid()} data={x} />)
+            userPostsData.map((x: any) => (
+              <UserPostCard key={uuid()} data={x} />
+            ))
           ) : (
             <div className="absolute left-0 right-0 flex flex-col items-center justify-center gap-2 p-5">
               <MdOutlineBookmarkBorder size={50} />
@@ -44,7 +46,9 @@ const ProfileTabs = ({ data }) => {
             </div>
           )
         ) : userData.savedPost.length ? (
-          userData.savedPost.map((x) => <SavedPostCard key={uuid()} data={x} />)
+          userData.savedPost.map((x: any) => (
+            <SavedPostCard key={uuid()} data={x} />
+          ))
         ) : (
           <div className="absolute left-0 right-0 flex flex-col items-center justify-center gap-2 p-5">
             <MdOutlineBookmarkBorder size={50} />
