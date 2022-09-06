@@ -2,10 +2,10 @@ import { useMutation } from "@tanstack/react-query";
 import { removedFromSavedPost } from "../firebase/firebaseConfig";
 
 const useRemovePostFromSavedPosts = (
-  loggedInUser,
-  postID,
-  onSuccess,
-  onError
+  loggedInUser: any,
+  postID: string,
+  onSuccess: () => void,
+  onError: () => void
 ) => {
   const { mutate, isLoading, isError } = useMutation(
     async () => {

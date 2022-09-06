@@ -1,12 +1,19 @@
 import { useMutation } from "@tanstack/react-query";
-import { useSelector } from "react-redux";
 import { createPost } from "../firebase/firebaseConfig";
+import { useAppSelector } from "../redux-toolkit/features/redux-hooks/hooks";
 
-const useCreatePost = (loggedInUser, files, caption, onSuccess, onError) => {
-  const { token } = useSelector((store) => store.authSlice);
+const useCreatePost = (
+  loggedInUser: any,
+  files: any,
+  caption: string,
+  onSuccess: () => void,
+  onError: () => void
+) => {
+  const { token } = useAppSelector((store) => store.authSlice);
   const { mutate, isLoading, isError } = useMutation(
     async () => {
       return await createPost(
+        // @ts-ignore
         token,
         loggedInUser.username,
         loggedInUser.profileImg,

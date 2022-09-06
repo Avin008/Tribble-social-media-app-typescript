@@ -2,8 +2,12 @@ import { useMutation } from "@tanstack/react-query";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 
-const useFollowSuggestedUsers = (userID, onSuccess, onError) => {
-  const followSuggestedUserApiCall = async (followerID) => {
+const useFollowSuggestedUsers = (
+  userID: string,
+  onSuccess: () => void,
+  onError: () => void
+) => {
+  const followSuggestedUserApiCall = async (followerID: string) => {
     const userDoc = doc(db, "users", userID);
     await updateDoc(userDoc, { following: arrayUnion(followerID) });
     const followerDocRef = doc(db, "users", followerID);
@@ -13,7 +17,7 @@ const useFollowSuggestedUsers = (userID, onSuccess, onError) => {
   };
 
   const { mutate, isLoading, isError } = useMutation(
-    async (followerID) => {
+    async (followerID: string) => {
       return await followSuggestedUserApiCall(followerID);
     },
     {

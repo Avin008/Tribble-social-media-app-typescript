@@ -1,11 +1,16 @@
 import { useMutation } from "@tanstack/react-query";
 import { doc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes } from "firebase/storage";
-import { useSelector } from "react-redux";
 import { db, storage } from "../firebase/firebaseConfig";
+import { useAppSelector } from "../redux-toolkit/features/redux-hooks/hooks";
 
-const useUpdatePost = (postID, files, caption, onSettled) => {
-  const { token } = useSelector((store) => store.authSlice);
+const useUpdatePost = (
+  postID: string,
+  files: any,
+  caption: string,
+  onSettled: () => void
+) => {
+  const { token } = useAppSelector((store) => store.authSlice);
 
   const updatePostApiCall = async () => {
     const userPostRef = doc(db, "posts", postID);

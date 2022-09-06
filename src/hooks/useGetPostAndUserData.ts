@@ -2,9 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 
-const useGetPostAndUserData = (queryKey, postID, onSuccess, onError) => {
+const useGetPostAndUserData = (queryKey: string, postID: string) => {
   const getPostAndUserDataApiCall = async () => {
-    const post = { post: "", user: "" };
+    const post: { post: any; user: any } = { post: "", user: "" };
     const postDocRef = doc(db, "posts", postID);
     post.post = (await getDoc(postDocRef)).data();
     const userDocRef = doc(db, "users", post.post.userID);

@@ -4,16 +4,17 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { db, storage } from "../firebase/firebaseConfig";
 
 const useMutationEditProfile = (
-  loggedInUserID,
-  userInfo,
-  profileImg,
-  onSuccess,
-  onError
+  loggedInUserID: string,
+  userInfo: any,
+  profileImg: any,
+  onSuccess: () => void,
+  onError: () => void
 ) => {
   const mutateEditProfileApiCall = async () => {
     const userDocRef = doc(db, "users", loggedInUserID);
     const profileImgRef = ref(storage, `/profileImg/${loggedInUserID}.jpg`);
     const res = profileImg && (await uploadBytes(profileImgRef, profileImg));
+    // @ts-ignore
     const imgUrl = profileImg && (await getDownloadURL(profileImgRef, res));
 
     const updatedUserobj = {

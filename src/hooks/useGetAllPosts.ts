@@ -2,7 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 
-const useGetAllPosts = (queryKey, onSuccess, onError) => {
+const useGetAllPosts = (
+  queryKey: string,
+  onSuccess: () => void,
+  onError: () => void
+) => {
   const getAllPostsApiCall = async () => {
     const postCollection = collection(db, "posts");
     return (await getDocs(postCollection)).docs.map((x) => x.data());

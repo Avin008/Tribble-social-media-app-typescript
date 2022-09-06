@@ -2,7 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 
-const useGetSinglePost = (queryKey, postID, onSuccess, onError) => {
+const useGetSinglePost = (
+  queryKey: string,
+  postID: string,
+  onSuccess: () => void,
+  onError: () => void
+) => {
   const getSinglePostApiCall = async () => {
     const postRef = doc(db, "posts", postID);
     return (await getDoc(postRef)).data();

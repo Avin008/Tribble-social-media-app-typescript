@@ -1,9 +1,14 @@
 import { useMutation } from "@tanstack/react-query";
 import { saveToCollection } from "../firebase/firebaseConfig";
 
-const useSaveToCollection = (userData, postData, onSuccess, onError) => {
+const useSaveToCollection = (
+  userData: any,
+  postData: any,
+  onSuccess: () => void,
+  onError: () => void
+) => {
   const { mutate, isLoading, isError } = useMutation(
-    async (folderName) => {
+    async (folderName: string) => {
       return await saveToCollection(
         userData.userId,
         folderName,
