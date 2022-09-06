@@ -1,6 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+type InitialState = {
+  isUpdatePostModalOpen: boolean;
+};
+
+const initialState: InitialState = {
   isUpdatePostModalOpen: false,
 };
 
@@ -8,7 +12,7 @@ const updatePostModalSlice = createSlice({
   name: "updatePostModal",
   initialState,
   reducers: {
-    openUpdatePostModal: (state, action) => {
+    openUpdatePostModal: (state) => {
       state.isUpdatePostModalOpen = true;
     },
     closeUpdatePostModal: (state) => {

@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+type InitialState = {
+  isCreatePostModalOpen: boolean;
+};
+
 const initialState = {
   isCreatePostModalOpen: false,
 };

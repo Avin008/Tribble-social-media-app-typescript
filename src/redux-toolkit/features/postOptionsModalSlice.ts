@@ -1,17 +1,37 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { User } from "../../types/type";
 
-const initialState = {
+type InitialState = {
+  isPostOptionsModalOpen: boolean;
+  userID: string;
+  postID: string;
+  postData: User;
+};
+
+const initialState: InitialState = {
   isPostOptionsModalOpen: false,
   userID: "",
   postID: "",
-  postData: {},
+  postData: {
+    userId: "",
+    username: "",
+    profileImg: "",
+    fullname: "",
+    emailAddress: "",
+    bio: "",
+    portfolio: "",
+    following: [],
+    followers: [],
+    savedPost: [],
+    dateCreated: null,
+  },
 };
 
 const postOptionsModalSlice = createSlice({
   name: "postOptionsModal",
   initialState,
   reducers: {
-    openPostOptionsModal: (state, action) => {
+    openPostOptionsModal: (state, action: PayloadAction<InitialState>) => {
       state.isPostOptionsModalOpen = true;
       state.userID = action.payload.userID;
       state.postID = action.payload.postID;

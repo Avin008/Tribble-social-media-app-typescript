@@ -1,6 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const initialState = {
+type InitialState = {
+  isModalOpen: boolean;
+  postID: string;
+};
+
+const initialState: InitialState = {
   isModalOpen: false,
   postID: "",
 };
@@ -9,7 +14,7 @@ const postModalSlice = createSlice({
   name: "postModal",
   initialState,
   reducers: {
-    openPostModal: (state, action) => {
+    openPostModal: (state, action: PayloadAction<InitialState>) => {
       state.isModalOpen = true;
       state.postID = action.payload.postID;
     },
