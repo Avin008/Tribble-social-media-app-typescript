@@ -20,7 +20,7 @@ const Signup = () => {
     password: "",
   });
 
-  const handleInput = (e) => {
+  const handleInput = (e: any) => {
     const { name, value } = e.target;
     setSignupInfo((prev) => ({
       ...prev,
@@ -28,7 +28,7 @@ const Signup = () => {
     }));
   };
 
-  const signupUser = async (signupInfo) => {
+  const signupUser = async (signupInfo: any) => {
     try {
       const usernameExist = await userExist(signupInfo);
       if (usernameExist) {
@@ -41,11 +41,12 @@ const Signup = () => {
         toast.error("username already exist");
       }
     } catch (error) {
+      // @ts-ignore
       toast.error(error.code);
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     signupUser(signupInfo);
   };

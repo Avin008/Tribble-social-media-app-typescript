@@ -15,7 +15,8 @@ const ExplorePage = () => {
 
   return (
     <div className="mx-auto mt-20 mb-4 grid w-3/5 grid-flow-row auto-rows-[300px] grid-cols-3 gap-4">
-      {posts.map((x) => (
+      {posts?.map((x) => (
+        // @ts-ignore
         <ExploreCard key={uuid()} data={x} />
       ))}
     </div>

@@ -1,24 +1,24 @@
 import { useRef, useState } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import { useGetUserData } from "../../hooks/useGetUserInfo";
 import { useMutationEditProfile } from "../../hooks/useMutatationEditProfile";
+import { useAppSelector } from "../../redux-toolkit/hooks";
 
 const EditProfile = () => {
   const [profileImg, setProfileImg] = useState(null);
-  const fileRef = useRef(null);
-  const [userInfo, setUserInfo] = useState({});
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [userInfo, setUserInfo] = useState<any>({});
   const navigate = useNavigate();
 
-  const { token } = useSelector((store) => store.authSlice);
+  const { token } = useAppSelector((store) => store.authSlice);
 
-  const onChangeHandler = (e) => {
+  const onChangeHandler = (e: any) => {
     setProfileImg(e.target.files[0]);
   };
 
-  const onSuccess = (data) => {
+  const onSuccess = (data: any) => {
     setUserInfo(data);
   };
 
@@ -33,9 +33,9 @@ const EditProfile = () => {
   };
 
   const { mutate: updateProfile, isLoading } = useMutationEditProfile(
-    token,
+    token!,
     userInfo,
-    profileImg,
+    profileImg!,
     onProfileUpdateSuccess
   );
 
@@ -55,7 +55,7 @@ const EditProfile = () => {
             className="h-full w-full rounded-full border-2 border-black object-cover"
             src={
               (profileImg && URL.createObjectURL(profileImg)) ||
-              userInfo.profileImg
+              userInfo?.profileImg
             }
             alt=""
           />
@@ -64,7 +64,7 @@ const EditProfile = () => {
         <div className="flex items-center justify-center">
           <button
             className="active: w-25 p-2 text-base font-semibold text-purple-500"
-            onClick={() => fileRef.current.click()}
+            onClick={() => fileRef.current!.click()}
           >
             Upload Image
           </button>
@@ -79,7 +79,7 @@ const EditProfile = () => {
           type="text"
           value={userInfo.fullname}
           onChange={(e) =>
-            setUserInfo((prev) => ({ ...prev, fullname: e.target.value }))
+            setUserInfo((prev: any) => ({ ...prev, fullname: e.target.value }))
           }
         />
         <label className="font-medium" htmlFor="">
@@ -90,7 +90,7 @@ const EditProfile = () => {
           placeholder="Bio"
           value={userInfo.bio}
           onChange={(e) =>
-            setUserInfo((prev) => ({ ...prev, bio: e.target.value }))
+            setUserInfo((prev: any) => ({ ...prev, bio: e.target.value }))
           }
         />
         <label className="font-medium" htmlFor="">
@@ -102,7 +102,7 @@ const EditProfile = () => {
           placeholder="portfolio Link"
           value={userInfo.portfolio}
           onChange={(e) =>
-            setUserInfo((prev) => ({ ...prev, portfolio: e.target.value }))
+            setUserInfo((prev: any) => ({ ...prev, portfolio: e.target.value }))
           }
         />
 

@@ -9,11 +9,11 @@ const ProfilePage = () => {
 
   const { data: userData, isLoading: userDataLoading } = useGetUserDataById(
     "current-user-data",
-    id
+    id!
   );
 
   const { data: userPostsData, isLoading: isUserPostsLoading } =
-    useGetUserPostsById("user-posts", id);
+    useGetUserPostsById("user-posts", id!);
 
   if (userDataLoading) {
     return (
@@ -25,6 +25,7 @@ const ProfilePage = () => {
 
   return (
     <div className="mx-auto mt-20 flex w-3/5 flex-col gap-5">
+      {/* @ts-ignore */}
       <UserProfileCard data={{ userData, userPostsData }} />
       {isUserPostsLoading ? (
         "<h1>Loading...</h1>"

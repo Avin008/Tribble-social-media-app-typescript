@@ -10,7 +10,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [loginInfo, setLoginInfo] = useState({ email: "", password: "" });
 
-  const handleInput = (e) => {
+  const handleInput = (e: any) => {
     const { name, value } = e.target;
     setLoginInfo((prev) => ({ ...prev, [name]: value }));
   };
@@ -19,18 +19,25 @@ const Login = () => {
     setLoginInfo({ email: "ericasmoke@gmail.com", password: "123456" });
   };
 
-  const signinUser = async ({ email, password }) => {
+  const signinUser = async ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
     try {
       const res = await loginUser(email, password);
       dispatch(addAuth({ authStatus: true, token: res.user.uid }));
       navigate("/");
       toast.success("user successfully loggedin");
     } catch (error) {
+      // @ts-ignore
       toast.error(error.code);
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     signinUser(loginInfo);
   };

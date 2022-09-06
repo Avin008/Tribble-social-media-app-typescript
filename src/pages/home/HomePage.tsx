@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   CreateCollectionModal,
   LoggedInUserCard,
@@ -13,26 +13,28 @@ import { ClipLoader } from "react-spinners";
 import { useGetUserData } from "../../hooks/useGetUserInfo";
 import { useGetAllPosts } from "../../hooks/useGetAllPosts";
 import { uuidv4 as uuid } from "@firebase/util";
+import { useAppSelector } from "../../redux-toolkit/hooks";
+import { User } from "../../types/type";
 
 const HomePage = () => {
-  const { token } = useSelector((store) => store.authSlice);
-  const { isPostOptionsModalOpen } = useSelector(
+  const { token } = useAppSelector((store) => store.authSlice);
+  const { isPostOptionsModalOpen } = useAppSelector(
     (store) => store.postOptionsModalSlice
   );
-  const { collectionModal } = useSelector(
+  const { collectionModal } = useAppSelector(
     (store) => store.collectionModalSlice
   );
-  const { isUpdatePostModalOpen } = useSelector(
+  const { isUpdatePostModalOpen } = useAppSelector(
     (store) => store.updatePostModalSlice
   );
 
   const dispatch = useDispatch();
 
-  const onSuccess = (data) => {
+  const onSuccess = (data: User) => {
     dispatch(initiateUserData({ userInfo: data }));
   };
 
-  const { data, isLoading, isError } = useGetUserData("users", onSuccess);
+  const { data, isLoading } = useGetUserData("users", onSuccess);
   const { data: followedPosts, isLoading: followedPostLoading } =
     useGetAllPosts("followed-user-post");
 
@@ -55,8 +57,11 @@ const HomePage = () => {
   return (
     <div className="mx-auto mt-20 mb-5 grid h-full w-3/5 grid-cols-2 gap-12">
       <div className="space-y-4">
-        {getFollowedPosts(followedPosts, data.following, token).length !== 0 ? (
-          getFollowedPosts(followedPosts, data.following, token).map((x) => (
+        {/* @ts-ignore */}
+        {getFollowedPosts(followedPosts, data?.following, token).length !==
+        0 ? (
+          // @ts-ignore
+          getFollowedPosts(followedPosts, data?.following, token).map((x) => (
             <VerticalPostCard key={uuid()} data={x} />
           ))
         ) : (
@@ -72,7 +77,9 @@ const HomePage = () => {
         )}
       </div>
       <div className="space-y-1">
+        {/* @ts-ignore */}
         <LoggedInUserCard data={data} />
+        {/* @ts-ignore */}
         <Suggestions data={data} />
       </div>
       {isPostOptionsModalOpen && <PostOptions />}

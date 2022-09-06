@@ -6,7 +6,7 @@ import { functionVoid } from "../types/type";
 
 const useGetUserData = (
   queryKey: string,
-  onSuccess?: functionVoid,
+  onSuccess?: any,
   onError?: functionVoid
 ) => {
   const { token } = useAppSelector((store) => store.authSlice);

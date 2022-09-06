@@ -30,7 +30,6 @@ const UpdatePostModal = () => {
   const {
     mutate: updatePost,
     isLoading,
-    isError,
     // @ts-ignore
   } = useUpdatePost(postData.postID, files, post.caption, onUpdatePostSuccess);
 

@@ -1,15 +1,16 @@
 import { SavedCard } from "../../components";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { ClipLoader } from "react-spinners";
 import { useGetUserDataById } from "../../hooks/useGetUserDataById";
 import { uuidv4 as uuid } from "@firebase/util";
+import { useAppSelector } from "../../redux-toolkit/hooks";
+import { SavedPosts } from "../../types/type";
 
 const SavedPostPage = () => {
   const { collectionID } = useParams();
-  const { token } = useSelector((store) => store.authSlice);
+  const { token } = useAppSelector((store) => store.authSlice);
 
-  const { data, isLoading } = useGetUserDataById("saved-post", token);
+  const { data, isLoading } = useGetUserDataById("saved-post", token!);
 
   if (isLoading) {
     return (
@@ -19,8 +20,8 @@ const SavedPostPage = () => {
     );
   }
 
-  const savedPosts = data.savedPost.filter(
-    (x) => x.collectionID === collectionID
+  const savedPosts = data?.savedPost.filter(
+    (x: SavedPosts) => x.collectionID === collectionID
   );
 
   return (
@@ -28,7 +29,7 @@ const SavedPostPage = () => {
       <h1 className="text-lg font-semibold">{savedPosts[0].folderName}</h1>
       {savedPosts[0].posts.length ? (
         <div className=" grid  grid-flow-row auto-rows-[300px] grid-cols-3 gap-4">
-          {savedPosts[0]?.posts.map((x) => (
+          {savedPosts[0]?.posts.map((x: any) => (
             <SavedCard key={uuid()} data={x} />
           ))}
         </div>
