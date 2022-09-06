@@ -1,6 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+type InitialState = {
+  loggedInUser: any;
+};
+
+const initialState: InitialState = {
   loggedInUser: {},
 };
 

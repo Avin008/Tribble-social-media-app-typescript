@@ -43,8 +43,13 @@ const storage = getStorage(app);
 // create new user && initialize with data
 
 const initializeUserData = (
-  userID,
-  { username, firstname, lastname, email }
+  userID: string,
+  {
+    username,
+    firstname,
+    lastname,
+    email,
+  }: { username: string; firstname: string; lastname: string; email: string }
 ) => {
   return {
     userId: userID,
@@ -61,25 +66,31 @@ const initializeUserData = (
   };
 };
 
-const createNewUser = async ({ email, password }) => {
+const createNewUser = async ({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) => {
   const res = await createUserWithEmailAndPassword(auth, email, password);
   return res.user.uid;
 };
 
-const userExist = async ({ username }) => {
+const userExist = async ({ username }: { username: string }) => {
   const collectionRef = collection(db, "users");
   const q = query(collectionRef, where("username", "==", username));
   const res = (await getDocs(q)).docs.map((x) => x.data()).length === 0;
   return res;
 };
 
-const createUserData = async (userID, userData) => {
+const createUserData = async (userID: string, userData: any) => {
   const docRef = doc(db, "users", userID);
   await setDoc(docRef, initializeUserData(userID, userData));
 };
 
 // login user
-const loginUser = async (email, password) => {
+const loginUser = async (email: string, password: string) => {
   return await signInWithEmailAndPassword(auth, email, password);
 };
 
@@ -87,14 +98,20 @@ const loginUser = async (email, password) => {
 
 // create new post
 
-const uploadImg = async (userID, file, postID) => {
+const uploadImg = async (userID: string, file: any, postID: string) => {
   const storageRef = ref(storage, `posts/${userID}/${postID}.jpg`);
   await uploadBytes(storageRef, file);
   const imgUrl = await getDownloadURL(storageRef);
   return imgUrl;
 };
 
-const createPost = async (userID, username, profileImg, file, caption) => {
+const createPost = async (
+  userID: string,
+  username: string,
+  profileImg: string,
+  file: any,
+  caption: string
+) => {
   const postID = uuid();
   const img = await uploadImg(userID, file, postID);
   const colllectionRef = doc(db, "posts", postID);
@@ -113,7 +130,13 @@ const createPost = async (userID, username, profileImg, file, caption) => {
 
 // post a comment
 
-const postComment = async (username, profileImg, userId, postID, comment) => {
+const postComment = async (
+  username: string,
+  profileImg: string,
+  userId: string,
+  postID: string,
+  comment: string
+) => {
   const docRef = doc(db, "posts", postID);
   return await updateDoc(docRef, {
     comments: arrayUnion({
@@ -128,21 +151,21 @@ const postComment = async (username, profileImg, userId, postID, comment) => {
 
 // like post
 
-const likePost = async (postID, userId) => {
+const likePost = async (postID: string, userId: string) => {
   const postRef = doc(db, "posts", postID);
   return await updateDoc(postRef, { likes: arrayUnion({ userId }) });
 };
 
 // unlike post
 
-const unlikePost = async (postID, userId) => {
+const unlikePost = async (postID: string, userId: string) => {
   const postRef = doc(db, "posts", postID);
   return await updateDoc(postRef, { likes: arrayRemove({ userId }) });
 };
 
 // create saved post folder
 
-const createCollection = async (userId, folderName) => {
+const createCollection = async (userId: string, folderName: string) => {
   const userRef = doc(db, "users", userId);
   return await updateDoc(userRef, {
     savedPost: arrayUnion({
@@ -153,9 +176,15 @@ const createCollection = async (userId, folderName) => {
   });
 };
 
-const saveToCollection = async (userId, folderName, savedPost, img, postID) => {
+const saveToCollection = async (
+  userId: string,
+  folderName: string,
+  savedPost: any,
+  img: any,
+  postID: string
+) => {
   console.log(userId, folderName, savedPost, img, postID);
-  const data = savedPost.map((x) => {
+  const data = savedPost.map((x: any) => {
     if (x.folderName === folderName) {
       return {
         ...x,
@@ -172,11 +201,15 @@ const saveToCollection = async (userId, folderName, savedPost, img, postID) => {
   });
 };
 
-const removedFromSavedPost = async (userId, savedPost, postID) => {
+const removedFromSavedPost = async (
+  userId: string,
+  savedPost: any,
+  postID: string
+) => {
   console.log(userId, savedPost, postID);
-  const result = savedPost.map((x) => {
+  const result = savedPost.map((x: any) => {
     if (x.posts.length > 0) {
-      return { ...x, posts: x.posts.filter((x) => x.postID !== postID) };
+      return { ...x, posts: x.posts.filter((x: any) => x.postID !== postID) };
     } else {
       return x;
     }
@@ -188,36 +221,43 @@ const removedFromSavedPost = async (userId, savedPost, postID) => {
   });
 };
 
-const getCurrentUser = async (userID) => {
+const getCurrentUser = async (userID: string) => {
   const userDocRef = doc(db, "users", userID);
+  // @ts-ignore
   return await getDoc(userDocRef).data();
 };
 
 // isPostSaved
-const isPostSaved = (dataArr, postID) => {
-  const posts = dataArr.filter((x) => x.posts.length > 0).map((x) => x.posts);
-  const postObj = [];
-  posts.forEach((x) => {
+const isPostSaved = (dataArr: any, postID: string) => {
+  const posts = dataArr
+    .filter((x: any) => x.posts.length > 0)
+    .map((x: any) => x.posts);
+  const postObj: any = [];
+  posts.forEach((x: any) => {
     postObj.push(...x);
   });
-  return postObj.map((x) => x.postID).includes(postID);
+  return postObj.map((x: any) => x.postID).includes(postID);
 };
 
 // filter followed and user posts
 
-const getFollowedPosts = (allPosts, userFollowing, token) => {
-  const filteredPosts = [];
-  allPosts.forEach((x) => {
+const getFollowedPosts = (allPosts: any, userFollowing: any, token: string) => {
+  const filteredPosts: any = [];
+  allPosts.forEach((x: any) => {
     if (userFollowing.includes(x.userID) || x.userID === token) {
       filteredPosts.push(x);
     }
   });
-  return filteredPosts.sort((a, b) => b.dateCreated - a.dateCreated);
+  return filteredPosts.sort((a: any, b: any) => b.dateCreated - a.dateCreated);
 };
 
-const getSuggestions = (suggestions, userFollowers, userId) => {
-  const filteredSuggestions = [];
-  suggestions.forEach((x) => {
+const getSuggestions = (
+  suggestions: any,
+  userFollowers: any,
+  userId: string
+) => {
+  const filteredSuggestions: any = [];
+  suggestions.forEach((x: any) => {
     if (!userFollowers.includes(x.userId) && x.userId !== userId) {
       filteredSuggestions.push(x);
     }

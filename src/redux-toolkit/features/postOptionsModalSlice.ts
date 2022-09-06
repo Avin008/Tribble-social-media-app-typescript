@@ -1,6 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+type InitialState = {
+  isPostOptionsModalOpen: boolean;
+  userID: string;
+  postID: string;
+  postData: any;
+};
+
+const initialState: InitialState = {
   isPostOptionsModalOpen: false,
   userID: "",
   postID: "",

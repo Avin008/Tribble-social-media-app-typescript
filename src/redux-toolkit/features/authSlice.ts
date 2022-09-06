@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+type InitialState = {
+  authStatus: boolean;
+  token: string | null;
+};
+
+const initialState: InitialState = {
   authStatus: localStorage.getItem("token") ? true : false,
   token: localStorage.getItem("token"),
 };

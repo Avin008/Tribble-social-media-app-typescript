@@ -1,6 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+type InitialState = {
+  isCollectionListOpen: boolean;
+};
+
+const initialState: InitialState = {
   isCollectionListOpen: false,
 };
 
