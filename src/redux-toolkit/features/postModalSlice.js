@@ -15,6 +15,7 @@ const postModalSlice = createSlice({
     },
     closePostModal: (state) => {
       state.isModalOpen = false;
+      state.postID = "";
     },
   },
 });
