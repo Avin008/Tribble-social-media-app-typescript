@@ -1,9 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
+import { functionVoid } from "../types/type";
 
-const useGetUserPostsById = (queryKey, userID, onSuccess, onError) => {
-  const getUserPostsByIdAPiCall = async () => {
+const useGetUserPostsById = (
+  queryKey: string,
+  userID: string,
+  onSuccess?: functionVoid,
+  onError?: functionVoid
+) => {
+  const getUserPostsByIdAPiCall = async (userID: string) => {
     const postsCollectionRef = collection(db, "posts");
     const queryK = query(postsCollectionRef, where("userID", "==", userID));
     return (await getDocs(queryK)).docs.map((x) => x.data());

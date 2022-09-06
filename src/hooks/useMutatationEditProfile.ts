@@ -2,19 +2,20 @@ import { useMutation } from "@tanstack/react-query";
 import { doc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { db, storage } from "../firebase/firebaseConfig";
+import { functionVoid, User } from "../types/type";
 
 const useMutationEditProfile = (
-  loggedInUserID,
-  userInfo,
-  profileImg,
-  onSuccess,
-  onError
+  loggedInUserID: string,
+  userInfo: User,
+  profileImg: Blob,
+  onSuccess?: functionVoid,
+  onError?: functionVoid
 ) => {
   const mutateEditProfileApiCall = async () => {
     const userDocRef = doc(db, "users", loggedInUserID);
     const profileImgRef = ref(storage, `/profileImg/${loggedInUserID}.jpg`);
-    const res = profileImg && (await uploadBytes(profileImgRef, profileImg));
-    const imgUrl = profileImg && (await getDownloadURL(profileImgRef, res));
+    profileImg && (await uploadBytes(profileImgRef, profileImg));
+    const imgUrl = profileImg && (await getDownloadURL(profileImgRef));
 
     const updatedUserobj = {
       fullname: userInfo.fullname,

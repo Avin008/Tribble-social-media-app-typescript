@@ -42,3 +42,5 @@ export type UserPost = {
   comments: Comments[];
   caption: string;
 };
+
+export type functionVoid = () => void;

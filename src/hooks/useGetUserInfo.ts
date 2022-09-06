@@ -1,13 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { doc, getDoc } from "firebase/firestore";
-import { useSelector } from "react-redux";
 import { db } from "../firebase/firebaseConfig";
+import { useAppSelector } from "../redux-toolkit/hooks";
+import { functionVoid } from "../types/type";
 
-const useGetUserData = (queryKey, onSuccess, onError) => {
-  const { token } = useSelector((store) => store.authSlice);
+const useGetUserData = (
+  queryKey: string,
+  onSuccess?: functionVoid,
+  onError?: functionVoid
+) => {
+  const { token } = useAppSelector((store) => store.authSlice);
 
-  const getUserDataAPiCall = async (token) => {
-    const userDocRef = doc(db, "users", token);
+  const getUserDataAPiCall = async (token: null | string) => {
+    const userDocRef = doc(db, "users", token!);
     return (await getDoc(userDocRef)).data();
   };
 
