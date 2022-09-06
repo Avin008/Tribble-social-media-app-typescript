@@ -38,7 +38,7 @@ https://github.com/Avin008/Tribble-A-Social-Media-App
 - Start the server
 
 ```bash
-  npm run dev
+  npm start
 ```
 
 - Run Test
