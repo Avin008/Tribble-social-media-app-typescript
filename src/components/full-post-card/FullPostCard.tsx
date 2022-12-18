@@ -10,7 +10,11 @@ import {
 import { useRef, useState } from "react";
 import SavePost from "../save-post/SavePost";
 import EmojiKeyboard from "../emoji-keyboard/EmojiKeyboard";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import CreateCollectionModal from "../create-collection-modal/CreateCollectionModal";
 import { useDispatch } from "react-redux";
 import { closePostModal } from "../../redux-toolkit/features/postModalSlice";
@@ -30,12 +34,19 @@ import { usePostComment } from "../../hooks/usePostComment";
 import { useGetSinglePost } from "../../hooks/useGetSinglePost";
 import { uuidv4 as uuid } from "@firebase/util";
 import { useAppSelector } from "../../redux-toolkit/hooks";
-import { Comments } from "../../types/type";
+import {
+  Comments,
+  UserPost,
+} from "../../types/type";
 
 const FullPostCard = () => {
-  const [toggleEmojikeyboard, setTogglEmojiKeyboard] = useState(false);
+  const [
+    toggleEmojikeyboard,
+    setTogglEmojiKeyboard,
+  ] = useState(false);
   const [comment, setComment] = useState("");
-  const commentRef = useRef<HTMLInputElement>(null);
+  const commentRef =
+    useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { postID } = useParams();
 
@@ -49,71 +60,92 @@ const FullPostCard = () => {
   const { collectionModal } = useAppSelector(
     (store) => store.collectionModalSlice
   );
-  const { isPostOptionsModalOpen } = useAppSelector(
-    (store) => store.postOptionsModalSlice
-  );
+  const { isPostOptionsModalOpen } =
+    useAppSelector(
+      (store) => store.postOptionsModalSlice
+    );
 
-  const { isUpdatePostModalOpen } = useAppSelector(
-    (store) => store.updatePostModalSlice
-  );
+  const { isUpdatePostModalOpen } =
+    useAppSelector(
+      (store) => store.updatePostModalSlice
+    );
 
   const { isCollectionListOpen } = useAppSelector(
     (store) => store.collectionListSlice
   );
 
-  const { data: postData, isLoading } = useGetSinglePost(
-    "current-post",
-    postID!
-  );
+  const { data: postData, isLoading } =
+    useGetSinglePost("current-post", postID!);
 
-  const { data: userData, isLoading: userDataLoading } =
-    useGetUserData("users");
+  const {
+    data: userData,
+    isLoading: userDataLoading,
+  } = useGetUserData("users");
 
   const onLikePostSuccess = () => {
-    queryClient.invalidateQueries(["current-post"]);
+    queryClient.invalidateQueries([
+      "current-post",
+    ]);
   };
 
-  const { mutate: likePost } = useLikePost(postID!, onLikePostSuccess);
+  const { mutate: likePost } = useLikePost(
+    postID!,
+    onLikePostSuccess
+  );
 
   const onUnlikePostSuccess = () => {
-    queryClient.invalidateQueries(["current-post"]);
+    queryClient.invalidateQueries([
+      "current-post",
+    ]);
   };
 
-  const { mutate: unLikePost } = useUnLikePost(postID!, onUnlikePostSuccess);
+  const { mutate: unLikePost } = useUnLikePost(
+    postID!,
+    onUnlikePostSuccess
+  );
 
   const onRemoveSavedPostSuccess = () => {
     queryClient.invalidateQueries(["users"]);
   };
 
-  const { mutate: removePostFromSaved } = useRemovePostFromSavedPosts(
-    // @ts-ignore
-    userData,
-    postID,
-    onRemoveSavedPostSuccess
-  );
+  const { mutate: removePostFromSaved } =
+    useRemovePostFromSavedPosts(
+      userData,
+      postID!,
+      onRemoveSavedPostSuccess
+    );
 
   const onPostCommentSuccess = () => {
-    queryClient.invalidateQueries(["current-post"]);
+    queryClient.invalidateQueries([
+      "current-post",
+    ]);
     setComment("");
     setTogglEmojiKeyboard(false);
   };
 
   const { mutate: postComment } = usePostComment(
-    // @ts-ignore
     userData,
-    postID,
+    postID!,
     comment,
     onPostCommentSuccess
   );
 
-  const sortedComments = (comments: Comments[]) => {
-    return [...comments].sort((a, b) => b.dateCreated - a.dateCreated);
+  const sortedComments = (
+    comments: Comments[]
+  ) => {
+    return [...comments].sort(
+      (a, b) => b.dateCreated - a.dateCreated
+    );
   };
 
   if (isLoading) {
     return (
       <div className="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center">
-        <ClipLoader color="gray" size={40} loading={isLoading} />
+        <ClipLoader
+          color="gray"
+          size={40}
+          loading={isLoading}
+        />
       </div>
     );
   }
@@ -121,7 +153,11 @@ const FullPostCard = () => {
   if (userDataLoading) {
     return (
       <div className="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center">
-        <ClipLoader color="gray" size={40} loading={isLoading} />
+        <ClipLoader
+          color="gray"
+          size={40}
+          loading={isLoading}
+        />
       </div>
     );
   }
@@ -142,7 +178,11 @@ const FullPostCard = () => {
           <div className="flex items-center gap-2">
             <div className="h-10 w-10">
               <img
-                src={postData?.profileImg ? postData.profileImg : avatarImg}
+                src={
+                  postData?.profileImg
+                    ? postData.profileImg
+                    : avatarImg
+                }
                 alt=""
                 className="h-full w-full rounded-full border border-black object-cover"
               />
@@ -150,7 +190,9 @@ const FullPostCard = () => {
             <h5
               className="cursor-pointer font-medium hover:underline"
               onClick={() => {
-                navigate(`/profile/${postData?.userID}`);
+                navigate(
+                  `/profile/${postData?.userID}`
+                );
                 dispatch(closePostModal());
               }}
             >
@@ -175,32 +217,45 @@ const FullPostCard = () => {
           </div>
         </div>
         <div className="flex h-3/5 flex-col gap-4 overflow-y-scroll p-3 scrollbar-hide">
-          <p className="text-base font-medium">{postData?.caption}</p>
+          <p className="text-base font-medium">
+            {postData?.caption}
+          </p>
 
-          {sortedComments(postData?.comments).map((x) => {
-            return (
-              <div className="flex items-center gap-2" key={uuid()}>
-                <div>
-                  <div className="h-10 w-10">
-                    <img
-                      src={x.profileImg ? x.profileImg : avatarImg}
-                      alt=""
-                      className="h-full w-full rounded-full border border-black object-cover"
-                    />
+          {sortedComments(postData?.comments).map(
+            (x) => {
+              return (
+                <div
+                  className="flex items-center gap-2"
+                  key={uuid()}
+                >
+                  <div>
+                    <div className="h-10 w-10">
+                      <img
+                        src={
+                          x.profileImg
+                            ? x.profileImg
+                            : avatarImg
+                        }
+                        alt=""
+                        className="h-full w-full rounded-full border border-black object-cover"
+                      />
+                    </div>
+                  </div>
+                  <div className="leading-3">
+                    <Link
+                      to={`/profile/${x.userId}`}
+                      className="text-xs font-semibold hover:underline"
+                    >
+                      {x.username}
+                    </Link>
+                    <p className="text-sm font-medium">
+                      {x.comment}
+                    </p>
                   </div>
                 </div>
-                <div className="leading-3">
-                  <Link
-                    to={`/profile/${x.userId}`}
-                    className="text-xs font-semibold hover:underline"
-                  >
-                    {x.username}
-                  </Link>
-                  <p className="text-sm font-medium">{x.comment}</p>
-                </div>
-              </div>
-            );
-          })}
+              );
+            }
+          )}
         </div>
         <div className="absolute bottom-0 left-0 right-0 flex flex-col gap-2 border-t border-gray-500 bg-white">
           <div className="space-y-2 p-2">
@@ -224,22 +279,31 @@ const FullPostCard = () => {
                 <MdOutlineComment
                   className="cursor-pointer"
                   size={25}
-                  onClick={() => focusCommentBox()}
+                  onClick={() =>
+                    focusCommentBox()
+                  }
                 />
               </div>
               <div className="card-secondary-actions">
-                {isPostSaved(userData?.savedPost, postID!) ? (
+                {isPostSaved(
+                  userData?.savedPost,
+                  postID!
+                ) ? (
                   <MdOutlineBookmark
                     size={25}
                     className="cursor-pointer"
-                    onClick={() => removePostFromSaved()}
+                    onClick={() =>
+                      removePostFromSaved()
+                    }
                   />
                 ) : (
                   <MdOutlineBookmarkBorder
                     size={25}
                     className="cursor-pointer"
                     onClick={() => {
-                      dispatch(toggleCollectionList());
+                      dispatch(
+                        toggleCollectionList()
+                      );
                     }}
                   />
                 )}
@@ -247,8 +311,12 @@ const FullPostCard = () => {
                 {isCollectionListOpen && (
                   <div className="relative">
                     <SavePost
-                      // @ts-ignore
-                      data={{ userData, postData: { post: postData } }}
+                      data={{
+                        userData,
+                        postData: {
+                          post: postData as UserPost,
+                        },
+                      }}
                     />
                   </div>
                 )}
@@ -256,7 +324,9 @@ const FullPostCard = () => {
             </div>
             <div className="px-2">
               <h5 className="text-md font-medium">
-                <span className="font-semibold">{postData?.likes.length}</span>{" "}
+                <span className="font-semibold">
+                  {postData?.likes.length}
+                </span>{" "}
                 Likes
               </h5>
             </div>
@@ -266,23 +336,33 @@ const FullPostCard = () => {
               <MdOutlineEmojiEmotions
                 className="cursor-pointer"
                 size={25}
-                onClick={() => setTogglEmojiKeyboard((prev) => !prev)}
+                onClick={() =>
+                  setTogglEmojiKeyboard(
+                    (prev) => !prev
+                  )
+                }
               />
               {toggleEmojikeyboard && (
-                <EmojiKeyboard addEmojiFunc={setComment} />
+                <EmojiKeyboard
+                  addEmojiFunc={setComment}
+                />
               )}
               <input
                 className="relative w-full  border-0 bg-transparent outline-none"
                 type="text"
                 placeholder="Add comment"
-                onChange={(e) => setComment(e.target.value)}
+                onChange={(e) =>
+                  setComment(e.target.value)
+                }
                 value={comment}
                 ref={commentRef}
               />
             </div>
             <button
               className={`border-0 bg-transparent p-0 text-sm font-semibold outline-none ${
-                !comment ? `: text-gray-500` : `text-black`
+                !comment
+                  ? `: text-gray-500`
+                  : `text-black`
               }`}
               onClick={() => postComment()}
               disabled={comment ? false : true}
@@ -292,9 +372,13 @@ const FullPostCard = () => {
           </div>
         </div>
       </div>
-      {collectionModal && <CreateCollectionModal />}
+      {collectionModal && (
+        <CreateCollectionModal />
+      )}
       {isPostOptionsModalOpen && <PostOptions />}
-      {isUpdatePostModalOpen && <UpdatePostModal />}
+      {isUpdatePostModalOpen && (
+        <UpdatePostModal />
+      )}
     </div>
   );
 };
