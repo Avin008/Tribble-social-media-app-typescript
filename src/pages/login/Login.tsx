@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+} from "react-router-dom";
 import { toast } from "react-toastify";
 import { loginUser } from "../../firebase/firebaseConfig";
 import { addAuth } from "../../redux-toolkit/features/authSlice";
@@ -8,15 +11,24 @@ import { addAuth } from "../../redux-toolkit/features/authSlice";
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [loginInfo, setLoginInfo] = useState({ email: "", password: "" });
+  const [loginInfo, setLoginInfo] = useState({
+    email: "",
+    password: "",
+  });
 
   const handleInput = (e: any) => {
     const { name, value } = e.target;
-    setLoginInfo((prev) => ({ ...prev, [name]: value }));
+    setLoginInfo((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const guestLogin = () => {
-    setLoginInfo({ email: "ericasmoke@gmail.com", password: "123456" });
+    setLoginInfo({
+      email: "cherleygardner@gmail.com",
+      password: "123456",
+    });
   };
 
   const signinUser = async ({
@@ -27,8 +39,16 @@ const Login = () => {
     password: string;
   }) => {
     try {
-      const res = await loginUser(email, password);
-      dispatch(addAuth({ authStatus: true, token: res.user.uid }));
+      const res = await loginUser(
+        email,
+        password
+      );
+      dispatch(
+        addAuth({
+          authStatus: true,
+          token: res.user.uid,
+        })
+      );
       navigate("/");
       toast.success("user successfully loggedin");
     } catch (error) {
@@ -45,7 +65,9 @@ const Login = () => {
   return (
     <div className="grid h-screen grid-cols-2 border border-black">
       <div className="flex items-center justify-center bg-[#5A21B9]">
-        <h1 className="text-5xl font-semibold text-rose-100">Tribble</h1>
+        <h1 className="text-5xl font-semibold text-rose-100">
+          Tribble
+        </h1>
       </div>
       <div className="flex w-full flex-col items-center justify-center space-y-5 bg-[#FEFEFE]">
         <h1 className="text-3xl">Sign In</h1>
@@ -66,7 +88,9 @@ const Login = () => {
             />
           </div>
           <div className="flex flex-col space-y-1">
-            <label htmlFor="email">Password</label>
+            <label htmlFor="email">
+              Password
+            </label>
             <input
               className="ring-blue border border-black p-1 outline-none focus:ring-1"
               type="password"
@@ -91,7 +115,10 @@ const Login = () => {
             </button>
           </div>
           <div>
-            <Link to="/signup" className="cursor-pointer font-medium">
+            <Link
+              to="/signup"
+              className="cursor-pointer font-medium"
+            >
               Create Account
             </Link>
           </div>
