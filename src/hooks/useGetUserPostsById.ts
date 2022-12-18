@@ -1,5 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 import { functionVoid } from "../types/type";
 
@@ -8,21 +13,35 @@ const useGetUserPostsById = (
   userID: string,
   onSuccess?: functionVoid,
   onError?: functionVoid
-) => {
-  const getUserPostsByIdAPiCall = async (userID: string) => {
-    const postsCollectionRef = collection(db, "posts");
-    const queryK = query(postsCollectionRef, where("userID", "==", userID));
-    return (await getDocs(queryK)).docs.map((x) => x.data());
+): { data: any; isLoading: boolean } => {
+  const getUserPostsByIdAPiCall = async (
+    userID: string
+  ) => {
+    const postsCollectionRef = collection(
+      db,
+      "posts"
+    );
+    const queryK = query(
+      postsCollectionRef,
+      where("userID", "==", userID)
+    );
+    return (await getDocs(queryK)).docs.map((x) =>
+      x.data()
+    );
   };
 
   const { data, isLoading } = useQuery(
     [`${queryKey}`],
     async () => {
-      return await getUserPostsByIdAPiCall(userID);
+      return await getUserPostsByIdAPiCall(
+        userID
+      );
     },
     {
       select: (data) => {
-        return data.sort((a, b) => b.dateCreated - a.dateCreated);
+        return data.sort(
+          (a, b) => b.dateCreated - a.dateCreated
+        );
       },
       onSuccess,
       onError,

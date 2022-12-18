@@ -8,7 +8,7 @@ const useGetUserDataById = (
   userID: string,
   onSuccess?: functionVoid,
   onError?: functionVoid
-) => {
+): { data: any; isLoading: boolean } => {
   const getCurrentUserApiCall = async () => {
     const userDocRef = doc(db, "users", userID);
     return (await getDoc(userDocRef)).data();

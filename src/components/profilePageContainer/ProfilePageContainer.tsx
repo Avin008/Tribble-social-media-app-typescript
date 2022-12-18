@@ -41,7 +41,6 @@ const ProfilePageContainer = () => {
 
   return (
     <div className="mx-auto mt-20 flex w-3/5 flex-col gap-5">
-      {/* @ts-ignore */}
       <UserProfileCard
         data={{ userData, userPostsData }}
       />
