@@ -1,4 +1,7 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import { User } from "../../types/type";
 
 type InitialState = {
@@ -31,7 +34,10 @@ const postOptionsModalSlice = createSlice({
   name: "postOptionsModal",
   initialState,
   reducers: {
-    openPostOptionsModal: (state, action: PayloadAction<InitialState>) => {
+    openPostOptionsModal: (
+      state,
+      action: PayloadAction<InitialState>
+    ) => {
       state.isPostOptionsModalOpen = true;
       state.userID = action.payload.userID;
       state.postID = action.payload.postID;
@@ -43,7 +49,9 @@ const postOptionsModalSlice = createSlice({
   },
 });
 
-export const { openPostOptionsModal, closePostOptionsModal } =
-  postOptionsModalSlice.actions;
+export const {
+  openPostOptionsModal,
+  closePostOptionsModal,
+} = postOptionsModalSlice.actions;
 
 export default postOptionsModalSlice.reducer;

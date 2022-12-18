@@ -7,3 +7,7 @@
 body {
     background-color: rgb(247, 238, 238);
 }
+
+html {
+    overflow-y: scroll;
+}
